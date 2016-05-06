@@ -1,0 +1,48 @@
+//
+//  PrefixHeader.pch
+//  qingsongyike
+//
+//  Created by 苗慧宇 on 4/24/16.
+//  Copyright © 2016 subo. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <Masonry.h>
+#import <SVProgressHUD.h>
+#import "QSYKDataManager.h"
+#import "QSYKResourceManager.h"
+#import <extobjc.h>
+#import <UIImageView+WebCache.h>
+#import "QSYKUtility.h"
+#import "QSYKResourceModel.h"
+#import "UIView+Commn.h"
+#import <MJRefresh.h>
+#import "QSYKRefreshFooter.h"
+#import "QSYKShareManager.h"
+#import "QSYKResultModel.h"
+
+#define SCREEN_WIDTH  [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
+#define SCREEN_FRAME  [[UIScreen mainScreen] bounds]
+
+#define kIsNetworkViaWiFi ([[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus] == AFNetworkReachabilityStatusReachableViaWiFi)
+#define kIsAutoLoadImgOnlyInWifi [[NSUserDefaults standardUserDefaults] boolForKey:kIsAutoLoadImgOnlyInWifiKey]
+
+#define kCurrentAppVersion [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+
+#define TEXT_LING_SPACING 10.f
+
+#define kCoreColor [UIColor colorWithRed:220.f / 255 green:83.f / 255 blue:74.f / 255 alpha:1.0f]
+
+//static NSString * const kBaseURL = @"http://qy1.appcq.cn:8895/";
+static NSString * const kBaseURL = @"http://c.appcq.cn/";
+
+
+static NSString * const kIsAutoLoadImgOnlyInWifiKey = @"IsAutoLoadImgOnlyInWifiKey";
+
+#endif /* PrefixHeader_pch */
