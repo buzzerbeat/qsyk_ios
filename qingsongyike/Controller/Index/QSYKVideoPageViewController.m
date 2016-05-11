@@ -12,7 +12,7 @@
 @import MediaPlayer;
 
 @interface QSYKVideoPageViewController () <QSYKCellDelegate>
-@property (nonatomic, strong) UITableView *tableView;
+//@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *resourceList;
 
 @end
@@ -32,6 +32,7 @@
         tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            self.isRefresh = YES;
             [self loadData];
         }];
         tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
@@ -51,6 +52,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+    // 当页面离开屏幕时关闭视频播放
     [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
@@ -61,7 +64,7 @@
 
 - (void)loadData {
     NSDictionary *paramaters = nil;
-    if ([self.tableView.mj_footer isRefreshing]) {
+    if (!self.isRefresh) {
         QSYKResourceModel *lastResource = _resourceList.lastObject;
         paramaters = @{
                        @"type" : @3,
@@ -69,7 +72,6 @@
                        };
     } else {
         paramaters = @{@"type" : @3};
-        self.resourceList = [NSMutableArray new];
     }
     
     @weakify(self);
@@ -82,10 +84,15 @@
                                                                [SVProgressHUD dismiss];
                                                                
                                                                if (resourceList.count) {
+                                                                   if (self.isRefresh) {
+                                                                       self.isRefresh = NO;
+                                                                       self.resourceList = [NSMutableArray new];
+                                                                   }
+                                                                   [self.resourceList addObjectsFromArray:resourceList];
+                                                                   [self.tableView reloadData];
+                                                               } else {
                                                                    [self.tableView.mj_footer endRefreshingWithNoMoreData];
                                                                }
-                                                               [self.resourceList addObjectsFromArray:resourceList];
-                                                               [self.tableView reloadData];
                                                                
                                                            } failure:^(NSError *error) {
                                                                [self.tableView.mj_header endRefreshing];
@@ -100,7 +107,7 @@
 #pragma mark tableView delegate & dataSource \
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _resourceList.count;
+    return _resourceList ? _resourceList.count : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

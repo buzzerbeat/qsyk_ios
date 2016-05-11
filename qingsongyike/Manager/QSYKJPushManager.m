@@ -25,10 +25,20 @@
     self = [super init];
     if (self) {
         
-        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
-                                                          UIUserNotificationTypeSound |
-                                                          UIUserNotificationTypeAlert)
-                                              categories:nil];
+        if (SYSTEM_VERSION >= 8.0) {
+            // 可以添加自定义categories
+            [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                              UIUserNotificationTypeSound |
+                                                              UIUserNotificationTypeAlert)
+                                                  categories:nil];
+        } else {
+            // categories 必须为nil
+            [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                              UIRemoteNotificationTypeSound |
+                                                              UIRemoteNotificationTypeAlert)
+                                                  categories:nil];
+        }
+        
         
         [JPUSHService setupWithOption:@{}
                                appKey:@"fc5f4abbf32e8d25f4603db6"

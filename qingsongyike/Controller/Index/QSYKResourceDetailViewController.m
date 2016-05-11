@@ -56,6 +56,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if (_resource.type == 3) {
+        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [curCell reset];
+    }
+}
+
 - (void)keyboardWillChangeFrame:(NSNotification *)noti {
     //弹出时间
     CGFloat animaDuration = [noti.userInfo [UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -65,14 +73,6 @@
     [UIView animateWithDuration:animaDuration animations:^{
         [self.view layoutIfNeeded];
     }];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    if (_resource.type == 3) {
-        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        [curCell reset];
-    }
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -163,8 +163,8 @@
                 break;
             case 2: {
                 // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-                if (_resource.img.height > 1.6 * _resource.img.width && !_resource.img.dynamic) {
-                    extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.6;
+                if (_resource.img.height > 2 * _resource.img.width && !_resource.img.dynamic) {
+                    extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
                 } else {
                     extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.img.height / _resource.img.width;
                 }

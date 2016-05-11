@@ -37,6 +37,7 @@
         [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            self.isRefresh = YES;
             [self loadData];
         }];
         tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
@@ -51,11 +52,14 @@
         tableView;
     });
     
+    self.resourceList = [NSMutableArray new];
     [self loadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+    // 当页面离开屏幕时关闭视频播放
     [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
@@ -69,7 +73,7 @@
     NSString *URLString = nil;
     if (_isBeautyTag) {
         URLString = @"resource/tagListJson/";
-        if ([self.tableView.mj_footer isRefreshing]) {
+        if (!self.isRefresh) {
             QSYKResourceModel *lastResource = _resourceList.lastObject;
             parameters = @{
                            @"tag" : @"uMwg4g0Mwg0",
@@ -77,11 +81,11 @@
                            };
         } else {
             parameters = @{@"tag" : @"uMwg4g0Mwg0"};
-            self.resourceList = [NSMutableArray new];
+            
         }
     } else {
         URLString = @"resource/listJson/";
-        if ([self.tableView.mj_footer isRefreshing]) {
+        if (!self.isRefresh) {
             QSYKResourceModel *lastResource = _resourceList.lastObject;
             parameters = @{
                            @"type" : @0,
@@ -89,7 +93,6 @@
                            };
         } else {
             parameters = @{@"type" : @0};
-            self.resourceList = [NSMutableArray new];
         }
     }
     
@@ -109,7 +112,10 @@
                                                    [SVProgressHUD dismiss];
                                                    
                                                    if (resourceList.list.count) {
-                                                       
+                                                       if (self.isRefresh) {
+                                                           self.isRefresh = NO;
+                                                           self.resourceList = [NSMutableArray new];
+                                                       }
                                                        [self.resourceList addObjectsFromArray:resourceList.list];
                                                        [self.tableView reloadData];
                                                    } else {
@@ -129,7 +135,7 @@
 #pragma mark tableView delegate & dataSource \
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _resourceList.count;
+    return _resourceList.count ?: 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -146,8 +152,8 @@
         
     } else if (cellType == 2) {
         // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-        if (resource.img.height > 1.6 * resource.img.width && !resource.img.dynamic) {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.6;
+        if (resource.img.height > 2 * resource.img.width && !resource.img.dynamic) {
+            extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
         } else {
             extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
         }

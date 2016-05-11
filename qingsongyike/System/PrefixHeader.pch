@@ -21,6 +21,8 @@
 #import "QSYKUtility.h"
 #import "QSYKResourceModel.h"
 #import "UIView+Commn.h"
+#import "UIImage+Round.h"
+#import "UIImageView+Avatar.h"
 #import <MJRefresh.h>
 #import "QSYKRefreshFooter.h"
 #import "QSYKShareManager.h"
@@ -29,6 +31,7 @@
 #define SCREEN_WIDTH  [[UIScreen mainScreen] bounds].size.width
 #define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 #define SCREEN_FRAME  [[UIScreen mainScreen] bounds]
+#define SYSTEM_VERSION [UIDevice currentDevice].systemVersion.floatValue
 
 #define kIsNetworkViaWiFi ([[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus] == AFNetworkReachabilityStatusReachableViaWiFi)
 #define kIsAutoLoadImgOnlyInWifi [[NSUserDefaults standardUserDefaults] boolForKey:kIsAutoLoadImgOnlyInWifiKey]
@@ -41,6 +44,7 @@
 
 //static NSString * const kBaseURL = @"http://qy1.appcq.cn:8895/";
 static NSString * const kBaseURL = @"http://c.appcq.cn/";
+static NSString * const kPictureBaseURL = @"http://ic.appcq.cn/";
 
 
 static NSString * const kIsAutoLoadImgOnlyInWifiKey = @"IsAutoLoadImgOnlyInWifiKey";

@@ -11,7 +11,7 @@
 #import "QSYKResourceDetailViewController.h"
 
 @interface QSYKPicturePageViewController () <QSYKCellDelegate>
-@property (nonatomic, strong) UITableView *tableView;
+//@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *resourceList;
 
 @end
@@ -55,7 +55,7 @@
 
 - (void)loadData {
     NSDictionary *paramaters = nil;
-    if ([self.tableView.mj_footer isRefreshing]) {
+    if (!self.isRefresh) {
         QSYKResourceModel *lastResource = _resourceList.lastObject;
         paramaters = @{
                        @"type" : @2,
@@ -67,7 +67,6 @@
                        @"type" : @2,
                        @"dynamic" : @(_isDynamic),
                        };
-        self.resourceList = [NSMutableArray new];
     }
     
     @weakify(self);
@@ -80,6 +79,10 @@
                                                                [SVProgressHUD dismiss];
                                                                
                                                                if (resourceList.count) {
+                                                                   if (self.isRefresh) {
+                                                                       self.isRefresh = NO;
+                                                                       self.resourceList = [NSMutableArray new];
+                                                                   }
                                                                    [self.resourceList addObjectsFromArray:resourceList];
                                                                    [self.tableView reloadData];
                                                                } else {
@@ -99,7 +102,7 @@
 #pragma mark tableView delegate & dataSource \
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _resourceList.count;
+    return _resourceList ? _resourceList.count : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -109,8 +112,8 @@
                                                           font:16.f
                                                          width:SCREEN_WIDTH - 8 * 4 - 7];
     
-    if (resource.img.height > resource.img.width * 1.6 && !resource.img.dynamic) {
-        extraHeight = (SCREEN_WIDTH - 8 * 4) * 1.6;
+    if (resource.img.height > resource.img.width * 2 && !resource.img.dynamic) {
+        extraHeight = (SCREEN_WIDTH - 8 * 4) * 1.5;
     } else {
         extraHeight = (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
     }

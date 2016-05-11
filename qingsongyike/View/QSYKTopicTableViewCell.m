@@ -15,9 +15,6 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.separatorHeightCon.constant = 1.0 / [[UIScreen mainScreen] scale];
     
-    self.avatarImageView.layer.cornerRadius = self.avatarImageView.height / 2;
-    self.avatarImageView.layer.masksToBounds = YES;
-    
     [self.digBtn setImage:[UIImage imageNamed:@"mainCellDing"] forState:UIControlStateNormal];
     [self.digBtn setImage:[UIImage imageNamed:@"mainCellDingClick"] forState:UIControlStateSelected];
     [self.buryBtn setImage:[UIImage imageNamed:@"mainCellCai"] forState:UIControlStateNormal];
@@ -44,7 +41,7 @@
         return;
     }
     
-    [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]] placeholderImage:[UIImage imageNamed:@"icon_avatar"]];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabe.text = _resource.username;
     self.pubTimeLabel.text = _resource.pubTime;
     self.contentLabel.text = [NSString stringWithFormat:@"%ld赞，%ld踩", _resource.dig, _resource.bury];

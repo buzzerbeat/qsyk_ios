@@ -26,11 +26,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self initialViews];
     [self loadImgae];
-    
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -9,5 +9,6 @@
 #import "QSYKBaseViewController.h"
 
 @interface QSYKVideoPageViewController : QSYKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, strong) UITableView *tableView;
 
 @end

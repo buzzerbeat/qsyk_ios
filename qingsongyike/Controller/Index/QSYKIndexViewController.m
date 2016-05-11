@@ -77,7 +77,15 @@
 - (UIViewController *)carbonTabSwipeNavigation:(CarbonTabSwipeNavigation *)carbonTabSwipeNavigation viewControllerAtIndex:(NSUInteger)index {
     
     switch (index) {
-        case 0:
+        case 0:{
+            QSYKRecommendPageViewController *recommendVC = [[QSYKRecommendPageViewController alloc] init];
+            if (index == 5) {
+                recommendVC.isBeautyTag = YES;
+            }
+            
+            return recommendVC;
+        }
+            break;
         case 5:{
             QSYKRecommendPageViewController *recommendVC = [[QSYKRecommendPageViewController alloc] init];
             if (index == 5) {
@@ -93,8 +101,15 @@
             return videoVC;
         }
             break;
-        case 2:
-        case 3:{
+        case 2: {
+            QSYKPicturePageViewController *pictureVC = [[QSYKPicturePageViewController alloc] init];
+            pictureVC.isDynamic = index == 2 ? 1 : 0;
+            
+            return pictureVC;
+        }
+            break;
+            
+        case 3: {
             QSYKPicturePageViewController *pictureVC = [[QSYKPicturePageViewController alloc] init];
             pictureVC.isDynamic = index == 2 ? 1 : 0;
             

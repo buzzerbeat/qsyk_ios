@@ -22,7 +22,12 @@
 
 + (CGFloat)heightForMutilLineLabel:(NSString * _Nonnull)string font:(CGFloat)fontSize width:(CGFloat)width;
 
-+ (UIAlertController * _Nonnull)alertControllerWithTitle:(NSString * _Nullable)title message:(NSString * _Nonnull)message cancleActionTitle:(NSString * _Nonnull)cancleActionTitle goActionTitle:(NSString * _Nonnull)goActionTitle handler:(void (^ __nullable)(UIAlertAction * _Nonnull action))handler;
++ (UIAlertController * _Nonnull)alertControllerWithTitle:(NSString * _Nullable)title
+                                                 message:(NSString * _Nullable)message
+                                       cancleActionTitle:(NSString * _Nonnull)cancleActionTitle
+                                           goActionTitle:(NSString * _Nonnull)goActionTitle
+                                                 preferredStyle:(UIAlertControllerStyle)preferredStyle
+                                                 handler:(void (^ __nullable)(UIAlertAction * _Nonnull action))handler;
 
 + (NSString * _Nonnull)mid;
 

@@ -10,4 +10,9 @@
 
 @interface UIImageView (Avatar)
 
+/**
+    默认头像的 name 为‘icon_avatar’,使用时可以修改为项目中已有的图片的name，或者修改图片的name
+ */
+- (void)setAvatar:(NSString *)aURL;
+
 @end

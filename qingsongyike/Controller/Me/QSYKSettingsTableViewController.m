@@ -12,7 +12,7 @@
 
 #define CUR_NOTI_TYPES  [[UIApplication sharedApplication] currentUserNotificationSettings].types
 
-@interface QSYKSettingsTableViewController ()
+@interface QSYKSettingsTableViewController () <UIActionSheetDelegate>
 @property (nonatomic, strong) NSArray *cellTitles;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) NSInteger oldType;
@@ -130,22 +130,24 @@
         NSString *appStoreStr = @"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=1034156676";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appStoreStr]];
     } else if(indexPath.row == 2) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:cancleAction];
         
-        UIAlertAction *clearAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (SYSTEM_VERSION >= 8.0) {
+            UIAlertController *alert = [QSYKUtility alertControllerWithTitle:nil message:nil
+                                                           cancleActionTitle:@"取消"
+                                                               goActionTitle:@"确定"
+                                                              preferredStyle:UIAlertControllerStyleActionSheet
+                                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                                         
+                                                                         [self clearCache];
+                                                                     }];
             
-            SDImageCache *imageCache = [SDImageCache sharedImageCache];
-            NSLog(@"缓存大小 = %luld", (unsigned long)imageCache.getSize);
-            [imageCache clearMemory];
-            [imageCache clearDisk];
-            
-            [self.tableView reloadData];
-        }];
-        [alert addAction:clearAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            UIActionSheet *acitonSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定", nil];
+
+            [acitonSheet showInView:self.view];
+        }
         
-        [self presentViewController:alert animated:YES completion:nil];
     } else if(indexPath.row == 4) {
         NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
         
@@ -160,12 +162,29 @@
     }
 }
 
+- (void)clearCache {
+    SDImageCache *imageCache = [SDImageCache sharedImageCache];
+    NSLog(@"缓存大小 = %luld", (unsigned long)imageCache.getSize);
+    [imageCache clearMemory];
+    [imageCache clearDisk];
+    
+    [self.tableView reloadData];
+}
+
 - (void)wifiSwitchValueChanged:(UISwitch *)aSwitch {
     NSLog(@"switch value changed --- %d !", aSwitch.isOn);
     
     [[NSUserDefaults standardUserDefaults] setBool:aSwitch.isOn forKey:kIsAutoLoadImgOnlyInWifiKey];
     
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark UIActionSheet Delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self clearCache];
+    }
 }
 
 /*

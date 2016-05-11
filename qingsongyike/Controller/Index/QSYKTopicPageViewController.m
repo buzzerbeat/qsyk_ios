@@ -11,7 +11,7 @@
 #import "QSYKResourceDetailViewController.h"
 
 @interface QSYKTopicPageViewController () <QSYKCellDelegate>
-@property (nonatomic, strong) UITableView *tableView;
+//@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *resourceList;
 
 @end
@@ -31,6 +31,7 @@
         tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            self.isRefresh = YES;
             [self loadData];
         }];
         tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
@@ -55,7 +56,7 @@
 
 - (void)loadData {
     NSDictionary *paramaters = nil;
-    if ([self.tableView.mj_footer isRefreshing]) {
+    if (!self.isRefresh) {
         QSYKResourceModel *lastResource = _resourceList.lastObject;
         paramaters = @{
                        @"type" : @1,
@@ -63,7 +64,6 @@
                        };
     } else {
         paramaters = @{@"type" : @1};
-        self.resourceList = [NSMutableArray new];
     }
     
     @weakify(self);
@@ -76,6 +76,10 @@
                                                                [self.tableView.mj_footer endRefreshing];
                                                                
                                                                if (resourceList.count) {
+                                                                   if (self.isRefresh) {
+                                                                       self.isRefresh = NO;
+                                                                       self.resourceList = [NSMutableArray new];
+                                                                   }
                                                                    [self.resourceList addObjectsFromArray:resourceList];
                                                                    [self.tableView reloadData];
                                                                } else {
@@ -95,7 +99,7 @@
 #pragma mark tableView delegate & dataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _resourceList.count;
+    return _resourceList.count ?: 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

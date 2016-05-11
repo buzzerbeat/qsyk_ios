@@ -10,4 +10,6 @@
 
 @interface UIImage (Round)
 
+- (UIImage *)roundImage;
+
 @end

@@ -11,7 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <KRVideoPlayerController.h>
 
-@interface QSYKVideoTableViewCell()
+@interface QSYKVideoTableViewCell() <UIAlertViewDelegate>
 @property (nonatomic, strong) KRVideoPlayerController *videoController;
 
 @end
@@ -22,9 +22,6 @@
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.separatorHeightCon.constant = 1.0 / [[UIScreen mainScreen] scale];
-    
-    self.avatarImageView.layer.cornerRadius = self.avatarImageView.height / 2;
-    self.avatarImageView.layer.masksToBounds = YES;
     
     [self.digBtn setImage:[UIImage imageNamed:@"mainCellDing"] forState:UIControlStateNormal];
     [self.digBtn setImage:[UIImage imageNamed:@"mainCellDingClick"] forState:UIControlStateSelected];
@@ -54,7 +51,7 @@
         return;
     }
     
-    [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]] placeholderImage:[UIImage imageNamed:@"icon_avatar"]];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text    = _resource.username;
     self.pubTimeLabel.text     = _resource.pubTime;
     self.videoLengthLabel.text = _resource.video.length;
@@ -86,13 +83,33 @@
 
 - (IBAction)playVideoBtnClicked:(id)sender {
     if (!kIsNetworkViaWiFi && kIsAutoLoadImgOnlyInWifi) {
-        UIAlertController *alert = [QSYKUtility alertControllerWithTitle:nil message:@"当前使用数据流量，是否继续？" cancleActionTitle:@"取消" goActionTitle:@"继续" handler:^(UIAlertAction * _Nonnull action) {
-            [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
-            [self.backView addSubview:self.videoController.view];
-        }];
+        if (SYSTEM_VERSION >= 8.0) {
+            UIAlertController *alert =
+                [QSYKUtility alertControllerWithTitle:nil
+                                              message:@"当前使用数据流量，是否继续？" cancleActionTitle:@"取消"
+                                        goActionTitle:@"继续"
+                                       preferredStyle:UIAlertControllerStyleAlert
+                                              handler:^(UIAlertAction * _Nonnull action) {
+                                                  [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
+                                                  [self.backView addSubview:self.videoController.view];
+                                              }];
+            
+            [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alert animated:YES completion:nil];
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:@"当前使用数据流量，是否继续？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"继续", nil];
+            [alertView show];
+        }
         
-        [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alert animated:YES completion:nil];
     } else {
+        [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
+        [self.backView addSubview:self.videoController.view];
+    }
+}
+
+#pragma mark UIAlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
         [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
         [self.backView addSubview:self.videoController.view];
     }

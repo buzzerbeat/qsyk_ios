@@ -24,9 +24,6 @@
     
     self.separatorHeightCon.constant = 1.0 / [[UIScreen mainScreen] scale];
     
-    self.avatarImageView.layer.cornerRadius = self.avatarImageView.frame.size.height / 2;
-    self.avatarImageView.layer.masksToBounds = YES;
-    
     self.myImageView.backgroundColor = [UIColor lightGrayColor];
     self.myImageView.userInteractionEnabled = YES;
     [self.myImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPicture)]];
@@ -70,7 +67,7 @@
         return;
     }
     
-    [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]] placeholderImage:[UIImage imageNamed:@"icon_avatar"]];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text = _resource.username;
     self.pubTimeLabel.text = _resource.pubTime;
     self.contentLabel.text = [NSString stringWithFormat:@"%ld赞，%ld踩", _resource.dig, _resource.bury];
@@ -118,8 +115,8 @@
                                 } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                     self.progressView.hidden = YES;
                                     if (!error) {
-                                        //判断是不是大图（暂时定为高 > 宽 * 1.6 时为大图）
-                                        if (_resource.img.height > _resource.img.width * 1.6 && !_resource.img.dynamic) {
+                                        //判断是不是大图（暂时定为高 > 宽 * 2 时为大图）
+                                        if (_resource.img.height > _resource.img.width * 2 && !_resource.img.dynamic) {
                                             //如果是的话，则截出图片的最上方铺满imageView
                                             // 开启图形上下文
                                             //                                            UIGraphicsBeginImageContextWithOptions(self.myImageView.size, YES, 0.0);

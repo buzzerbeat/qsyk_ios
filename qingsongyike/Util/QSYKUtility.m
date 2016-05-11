@@ -13,11 +13,11 @@
 
 + (NSString *)imgUrl:(NSString *)sid width:(int)width height:(int)height extension:(NSString *)extension
 {
-    return [NSString stringWithFormat:@"%@img/show/sid/%@/w/%d/h/%d/t/1/show.%@", kBaseURL, sid, width, height, extension];
+    return [NSString stringWithFormat:@"%@img/show/sid/%@/w/%d/h/%d/t/1/show.%@", kPictureBaseURL, sid, width, height, extension];
 }
 
 + (NSString *)imgUrl:(NSString *)sid {
-    return [NSString stringWithFormat:@"%@img/show/sid/%@/w//h//t/1/show.png", kBaseURL, sid];
+    return [NSString stringWithFormat:@"%@img/show/sid/%@/w//h//t/1/show.png", kPictureBaseURL, sid];
 }
 
 + (CGFloat)heightForMutilLineLabel:(NSString *)string font:(CGFloat)fontSize width:(CGFloat)width {
@@ -34,8 +34,13 @@
     return ceil(titleSize.height);
 }
 
-+ (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSString *)message cancleActionTitle:(NSString *)cancleActionTitle goActionTitle:(NSString *)goActionTitle handler:(void (^ __nullable)(UIAlertAction *action))handler {
-    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
++ (UIAlertController *)alertControllerWithTitle:(NSString *)title
+                                        message:(NSString *)message
+                              cancleActionTitle:(NSString *)cancleActionTitle
+                                  goActionTitle:(NSString *)goActionTitle
+                                 preferredStyle:(UIAlertControllerStyle)preferredStyle
+                                        handler:(void (^ __nullable)(UIAlertAction *action))handler {
+    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:preferredStyle];
     
     if (cancleActionTitle.length) {
         UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:cancleActionTitle style:UIAlertActionStyleCancel handler:nil];

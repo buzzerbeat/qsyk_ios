@@ -12,6 +12,8 @@
 #import <UMengSocial/UMSocial.h>
 #import "QSYKJPushManager.h"
 #import "JPUSHService.h"
+#import "QSYKUMengManager.h"
+#import "LYTopWindow.h"
 
 @interface AppDelegate ()
 
@@ -26,37 +28,51 @@
     //AFNetwork state monitoring
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        //TODO: 网络状况处理方法
+        //TODO: 网络状况变化处理方法
         
     }];
     
+    // 实现点击状态栏让keyWindow上的ScrollView滚动到顶部
+    [[LYTopWindow sharedTopWindow] setClickStatusBarBlock:^{
+        // 让keyWindow上的ScrollView滚动到顶部
+        [[LYTopWindow sharedTopWindow] searchAllScrollViewsInView:[UIApplication sharedApplication].keyWindow];
+        
+        // 如果需要实现点击状态栏，实现其他功能，可用在这里编写功能代码
+    }];
+    
+    // 极光推送
     [QSYKJPushManager sharedManager];
+    // 友盟
+    [QSYKUMengManager shardManager];
     
     // 注册通知监听自定义消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
     
-    // 首次启动app时设置‘仅在WiFi下自动加载图片’设置默认值为YES
-//    [[NSUserDefaults standardUserDefaults] setBool:YES frorKey:kIsAutoLoadImgOnlyInWifiKey];
-    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.window makeKeyAndVisible];
+    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
+                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]];
     
+    // 利用线程的方式延长launchScreen 的显示时间
+    [NSThread sleepForTimeInterval:2.5];
+    
+    /*
     // 展示SplashView
-    
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default"]];
     imageView.frame = SCREEN_FRAME;
     UIViewController *tempVC = [[UIViewController alloc] init];
     [tempVC.view addSubview:imageView];
+    
     self.window.rootViewController = tempVC;
     
-    [self.window makeKeyAndVisible];
-    
-    [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(timerForSplashView) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(timeoutForSplashView) userInfo:nil repeats:NO];
+     */
     
     return YES;
 }
 
-- (void)timerForSplashView {
+- (void)timeoutForSplashView {
     self.window.rootViewController = [[QSYKBaseNavigationController alloc]
                                       initWithRootViewController:[[QSYKIndexViewController alloc] init]];
 }
