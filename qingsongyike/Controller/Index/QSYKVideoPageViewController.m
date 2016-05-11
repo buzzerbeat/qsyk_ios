@@ -116,7 +116,12 @@
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
                                                           font:16.f
                                                          width:SCREEN_WIDTH - 8 * 4 - 7];
-    extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.video.height / resource.video.width;
+    
+    if (resource.video.height > resource.video.width) {
+        extraHeight += (SCREEN_WIDTH - 8 * 4);
+    } else {
+        extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.video.height / resource.video.width;
+    }
     
     return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
 }

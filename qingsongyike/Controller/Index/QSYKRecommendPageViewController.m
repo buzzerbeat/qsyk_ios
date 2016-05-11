@@ -161,7 +161,11 @@
         return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
     } else {
         // video类型同图片
-        extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.video.height / resource.video.width;
+        if (resource.video.height > resource.video.width) {
+            extraHeight += (SCREEN_WIDTH - 8 * 4);
+        } else {
+            extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.video.height / resource.video.width;
+        }
         
         return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
     }
