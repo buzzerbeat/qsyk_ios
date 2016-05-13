@@ -33,4 +33,6 @@
 
 + (NSString * _Nonnull)UAString;
 
++ (void)rateResourceWithSid:(NSString * _Nonnull)sid type:(NSInteger)type;
+
 @end

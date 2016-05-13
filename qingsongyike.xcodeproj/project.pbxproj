@@ -9,15 +9,18 @@
 /* Begin PBXBuildFile section */
 		8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */; };
 		8C3546CE1CD9EBFD002807DD /* QSYKJPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */; };
+		8C4D726A1CE4A86400D454A5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D72681CE4A86400D454A5 /* Default.png */; };
+		8C4D726B1CE4A86400D454A5 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D72691CE4A86400D454A5 /* default@2x.png */; };
 		8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */; };
 		8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */; };
+		8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C94A1AE1CE3433C00D78CDE /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8C95B8D01CCC529D0058B82D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C95B8CF1CCC529D0058B82D /* main.m */; };
 		8C95B8D31CCC529D0058B82D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C95B8D21CCC529D0058B82D /* AppDelegate.m */; };
 		8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C95B8D71CCC529D0058B82D /* Main.storyboard */; };
 		8C95B8DB1CCC529E0058B82D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C95B8DA1CCC529E0058B82D /* Assets.xcassets */; };
 		8CB299151CCF186C0024E471 /* QSYKSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */; };
 		8CB2993A1CD04BB80024E471 /* QSYKUMengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299391CD04BB80024E471 /* QSYKUMengManager.m */; };
-		8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */; };
+		8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		8CB299431CD051C80024E471 /* QSYKSharePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299421CD051C80024E471 /* QSYKSharePopupView.m */; };
 		8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB299441CD051D30024E471 /* QSYKSharePopupView.xib */; };
 		8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299491CD05C5C0024E471 /* KLCPopup.m */; };
@@ -56,7 +59,7 @@
 		8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF9C6BC1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib */; };
 		8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C01CCDBCDC0008FCA0 /* QSYKRefreshFooter.m */; };
 		8CF9C6C41CCDC9730008FCA0 /* QSYKResourceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */; };
-		E520945C0ABF1FD5C2958939 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C37A885890D3BFB11B5E67D /* libPods.a */; };
+		E520945C0ABF1FD5C2958939 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C37A885890D3BFB11B5E67D /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,10 +70,13 @@
 		8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKDetailPicutreViewController.m; sourceTree = "<group>"; };
 		8C3546CC1CD9EBFD002807DD /* QSYKJPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKJPushManager.h; sourceTree = "<group>"; };
 		8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKJPushManager.m; sourceTree = "<group>"; };
+		8C4D72681CE4A86400D454A5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		8C4D72691CE4A86400D454A5 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		8C6707A71CE203F5002CA1E1 /* LYTopRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopRootController.h; sourceTree = "<group>"; };
 		8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYTopRootController.m; sourceTree = "<group>"; };
 		8C6707A91CE203F5002CA1E1 /* LYTopWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopWindow.h; sourceTree = "<group>"; };
 		8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYTopWindow.m; sourceTree = "<group>"; };
+		8C94A1AE1CE3433C00D78CDE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8C95B8CB1CCC529D0058B82D /* qingsongyike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qingsongyike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C95B8CF1CCC529D0058B82D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8C95B8D11CCC529D0058B82D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
@@ -162,6 +168,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */,
 				8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */,
 				E520945C0ABF1FD5C2958939 /* libPods.a in Frameworks */,
 			);
@@ -173,6 +180,7 @@
 		584AA0AA95BEF5FF26F0CCFA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C94A1AE1CE3433C00D78CDE /* UIKit.framework */,
 				8CB2993D1CD04DF90024E471 /* MapKit.framework */,
 				8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */,
 				5C37A885890D3BFB11B5E67D /* libPods.a */,
@@ -323,6 +331,8 @@
 				8C95B8D21CCC529D0058B82D /* AppDelegate.m */,
 				8C95B8D71CCC529D0058B82D /* Main.storyboard */,
 				8C95B8DA1CCC529E0058B82D /* Assets.xcassets */,
+				8C4D72681CE4A86400D454A5 /* Default.png */,
+				8C4D72691CE4A86400D454A5 /* default@2x.png */,
 				8C95B8DF1CCC529E0058B82D /* Info.plist */,
 				8CBFC47F1CCC649D00B82E2D /* PrefixHeader.pch */,
 				8CB299BE1CD0CF620024E471 /* LaunchScreen.xib */,
@@ -505,8 +515,10 @@
 				8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */,
 				8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */,
 				8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */,
+				8C4D726B1CE4A86400D454A5 /* default@2x.png in Resources */,
 				8CB299BF1CD0CF620024E471 /* LaunchScreen.xib in Resources */,
 				8CB2994F1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib in Resources */,
+				8C4D726A1CE4A86400D454A5 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,7 +674,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -703,7 +715,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -715,6 +727,7 @@
 			baseConfigurationReference = 41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -724,7 +737,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/System/PrefixHeader.pch";
 				INFOPLIST_FILE = qingsongyike/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -737,6 +750,7 @@
 			baseConfigurationReference = 1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -746,7 +760,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/System/PrefixHeader.pch";
 				INFOPLIST_FILE = qingsongyike/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";

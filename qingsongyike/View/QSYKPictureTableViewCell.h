@@ -29,9 +29,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *pubTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *myImageView;
-@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *digBtn;
+@property (weak, nonatomic) IBOutlet UILabel *digCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *buryBtn;
+@property (weak, nonatomic) IBOutlet UILabel *buryCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightCon;
@@ -42,6 +43,7 @@
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
 @property (nonatomic, strong) QSYKResourceModel *resource;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic) BOOL isInnerPage;
 
 + (CGFloat)cellBaseHeight;
 

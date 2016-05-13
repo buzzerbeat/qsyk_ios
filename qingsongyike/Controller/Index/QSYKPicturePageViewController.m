@@ -110,12 +110,12 @@
     // width = content标签左右边距离屏幕左右边的距离的和
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
                                                           font:16.f
-                                                         width:SCREEN_WIDTH - 8 * 4 - 7];
+                                                         width:SCREEN_WIDTH - 8 * 4];
     
     if (resource.img.height > resource.img.width * 2 && !resource.img.dynamic) {
-        extraHeight = (SCREEN_WIDTH - 8 * 4) * 1.5;
+        extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
     } else {
-        extraHeight = (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
+        extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
     }
     
     return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
@@ -148,7 +148,15 @@
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
+    [QSYKUtility rateResourceWithSid:sid type:type];
     
+    QSYKResourceModel *resource = self.resourceList[indexPath.row];
+    if (type == 1) {
+        resource.dig++;
+    } else {
+        resource.bury++;
+    }
+    [self.resourceList replaceObjectAtIndex:indexPath.row withObject:resource];
 }
 
 - (void)commentResourceWithSid:(NSString *)sid {

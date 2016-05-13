@@ -153,7 +153,7 @@
         // width = content标签左右边距离屏幕左右边的距离的和
         CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_resource.content
                                                               font:16.f
-                                                             width:SCREEN_WIDTH - 8 * 4 - 7];
+                                                             width:SCREEN_WIDTH - 8 * 4];
         
         switch (_type) {
             case 1: {
@@ -163,17 +163,17 @@
                 break;
             case 2: {
                 // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-                if (_resource.img.height > 2 * _resource.img.width && !_resource.img.dynamic) {
-                    extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
-                } else {
-                    extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.img.height / _resource.img.width;
-                }
+                extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.img.height / _resource.img.width;
                 return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
             }
                 break;
             case 3: {
                 // video类型cell
-                extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.video.height / _resource.video.width;
+                if (_resource.video.height > _resource.video.width) {
+                    extraHeight += (SCREEN_WIDTH - 8 * 4);
+                } else {
+                    extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.video.height / _resource.video.width;
+                }
                 
                 return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
             }
@@ -208,6 +208,7 @@
                 QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
                 cell.resource = _resource;
                 cell.indexPath = indexPath;
+                cell.isInnerPage = YES;
                 cell.delegate = self;
                 
                 return cell;
@@ -302,37 +303,13 @@
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
-    @weakify(self);
-    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:@"resource/rate"
-                                            parameters:@{
-                                                         @"type" : @(type),
-                                                         @"sid" : sid,
-                                                         }
-                                               success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-                                                   if (result && result.success) {
-                                                       @strongify(self);
-                                                       [SVProgressHUD showSuccessWithStatus:@"评价成功"];
-                                                       
-//                                                       if (type == 1) {
-//                                                           self.resource.dig += 1;
-//                                                       } else {
-//                                                           self.resource.bury -= 1;
-//                                                       }
-//                                                       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                                                           [self loadResourceData];
-//                                                       });
-                                                       
-//                                                       [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                                                   } else {
-                                                       [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   }
-                                                   
-                                               } failure:^(NSError *error) {
-                                                   [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   NSLog(@"error = %@", error);
-                                               }];
+    [QSYKUtility rateResourceWithSid:sid type:type];
+    
+    if (type == 1) {
+        _resource.dig++;
+    } else {
+        _resource.bury++;
+    }
 }
 
 - (void)commentResourceWithSid:(NSString *)sid {

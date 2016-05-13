@@ -14,11 +14,12 @@
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.separatorHeightCon.constant = 1.0 / [[UIScreen mainScreen] scale];
+    [self.contentLabel setNumberOfLines:0];
     
-    [self.digBtn setImage:[UIImage imageNamed:@"mainCellDing"] forState:UIControlStateNormal];
-    [self.digBtn setImage:[UIImage imageNamed:@"mainCellDingClick"] forState:UIControlStateSelected];
-    [self.buryBtn setImage:[UIImage imageNamed:@"mainCellCai"] forState:UIControlStateNormal];
-    [self.buryBtn setImage:[UIImage imageNamed:@"mainCellCaiClick"] forState:UIControlStateSelected];
+    [self.digBtn setImage:[UIImage imageNamed:@"icon_like"] forState:UIControlStateNormal];
+    [self.digBtn setImage:[UIImage imageNamed:@"icon_like_pressed"] forState:UIControlStateSelected];
+    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
+    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike_pressed"] forState:UIControlStateSelected];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,6 +33,8 @@
     
     [self.digBtn setSelected:NO];
     [self.buryBtn setSelected:NO];
+    self.digCountLabel.textColor = [UIColor lightGrayColor];
+    self.buryCountLabel.textColor = [UIColor lightGrayColor];
     self.buryBtn.userInteractionEnabled = YES;
     self.digBtn.userInteractionEnabled = YES;
 }
@@ -41,10 +44,16 @@
         return;
     }
     
+    // 解决cell的contentView不随着cell高度的变化而变化（原因未找到）
+    self.contentView.height = [QSYKUtility heightForMutilLineLabel:_resource.content
+                                                              font:16.f
+                                                             width:SCREEN_WIDTH - 8 * 4] + 140 ;
+    
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabe.text = _resource.username;
     self.pubTimeLabel.text = _resource.pubTime;
-    self.contentLabel.text = [NSString stringWithFormat:@"%ld赞，%ld踩", _resource.dig, _resource.bury];
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_resource.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -59,6 +68,8 @@
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:_resource.sid type:1 indexPath:_indexPath];
         [self.digBtn setSelected:YES];
+        self.digCountLabel.textColor = kCoreColor;
+        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
         [self disableRateBtn];
     }
 }
@@ -67,6 +78,8 @@
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:_resource.sid type:2 indexPath:_indexPath];
         [self.buryBtn setSelected:YES];
+        self.buryCountLabel.textColor = kCoreColor;
+        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
         [self disableRateBtn];
     }
 }
@@ -89,7 +102,7 @@
 }
 
 + (CGFloat)cellBaseHeight {
-    return 160.f;
+    return 140.f;
 }
 
 @end

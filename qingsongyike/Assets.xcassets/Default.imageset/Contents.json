@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "banner-1920.png",
+      "filename" : "default.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "default@2x.png",
       "scale" : "2x"
     },
     {

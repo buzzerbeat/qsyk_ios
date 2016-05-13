@@ -71,4 +71,24 @@
     return [NSString stringWithFormat:@"%@ iOS v%@ mid:%@", appName, version, mid];
 }
 
++ (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                             URLString:@"resource/rate"
+                                            parameters:@{
+                                                         @"type" : @(type),
+                                                         @"sid" : sid,
+                                                         }
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                   
+                                                   if (!(result || result.success)) {
+//                                                       [SVProgressHUD showErrorWithStatus:@"评价失败"];
+                                                   }
+                                                   
+                                               } failure:^(NSError *error) {
+//                                                   [SVProgressHUD showErrorWithStatus:@"评价失败"];
+                                                   NSLog(@"error = %@", error);
+                                               }];
+}
+
 @end

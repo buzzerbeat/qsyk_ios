@@ -107,8 +107,8 @@
     // width = content标签左右边距离屏幕左右边的距离的和
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
                                                           font:16.f
-                                                         width:SCREEN_WIDTH - 8 * 4 - 7];
-        
+                                                         width:SCREEN_WIDTH - 8 * 4];
+    
     return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
 }
 
@@ -142,26 +142,15 @@
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
-    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:@"resource/rate"
-                                            parameters:@{
-                                                         @"type" : @(type),
-                                                         @"sid" : sid,
-                                                         }
-                                               success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-                                                   if (result && result.success) {
-                                                       [SVProgressHUD showSuccessWithStatus:@"评价成功"];
-                                                       
-//                                                       [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                                                   } else {
-                                                       [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   }
-                                                   
-                                               } failure:^(NSError *error) {
-                                                   [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   NSLog(@"error = %@", error);
-                                               }];
+    [QSYKUtility rateResourceWithSid:sid type:type];
+    
+    QSYKResourceModel *resource = self.resourceList[indexPath.row];
+    if (type == 1) {
+        resource.dig++;
+    } else {
+        resource.bury++;
+    }
+    [self.resourceList replaceObjectAtIndex:indexPath.row withObject:resource];
 }
 
 - (void)commentResourceWithSid:(NSString *)sid {

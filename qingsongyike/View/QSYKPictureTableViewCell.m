@@ -28,10 +28,10 @@
     self.myImageView.userInteractionEnabled = YES;
     [self.myImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPicture)]];
     
-    [self.digBtn setImage:[UIImage imageNamed:@"mainCellDing"] forState:UIControlStateNormal];
-    [self.digBtn setImage:[UIImage imageNamed:@"mainCellDingClick"] forState:UIControlStateSelected];
-    [self.buryBtn setImage:[UIImage imageNamed:@"mainCellCai"] forState:UIControlStateNormal];
-    [self.buryBtn setImage:[UIImage imageNamed:@"mainCellCaiClick"] forState:UIControlStateSelected];
+    [self.digBtn setImage:[UIImage imageNamed:@"icon_like"] forState:UIControlStateNormal];
+    [self.digBtn setImage:[UIImage imageNamed:@"icon_like_pressed"] forState:UIControlStateSelected];
+    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
+    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike_pressed"] forState:UIControlStateSelected];
     
     self.tapToDownloadIndicatorLabel.userInteractionEnabled = YES;
     [self.tapToDownloadIndicatorLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTODownload)]];
@@ -47,18 +47,14 @@
     [super prepareForReuse];
     self.myImageView.image = nil;
     self.avatarImageView.image = nil;
-    self.progressView.hidden = NO;
+    self.progressView.hidden = YES;
     self.showBigPicBtn.hidden = YES;
     [self.digBtn setSelected:NO];
     [self.buryBtn setSelected:NO];
+    self.digCountLabel.textColor = [UIColor lightGrayColor];
+    self.buryCountLabel.textColor = [UIColor lightGrayColor];
     self.buryBtn.userInteractionEnabled = YES;
     self.digBtn.userInteractionEnabled = YES;
-    
-//    if (!kIsNetworkViaWiFi && kIsAutoLoadImgOnlyInWifi) {
-//        self.tapToDownloadIndicatorLabel.hidden = NO;
-//    } else {
-//        self.tapToDownloadIndicatorLabel.hidden = YES;
-//    }
 }
 
 - (void)layoutSubviews {
@@ -67,10 +63,12 @@
         return;
     }
     
+    self.progressView.hidden = YES;
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text = _resource.username;
     self.pubTimeLabel.text = _resource.pubTime;
-    self.contentLabel.text = [NSString stringWithFormat:@"%ld赞，%ld踩", _resource.dig, _resource.bury];
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_resource.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -81,9 +79,9 @@
     self.contentLabel.attributedText = attrString;
     
     self.URL = [NSURL URLWithString:[QSYKUtility imgUrl:_resource.img.sid
-                                                        width:_resource.img.width
-                                                       height:_resource.img.height
-                                                    extension:_resource.img.extension]];
+                                                  width:_resource.img.width
+                                                 height:_resource.img.height
+                                              extension:_resource.img.extension]];
     
     if (!kIsNetworkViaWiFi && kIsAutoLoadImgOnlyInWifi) {
         self.tapToDownloadIndicatorLabel.hidden = NO;
@@ -92,8 +90,6 @@
         self.tapToDownloadIndicatorLabel.hidden = YES;
         [self downloadWithURL:_URL];
     }
-    
-//    [self downloadWithURL:URL];
 }
 
 - (void)tapTODownload {
@@ -116,7 +112,7 @@
                                     self.progressView.hidden = YES;
                                     if (!error) {
                                         //判断是不是大图（暂时定为高 > 宽 * 2 时为大图）
-                                        if (_resource.img.height > _resource.img.width * 2 && !_resource.img.dynamic) {
+                                        if (_resource.img.height > _resource.img.width * 2 && !_resource.img.dynamic && !_isInnerPage) {
                                             //如果是的话，则截出图片的最上方铺满imageView
                                             // 开启图形上下文
                                             //                                            UIGraphicsBeginImageContextWithOptions(self.myImageView.size, YES, 0.0);
@@ -157,6 +153,8 @@
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:_resource.sid type:1 indexPath:_indexPath];
         [self.digBtn setSelected:YES];
+        self.digCountLabel.textColor = kCoreColor;
+        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
         [self disableRateBtn];
     }
 }
@@ -165,6 +163,8 @@
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:_resource.sid type:2 indexPath:_indexPath];
         [self.buryBtn setSelected:YES];
+        self.buryCountLabel.textColor = kCoreColor;
+        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
         [self disableRateBtn];
     }
 }
@@ -187,7 +187,7 @@
 }
 
 + (CGFloat)cellBaseHeight {
-    return 172.f;
+    return 157.f;
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "QSYKSettingsTableViewController.h"
 #import "WebViewController.h"
 
-#define CUR_NOTI_TYPES  [[UIApplication sharedApplication] currentUserNotificationSettings].types
+#define CUR_NOTI_TYPES  (SYSTEM_VERSION > 8.0 ? [[UIApplication sharedApplication] currentUserNotificationSettings].types : [[UIApplication sharedApplication] enabledRemoteNotificationTypes])
 
 @interface QSYKSettingsTableViewController () <UIActionSheetDelegate>
 @property (nonatomic, strong) NSArray *cellTitles;
@@ -113,13 +113,21 @@
         UILabel *valueLabel = [[UILabel alloc] init];
         valueLabel.font = [UIFont systemFontOfSize:14.f];
 
-        valueLabel.text = CUR_NOTI_TYPES == 0 ? @"已关闭" : @"已开启";
+        if (SYSTEM_VERSION >= 8.0) {
+            valueLabel.text = CUR_NOTI_TYPES == 0 ? @"已关闭" : @"已开启";
+            [cell.contentView addSubview:valueLabel];
+            [valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerY.equalTo(cell.contentView);
+                make.right.equalTo(cell.contentView);
+            }];
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            
+            NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"推送消息（请到“设置”-“通知中心”修改）"];
+            [attrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Helvetica" size:12] range:NSMakeRange(4, attrStr.length - 4)];
+            cell.textLabel.attributedText = attrStr;
+        }
         
-        [cell.contentView addSubview:valueLabel];
-        [valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView);
-            make.right.equalTo(cell.contentView);
-        }];
     }
     
     return cell;
@@ -132,7 +140,8 @@
     } else if(indexPath.row == 2) {
         
         if (SYSTEM_VERSION >= 8.0) {
-            UIAlertController *alert = [QSYKUtility alertControllerWithTitle:nil message:nil
+            UIAlertController *alert = [QSYKUtility alertControllerWithTitle:nil
+                                                                     message:@"确定清除缓存？"
                                                            cancleActionTitle:@"取消"
                                                                goActionTitle:@"确定"
                                                               preferredStyle:UIAlertControllerStyleActionSheet
@@ -149,10 +158,12 @@
         }
         
     } else if(indexPath.row == 4) {
-        NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        
-        if([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
+        if (SYSTEM_VERSION >= 8.0) {
+            NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            
+            if([[UIApplication sharedApplication] canOpenURL:url]) {
+                [[UIApplication sharedApplication] openURL:url];
+            }
         }
     } else if(indexPath.row == 5) {
         WebViewController *webView = [[WebViewController alloc] initWithTitle:@"用户协议" url:@"http://a.appcq.cn/mobile/page/pagename/qingsong"];
@@ -182,7 +193,7 @@
 #pragma mark UIActionSheet Delegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
+    if (buttonIndex == 0) {
         [self clearCache];
     }
 }

@@ -44,6 +44,8 @@
     [QSYKJPushManager sharedManager];
     // 友盟
     [QSYKUMengManager shardManager];
+    // 设置APP最大缓存为 100M
+    [[SDImageCache sharedImageCache] setMaxCacheSize:100 * 1024 * 1024];
     
     // 注册通知监听自定义消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
@@ -51,13 +53,13 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
-    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
-                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]];
+//    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
+//                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]];
     
     // 利用线程的方式延长launchScreen 的显示时间
-    [NSThread sleepForTimeInterval:2.5];
+//    [NSThread sleepForTimeInterval:2.5];
     
-    /*
+    
     // 展示SplashView
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default"]];
     imageView.frame = SCREEN_FRAME;
@@ -66,8 +68,9 @@
     
     self.window.rootViewController = tempVC;
     
-    [NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(timeoutForSplashView) userInfo:nil repeats:NO];
-     */
+    NSTimeInterval timeInterval = SYSTEM_VERSION >= 8.0 ? 2.5f : 0;
+    [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timeoutForSplashView) userInfo:nil repeats:NO];
+     
     
     return YES;
 }
@@ -78,10 +81,10 @@
 }
 
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
-    NSDictionary * userInfo = [notification userInfo];
-    NSString *content = [userInfo valueForKey:@"content"];
-    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
+//    NSDictionary * userInfo = [notification userInfo];
+//    NSString *content = [userInfo valueForKey:@"content"];
+//    NSDictionary *extras = [userInfo valueForKey:@"extras"];
+//    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
     
 }
 

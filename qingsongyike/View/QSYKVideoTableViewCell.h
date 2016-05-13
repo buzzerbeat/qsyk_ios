@@ -20,11 +20,12 @@
 @property (weak, nonatomic) IBOutlet UIImageView *videoThumbImageView;
 @property (weak, nonatomic) IBOutlet UIButton *playVideoBtn;
 @property (weak, nonatomic) IBOutlet UILabel *videoLengthLabel;
-@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightCon;
 @property (weak, nonatomic) IBOutlet UIButton *shareBtn;
 @property (weak, nonatomic) IBOutlet UIButton *digBtn;
+@property (weak, nonatomic) IBOutlet UILabel *digCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *buryBtn;
+@property (weak, nonatomic) IBOutlet UILabel *buryCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
