@@ -9,14 +9,6 @@
       "scale" : "3x"
     },
     {
-      "orientation" : "landscape",
-      "idiom" : "iphone",
-      "extent" : "full-screen",
-      "minimum-system-version" : "8.0",
-      "subtype" : "736h",
-      "scale" : "3x"
-    },
-    {
       "orientation" : "portrait",
       "idiom" : "iphone",
       "extent" : "full-screen",

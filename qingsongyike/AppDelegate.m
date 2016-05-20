@@ -14,6 +14,8 @@
 #import "JPUSHService.h"
 #import "QSYKUMengManager.h"
 #import "LYTopWindow.h"
+#import "QSYKRootTabBarController.h"
+#import "QSYKTopWindow.h"
 
 @interface AppDelegate ()
 
@@ -33,12 +35,16 @@
     }];
     
     // 实现点击状态栏让keyWindow上的ScrollView滚动到顶部
-    [[LYTopWindow sharedTopWindow] setClickStatusBarBlock:^{
-        // 让keyWindow上的ScrollView滚动到顶部
-        [[LYTopWindow sharedTopWindow] searchAllScrollViewsInView:[UIApplication sharedApplication].keyWindow];
-        
-        // 如果需要实现点击状态栏，实现其他功能，可用在这里编写功能代码
-    }];
+    if (SYSTEM_VERSION >= 8.0) {
+        [[LYTopWindow sharedTopWindow] setClickStatusBarBlock:^{
+            // 让keyWindow上的ScrollView滚动到顶部
+            [[LYTopWindow sharedTopWindow] searchAllScrollViewsInView:[UIApplication sharedApplication].keyWindow];
+            
+            // 如果需要实现点击状态栏，实现其他功能，可用在这里编写功能代码
+        }];
+    } else {
+        [QSYKTopWindow show];
+    }
     
     // 极光推送
     [QSYKJPushManager sharedManager];
@@ -47,25 +53,28 @@
     // 设置APP最大缓存为 100M
     [[SDImageCache sharedImageCache] setMaxCacheSize:100 * 1024 * 1024];
     
-    // 注册通知监听自定义消息
+    // 首次启动app是进行注册
+    if (!kToken) {
+        [[QSYKDataManager sharedManager] registerAction];
+    }
+    [self startApp];
+    
+    // 注册通知监听自定义推送消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.window makeKeyAndVisible];
 //    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
-//                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]];
+//                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]]
     
-    // 利用线程的方式延长launchScreen 的显示时间
-//    [NSThread sleepForTimeInterval:2.5];
-    
+    [QSYKUtility loadSplash];
     
     // 展示SplashView
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default"]];
     imageView.frame = SCREEN_FRAME;
     UIViewController *tempVC = [[UIViewController alloc] init];
     [tempVC.view addSubview:imageView];
-    
     self.window.rootViewController = tempVC;
     
     NSTimeInterval timeInterval = SYSTEM_VERSION >= 8.0 ? 2.5f : 0;
@@ -76,8 +85,21 @@
 }
 
 - (void)timeoutForSplashView {
-    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
-                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
+    self.window.rootViewController = [[QSYKRootTabBarController alloc] init];
+}
+
+- (void)startApp {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
+                     URLString:[NSString stringWithFormat:@"%@/user/sign-task", kAuthBaseURL]
+                    parameters:nil
+                       success:^(NSURLSessionDataTask *task, id responseObject) {
+                           [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
+                       }
+                       failure:^(NSError *error) {
+                           
+                       }];
 }
 
 - (void)networkDidReceiveMessage:(NSNotification *)notification {

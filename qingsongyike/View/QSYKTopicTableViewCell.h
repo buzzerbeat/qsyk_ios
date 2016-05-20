@@ -6,13 +6,12 @@
 //  Copyright © 2016 subo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "QSYKCellDelegate.h"
+#import "QSYKBaseTableViewCell.h"
 
 #define kCellIdentifier_topicCell @"QSYKTopicTableViewCell"
 
 
-@interface QSYKTopicTableViewCell : UITableViewCell
+@interface QSYKTopicTableViewCell : QSYKBaseTableViewCell
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabe;
@@ -27,7 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
-@property (nonatomic, strong) QSYKResourceModel *resource;
+@property (nonatomic, strong) id resource;
+@property (nonatomic) BOOL flag;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
 + (CGFloat)cellBaseHeight;

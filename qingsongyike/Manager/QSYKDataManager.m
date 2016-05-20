@@ -7,6 +7,7 @@
 //
 
 #import "QSYKDataManager.h"
+#import "QSYKResultModel.h"
 
 @interface QSYKDataManager()
 
@@ -44,6 +45,14 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
+    if ([URLString hasPrefix:@"http://c2"]) {
+        NSString *token = [self.manager.requestSerializer valueForHTTPHeaderField:@"Authorization"];
+        if (token.length < 14) {
+            [self.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", kToken] forHTTPHeaderField:@"Authorization"];
+            NSLog(@"token = %@", kToken);
+        }
+    }
+    
     NSURLSessionDataTask *task = nil;
     
     if (method == QSYKHTTPMethodGET) {
@@ -75,6 +84,28 @@
     }
     
     return task;
+}
+
+- (void)registerAction {
+    
+    NSLog(@"UUID = %@", UUID);
+    [self requestWithMethod:QSYKHTTPMethodPOST
+                  URLString:[NSString stringWithFormat:@"%@/user/register", kAuthBaseURL]
+                 parameters:@{@"uuid": UUID}
+                    success:^(NSURLSessionDataTask *task, id responseObject) {
+                        
+                        NSError *error = nil;
+                        QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:&error];
+                        if (result && !result.status) {
+                            // 注册成功后把返回的token保存到本地
+                            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                            
+                            [userDefaults setValue:result.user[@"auth_key"] forKey:@"token"];
+                            [userDefaults synchronize];
+                        }
+                    } failure:^(NSError *error) {
+                        NSLog(@"error = %@", error);
+                    }];
 }
 
 @end

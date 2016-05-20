@@ -72,23 +72,53 @@
 }
 
 + (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type {
+    NSString *URLStr = type == 1 ? @"/resource/like" : @"/resource/hate";
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:@"resource/rate"
-                                            parameters:@{
-                                                         @"type" : @(type),
-                                                         @"sid" : sid,
-                                                         }
-                                               success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-                                                   
-                                                   if (!(result || result.success)) {
-//                                                       [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   }
-                                                   
-                                               } failure:^(NSError *error) {
-//                                                   [SVProgressHUD showErrorWithStatus:@"评价失败"];
-                                                   NSLog(@"error = %@", error);
-                                               }];
+                                                 URLString:[NSString stringWithFormat:@"%@/%@", kAuthBaseURL, URLStr]
+                                                parameters:@{
+                                                             @"sid" : sid,
+                                                             }
+                                                   success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                       QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                       
+                                                       if (result && !result.status) {
+                                                           NSLog(@"评价成功");
+                                                       }
+                                                       
+                                                   } failure:^(NSError *error) {
+                                                       NSLog(@"评价失败  %@", error);
+                                                   }];
+}
+
++ (void)loadSplash {
+    
+    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_sync(concurrentQueue, ^{
+        
+        // 1.请求加密的数据
+        NSError *encodeError = nil;
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/splash", kAuthBaseURL]];
+        NSData *encodedData = [NSData dataWithContentsOfURL:url options:0 error:&encodeError];
+        
+        // 2.解码数据
+        NSData *decodedData = [[NSData alloc] initWithBase64EncodedData:encodedData options:0];
+//        NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
+        
+        // 3.把解密后的数据转换为字典类型
+        NSError *parseError = nil;
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:decodedData options:0 error:&parseError];
+        NSLog(@"dic = %@", dic);
+        
+        // 提取开关设置
+        BOOL lotteryEnable = [dic[@"config"][@"lotteryEnable"] boolValue];
+        NSLog(@"%d", lotteryEnable);
+        
+        // 存到本地
+        [[NSUserDefaults standardUserDefaults] setBool:lotteryEnable forKey:@"lotteryEnable"];
+        BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
+        NSLog(@"saveSuccess = %d", saveSuccess);
+        
+    });
 }
 
 @end

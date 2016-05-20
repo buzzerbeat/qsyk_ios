@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C13D2991CEABB6C00C1BE9B /* default_4.7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C13D2981CEABB6C00C1BE9B /* default_4.7.png */; };
+		8C13D29B1CEB42F100C1BE9B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */; };
 		8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */; };
 		8C3546CE1CD9EBFD002807DD /* QSYKJPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */; };
-		8C4D726A1CE4A86400D454A5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D72681CE4A86400D454A5 /* Default.png */; };
-		8C4D726B1CE4A86400D454A5 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D72691CE4A86400D454A5 /* default@2x.png */; };
 		8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */; };
 		8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */; };
 		8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C94A1AE1CE3433C00D78CDE /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -26,14 +26,12 @@
 		8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299491CD05C5C0024E471 /* KLCPopup.m */; };
 		8CB2994D1CD05DE30024E471 /* QSYKShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB2994C1CD05DE30024E471 /* QSYKShareManager.m */; };
 		8CB2994F1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB2994E1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib */; };
-		8CB299BF1CD0CF620024E471 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB299BE1CD0CF620024E471 /* LaunchScreen.xib */; };
-		8CBFC4681CCC5CC900B82E2D /* QSYKBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4671CCC5CC900B82E2D /* QSYKBaseViewController.m */; };
+		8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */; };
 		8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */; };
 		8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4741CCC5FD500B82E2D /* QSYKVideoPageViewController.m */; };
 		8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4771CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m */; };
 		8CBFC47B1CCC608400B82E2D /* QSYKPicturePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC47A1CCC608400B82E2D /* QSYKPicturePageViewController.m */; };
 		8CBFC47E1CCC609600B82E2D /* QSYKTopicPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC47D1CCC609600B82E2D /* QSYKTopicPageViewController.m */; };
-		8CBFC4821CCC691F00B82E2D /* QSYKBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4811CCC691F00B82E2D /* QSYKBaseNavigationController.m */; };
 		8CBFC4861CCC722B00B82E2D /* QSYKDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4851CCC722B00B82E2D /* QSYKDataManager.m */; };
 		8CBFC4891CCC7C2300B82E2D /* QSYKResourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4881CCC7C2300B82E2D /* QSYKResourceManager.m */; };
 		8CBFC48F1CCC7D9C00B82E2D /* QSYKResourceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC48E1CCC7D9C00B82E2D /* QSYKResourceModel.m */; };
@@ -48,10 +46,20 @@
 		8CC171C31CE0427000FEF2F3 /* UIImageView+Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC171C21CE0427000FEF2F3 /* UIImageView+Avatar.m */; };
 		8CDB3EA91CDB6A57003B1F55 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */; };
 		8CDB3EAA1CDB6A57003B1F55 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */; };
-		8CDB3EAD1CDB76AD003B1F55 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EAC1CDB76AD003B1F55 /* WebViewController.m */; };
 		8CE38CBC1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE38CBA1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m */; };
 		8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE38CBB1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib */; };
 		8CE38CC01CD30E3E001EC3D6 /* QSYKResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE38CBF1CD30E3E001EC3D6 /* QSYKResultModel.m */; };
+		8CEB70AC1CE9582C008220D3 /* QSYKBaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70A51CE9582C008220D3 /* QSYKBaseNavigationController.m */; };
+		8CEB70AD1CE9582C008220D3 /* QSYKBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70A71CE9582C008220D3 /* QSYKBaseViewController.m */; };
+		8CEB70AE1CE9582C008220D3 /* QSYKRootTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70A91CE9582C008220D3 /* QSYKRootTabBarController.m */; };
+		8CEB70AF1CE9582C008220D3 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70AB1CE9582C008220D3 /* WebViewController.m */; };
+		8CEB70B21CE96196008220D3 /* QSYKMyPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70B11CE96196008220D3 /* QSYKMyPageViewController.m */; };
+		8CEB70B51CE9AE67008220D3 /* QSYKTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70B41CE9AE67008220D3 /* QSYKTopWindow.m */; };
+		8CEB70B81CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70B71CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m */; };
+		8CEB70BB1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */; };
+		8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */; };
+		8CF911581CEEA43800B28ADD /* QSYKUserInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */; };
+		8CF9115B1CEEC6E100B28ADD /* QSYKTaskTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9115A1CEEC6E100B28ADD /* QSYKTaskTableViewController.m */; };
 		8CF9C6AE1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6AC1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m */; };
 		8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF9C6AD1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib */; };
 		8CF9C6B91CCDA68E0008FCA0 /* UIView+Commn.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6B81CCDA68E0008FCA0 /* UIView+Commn.m */; };
@@ -66,12 +74,12 @@
 		1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		5C37A885890D3BFB11B5E67D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C13D2981CEABB6C00C1BE9B /* default_4.7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_4.7.png; sourceTree = "<group>"; };
+		8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		8C282F311CCE1D24003FC86A /* QSYKDetailPicutreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKDetailPicutreViewController.h; sourceTree = "<group>"; };
 		8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKDetailPicutreViewController.m; sourceTree = "<group>"; };
 		8C3546CC1CD9EBFD002807DD /* QSYKJPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKJPushManager.h; sourceTree = "<group>"; };
 		8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKJPushManager.m; sourceTree = "<group>"; };
-		8C4D72681CE4A86400D454A5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		8C4D72691CE4A86400D454A5 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		8C6707A71CE203F5002CA1E1 /* LYTopRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopRootController.h; sourceTree = "<group>"; };
 		8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYTopRootController.m; sourceTree = "<group>"; };
 		8C6707A91CE203F5002CA1E1 /* LYTopWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopWindow.h; sourceTree = "<group>"; };
@@ -98,9 +106,8 @@
 		8CB2994B1CD05DE30024E471 /* QSYKShareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKShareManager.h; sourceTree = "<group>"; };
 		8CB2994C1CD05DE30024E471 /* QSYKShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKShareManager.m; sourceTree = "<group>"; };
 		8CB2994E1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKResourceDetailViewController.xib; sourceTree = "<group>"; };
-		8CB299BE1CD0CF620024E471 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		8CBFC4661CCC5CC900B82E2D /* QSYKBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseViewController.h; sourceTree = "<group>"; };
-		8CBFC4671CCC5CC900B82E2D /* QSYKBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseViewController.m; sourceTree = "<group>"; };
+		8CBABCC01CEC0B68002EA776 /* QSYKSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKSlider.h; sourceTree = "<group>"; };
+		8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKSlider.m; sourceTree = "<group>"; };
 		8CBFC46D1CCC5E1C00B82E2D /* QSYKIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKIndexViewController.h; sourceTree = "<group>"; };
 		8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKIndexViewController.m; sourceTree = "<group>"; };
 		8CBFC4731CCC5FD500B82E2D /* QSYKVideoPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKVideoPageViewController.h; sourceTree = "<group>"; };
@@ -112,8 +119,6 @@
 		8CBFC47C1CCC609600B82E2D /* QSYKTopicPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTopicPageViewController.h; sourceTree = "<group>"; };
 		8CBFC47D1CCC609600B82E2D /* QSYKTopicPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTopicPageViewController.m; sourceTree = "<group>"; };
 		8CBFC47F1CCC649D00B82E2D /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		8CBFC4801CCC691F00B82E2D /* QSYKBaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseNavigationController.h; sourceTree = "<group>"; };
-		8CBFC4811CCC691F00B82E2D /* QSYKBaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseNavigationController.m; sourceTree = "<group>"; };
 		8CBFC4841CCC722B00B82E2D /* QSYKDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKDataManager.h; sourceTree = "<group>"; };
 		8CBFC4851CCC722B00B82E2D /* QSYKDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKDataManager.m; sourceTree = "<group>"; };
 		8CBFC4871CCC7C2300B82E2D /* QSYKResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKResourceManager.h; sourceTree = "<group>"; };
@@ -141,14 +146,34 @@
 		8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		8CDB3EA71CDB6A57003B1F55 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
 		8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
-		8CDB3EAB1CDB76AD003B1F55 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
-		8CDB3EAC1CDB76AD003B1F55 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		8CE38CB81CD1A555001EC3D6 /* QSYKCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSYKCellDelegate.h; sourceTree = "<group>"; };
 		8CE38CB91CD1B328001EC3D6 /* QSYKCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKCommentTableViewCell.h; sourceTree = "<group>"; };
 		8CE38CBA1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKCommentTableViewCell.m; sourceTree = "<group>"; };
 		8CE38CBB1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKCommentTableViewCell.xib; sourceTree = "<group>"; };
 		8CE38CBE1CD30E3E001EC3D6 /* QSYKResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKResultModel.h; sourceTree = "<group>"; };
 		8CE38CBF1CD30E3E001EC3D6 /* QSYKResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKResultModel.m; sourceTree = "<group>"; };
+		8CEB70A41CE9582C008220D3 /* QSYKBaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseNavigationController.h; sourceTree = "<group>"; };
+		8CEB70A51CE9582C008220D3 /* QSYKBaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseNavigationController.m; sourceTree = "<group>"; };
+		8CEB70A61CE9582C008220D3 /* QSYKBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseViewController.h; sourceTree = "<group>"; };
+		8CEB70A71CE9582C008220D3 /* QSYKBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseViewController.m; sourceTree = "<group>"; };
+		8CEB70A81CE9582C008220D3 /* QSYKRootTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKRootTabBarController.h; sourceTree = "<group>"; };
+		8CEB70A91CE9582C008220D3 /* QSYKRootTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKRootTabBarController.m; sourceTree = "<group>"; };
+		8CEB70AA1CE9582C008220D3 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		8CEB70AB1CE9582C008220D3 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		8CEB70B01CE96196008220D3 /* QSYKMyPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKMyPageViewController.h; sourceTree = "<group>"; };
+		8CEB70B11CE96196008220D3 /* QSYKMyPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKMyPageViewController.m; sourceTree = "<group>"; };
+		8CEB70B31CE9AE67008220D3 /* QSYKTopWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTopWindow.h; sourceTree = "<group>"; };
+		8CEB70B41CE9AE67008220D3 /* QSYKTopWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTopWindow.m; sourceTree = "<group>"; };
+		8CEB70B61CE9B936008220D3 /* QSYKMyFavoriteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKMyFavoriteTableViewController.h; sourceTree = "<group>"; };
+		8CEB70B71CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKMyFavoriteTableViewController.m; sourceTree = "<group>"; };
+		8CEB70B91CE9BA95008220D3 /* QSYKFavoriteResourceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKFavoriteResourceModel.h; sourceTree = "<group>"; };
+		8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKFavoriteResourceModel.m; sourceTree = "<group>"; };
+		8CEB70BC1CE9D39C008220D3 /* QSYKBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseTableViewCell.h; sourceTree = "<group>"; };
+		8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseTableViewCell.m; sourceTree = "<group>"; };
+		8CF911561CEEA43800B28ADD /* QSYKUserInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserInfoModel.h; sourceTree = "<group>"; };
+		8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserInfoModel.m; sourceTree = "<group>"; };
+		8CF911591CEEC6E100B28ADD /* QSYKTaskTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTaskTableViewController.h; sourceTree = "<group>"; };
+		8CF9115A1CEEC6E100B28ADD /* QSYKTaskTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTaskTableViewController.m; sourceTree = "<group>"; };
 		8CF9C6AB1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTopicTableViewCell.h; sourceTree = "<group>"; };
 		8CF9C6AC1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTopicTableViewCell.m; sourceTree = "<group>"; };
 		8CF9C6AD1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKTopicTableViewCell.xib; sourceTree = "<group>"; };
@@ -204,6 +229,8 @@
 				8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */,
 				8C6707A91CE203F5002CA1E1 /* LYTopWindow.h */,
 				8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */,
+				8CEB70B31CE9AE67008220D3 /* QSYKTopWindow.h */,
+				8CEB70B41CE9AE67008220D3 /* QSYKTopWindow.m */,
 			);
 			path = LYTopWindow;
 			sourceTree = "<group>";
@@ -252,6 +279,8 @@
 		8C95B8E51CCC576B0058B82D /* Addition */ = {
 			isa = PBXGroup;
 			children = (
+				8CBABCC01CEC0B68002EA776 /* QSYKSlider.h */,
+				8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */,
 				8CB299461CD05C5C0024E471 /* Lib */,
 				8CF9C6B01CCDA4CB0008FCA0 /* Category */,
 			);
@@ -261,14 +290,9 @@
 		8C95B8E61CCC576B0058B82D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8CEB70A31CE957C5008220D3 /* Base */,
 				8CB299121CCF18450024E471 /* Me */,
 				8CBFC46C1CCC5E1C00B82E2D /* Index */,
-				8CBFC4661CCC5CC900B82E2D /* QSYKBaseViewController.h */,
-				8CBFC4671CCC5CC900B82E2D /* QSYKBaseViewController.m */,
-				8CBFC4801CCC691F00B82E2D /* QSYKBaseNavigationController.h */,
-				8CBFC4811CCC691F00B82E2D /* QSYKBaseNavigationController.m */,
-				8CDB3EAB1CDB76AD003B1F55 /* WebViewController.h */,
-				8CDB3EAC1CDB76AD003B1F55 /* WebViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -288,6 +312,10 @@
 				8CBFC49D1CCC91F400B82E2D /* QSYKReplyModel.m */,
 				8CE38CBE1CD30E3E001EC3D6 /* QSYKResultModel.h */,
 				8CE38CBF1CD30E3E001EC3D6 /* QSYKResultModel.m */,
+				8CEB70B91CE9BA95008220D3 /* QSYKFavoriteResourceModel.h */,
+				8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */,
+				8CF911561CEEA43800B28ADD /* QSYKUserInfoModel.h */,
+				8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,6 +348,8 @@
 				8CE38CB91CD1B328001EC3D6 /* QSYKCommentTableViewCell.h */,
 				8CE38CBA1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m */,
 				8CE38CBB1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib */,
+				8CEB70BC1CE9D39C008220D3 /* QSYKBaseTableViewCell.h */,
+				8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -331,11 +361,10 @@
 				8C95B8D21CCC529D0058B82D /* AppDelegate.m */,
 				8C95B8D71CCC529D0058B82D /* Main.storyboard */,
 				8C95B8DA1CCC529E0058B82D /* Assets.xcassets */,
-				8C4D72681CE4A86400D454A5 /* Default.png */,
-				8C4D72691CE4A86400D454A5 /* default@2x.png */,
+				8C13D2981CEABB6C00C1BE9B /* default_4.7.png */,
+				8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */,
 				8C95B8DF1CCC529E0058B82D /* Info.plist */,
 				8CBFC47F1CCC649D00B82E2D /* PrefixHeader.pch */,
-				8CB299BE1CD0CF620024E471 /* LaunchScreen.xib */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -343,8 +372,14 @@
 		8CB299121CCF18450024E471 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				8CEB70B01CE96196008220D3 /* QSYKMyPageViewController.h */,
+				8CEB70B11CE96196008220D3 /* QSYKMyPageViewController.m */,
 				8CB299131CCF186C0024E471 /* QSYKSettingsTableViewController.h */,
 				8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */,
+				8CEB70B61CE9B936008220D3 /* QSYKMyFavoriteTableViewController.h */,
+				8CEB70B71CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m */,
+				8CF911591CEEC6E100B28ADD /* QSYKTaskTableViewController.h */,
+				8CF9115A1CEEC6E100B28ADD /* QSYKTaskTableViewController.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -428,6 +463,21 @@
 			path = KeychainItemWrapper;
 			sourceTree = "<group>";
 		};
+		8CEB70A31CE957C5008220D3 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8CEB70A81CE9582C008220D3 /* QSYKRootTabBarController.h */,
+				8CEB70A91CE9582C008220D3 /* QSYKRootTabBarController.m */,
+				8CEB70A41CE9582C008220D3 /* QSYKBaseNavigationController.h */,
+				8CEB70A51CE9582C008220D3 /* QSYKBaseNavigationController.m */,
+				8CEB70A61CE9582C008220D3 /* QSYKBaseViewController.h */,
+				8CEB70A71CE9582C008220D3 /* QSYKBaseViewController.m */,
+				8CEB70AA1CE9582C008220D3 /* WebViewController.h */,
+				8CEB70AB1CE9582C008220D3 /* WebViewController.m */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		8CF9C6B01CCDA4CB0008FCA0 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -508,17 +558,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C13D29B1CEB42F100C1BE9B /* LaunchScreen.xib in Resources */,
 				8CBFC4A31CCCA11600B82E2D /* QSYKPictureTableViewCell.xib in Resources */,
 				8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */,
 				8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */,
+				8C13D2991CEABB6C00C1BE9B /* default_4.7.png in Resources */,
 				8C95B8DB1CCC529E0058B82D /* Assets.xcassets in Resources */,
 				8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */,
 				8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */,
 				8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */,
-				8C4D726B1CE4A86400D454A5 /* default@2x.png in Resources */,
-				8CB299BF1CD0CF620024E471 /* LaunchScreen.xib in Resources */,
 				8CB2994F1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib in Resources */,
-				8C4D726A1CE4A86400D454A5 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,8 +626,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CEB70B21CE96196008220D3 /* QSYKMyPageViewController.m in Sources */,
+				8CEB70B81CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m in Sources */,
 				8CB2993A1CD04BB80024E471 /* QSYKUMengManager.m in Sources */,
-				8CDB3EAD1CDB76AD003B1F55 /* WebViewController.m in Sources */,
 				8CC171C01CE041AC00FEF2F3 /* UIImage+Round.m in Sources */,
 				8CBFC49E1CCC91F400B82E2D /* QSYKReplyModel.m in Sources */,
 				8CF9C6BD1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.m in Sources */,
@@ -586,25 +636,30 @@
 				8C95B8D31CCC529D0058B82D /* AppDelegate.m in Sources */,
 				8CF9C6C41CCDC9730008FCA0 /* QSYKResourceDetailViewController.m in Sources */,
 				8CBFC4A71CCCD20500B82E2D /* QSYKUtility.m in Sources */,
+				8CF9115B1CEEC6E100B28ADD /* QSYKTaskTableViewController.m in Sources */,
 				8CF9C6B91CCDA68E0008FCA0 /* UIView+Commn.m in Sources */,
+				8CEB70BB1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m in Sources */,
 				8CDB3EA91CDB6A57003B1F55 /* SSKeychain.m in Sources */,
 				8CB299431CD051C80024E471 /* QSYKSharePopupView.m in Sources */,
+				8CEB70AF1CE9582C008220D3 /* WebViewController.m in Sources */,
 				8C95B8D01CCC529D0058B82D /* main.m in Sources */,
+				8CEB70AC1CE9582C008220D3 /* QSYKBaseNavigationController.m in Sources */,
+				8CEB70AD1CE9582C008220D3 /* QSYKBaseViewController.m in Sources */,
 				8CBFC4A21CCCA11600B82E2D /* QSYKPictureTableViewCell.m in Sources */,
 				8CBFC4891CCC7C2300B82E2D /* QSYKResourceManager.m in Sources */,
 				8CBFC48F1CCC7D9C00B82E2D /* QSYKResourceModel.m in Sources */,
 				8CBFC47B1CCC608400B82E2D /* QSYKPicturePageViewController.m in Sources */,
 				8CBFC4951CCC802700B82E2D /* QSYKImageModel.m in Sources */,
-				8CBFC4821CCC691F00B82E2D /* QSYKBaseNavigationController.m in Sources */,
 				8CBFC47E1CCC609600B82E2D /* QSYKTopicPageViewController.m in Sources */,
 				8CBFC4861CCC722B00B82E2D /* QSYKDataManager.m in Sources */,
 				8CBFC49B1CCC8E1700B82E2D /* QSYKPostModel.m in Sources */,
 				8CC171C31CE0427000FEF2F3 /* UIImageView+Avatar.m in Sources */,
 				8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */,
+				8CF911581CEEA43800B28ADD /* QSYKUserInfoModel.m in Sources */,
 				8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */,
 				8CE38CC01CD30E3E001EC3D6 /* QSYKResultModel.m in Sources */,
+				8CEB70AE1CE9582C008220D3 /* QSYKRootTabBarController.m in Sources */,
 				8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */,
-				8CBFC4681CCC5CC900B82E2D /* QSYKBaseViewController.m in Sources */,
 				8CF9C6AE1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m in Sources */,
 				8CBFC4921CCC801800B82E2D /* QSYKVideoModel.m in Sources */,
 				8CB2994D1CD05DE30024E471 /* QSYKShareManager.m in Sources */,
@@ -612,9 +667,12 @@
 				8CDB3EAA1CDB6A57003B1F55 /* SSKeychainQuery.m in Sources */,
 				8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */,
 				8CE38CBC1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m in Sources */,
+				8CEB70B51CE9AE67008220D3 /* QSYKTopWindow.m in Sources */,
 				8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */,
 				8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */,
+				8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */,
 				8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */,
+				8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */,
 				8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -27,16 +27,20 @@
 #import "QSYKRefreshFooter.h"
 #import "QSYKShareManager.h"
 #import "QSYKResultModel.h"
+#import <DKNightVersion/DKNightVersion.h>
 
 #define SCREEN_WIDTH  [[UIScreen mainScreen] bounds].size.width
 #define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
 #define SCREEN_FRAME  [[UIScreen mainScreen] bounds]
 #define SYSTEM_VERSION [UIDevice currentDevice].systemVersion.floatValue
+#define UUID [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 
 #define kIsNetworkViaWiFi ([[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus] == AFNetworkReachabilityStatusReachableViaWiFi)
 #define kIsAutoLoadImgOnlyInWifi [[NSUserDefaults standardUserDefaults] boolForKey:kIsAutoLoadImgOnlyInWifiKey]
-
 #define kCurrentAppVersion [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+#define kToken [[NSUserDefaults standardUserDefaults] valueForKey:@"token"]
+#define kLotteryEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"lotteryEnable"]
+
 
 #define TEXT_LING_SPACING 10.f
 
@@ -44,9 +48,11 @@
 
 //static NSString * const kBaseURL = @"http://qy1.appcq.cn:8895/";
 static NSString * const kBaseURL = @"http://c.appcq.cn/";
+static NSString * const kAuthBaseURL = @"http://c2.appcq.cn";
 static NSString * const kPictureBaseURL = @"http://ic.appcq.cn/";
 
 
 static NSString * const kIsAutoLoadImgOnlyInWifiKey = @"IsAutoLoadImgOnlyInWifiKey";
+static NSString * const kUserInfoChangedNotification = @"UserInfoChangedNotification";
 
 #endif /* PrefixHeader_pch */

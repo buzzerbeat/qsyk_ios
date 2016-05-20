@@ -6,23 +6,14 @@
 //  Copyright © 2016 subo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "QSYKCellDelegate.h"
+#import "QSYKBaseTableViewCell.h"
 @class FLAnimatedImageView;
 @class QSYKResourceModel;
 @class DALabeledCircularProgressView;
 
 #define kCellIdentifier_pictureCell @"QSYKPictureTableViewCell"
 
-//@protocol QSYKPictureCellDelegate <NSObject>
-//
-//- (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type;
-//- (void)commentResource;
-//- (void)shareResoure;
-//
-//@end
-
-@interface QSYKPictureTableViewCell : UITableViewCell
+@interface QSYKPictureTableViewCell : QSYKBaseTableViewCell
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
@@ -41,7 +32,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *tapToDownloadIndicatorLabel;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
-@property (nonatomic, strong) QSYKResourceModel *resource;
+@property (nonatomic, strong) id resource;
+@property (nonatomic) BOOL flag;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic) BOOL isInnerPage;
 

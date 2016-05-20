@@ -44,18 +44,42 @@
         return;
     }
     
+    if ([_resource isKindOfClass:[QSYKResourceModel class]]) {
+        QSYKResourceModel *res = (QSYKResourceModel *)_resource;
+        
+        self.userName = res.username;
+        self.userAvatar = res.userAvatar;
+        self.content = res.content;
+        self.sid = res.sid;
+        self.pubTime = res.pubTime;
+        self.dig = res.dig;
+        self.bury = res.bury;
+        self.isTopic = (res.type == 1);
+    } else {
+        QSYKFavoriteResourceModel *res = (QSYKFavoriteResourceModel *)_resource;
+        
+        self.userName = res.userName;
+        self.userAvatar = res.userAvatar;
+        self.content = res.desc;
+        self.sid = res.sid;
+        self.pubTime = res.pubTimeElapsed;
+        self.dig = res.dig;
+        self.bury = res.bury;
+        self.isTopic = (res.type == 1);
+    }
+    
     // 解决cell的contentView不随着cell高度的变化而变化（原因未找到）
-    self.contentView.height = [QSYKUtility heightForMutilLineLabel:_resource.content
+    self.contentView.height = [QSYKUtility heightForMutilLineLabel:self.content
                                                               font:16.f
                                                              width:SCREEN_WIDTH - 8 * 4] + 140 ;
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
-    self.usernameLabe.text = _resource.username;
-    self.pubTimeLabel.text = _resource.pubTime;
-    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
-    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabe.text = self.userName;
+    self.pubTimeLabel.text = self.pubTime;
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
     
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_resource.content];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:self.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:TEXT_LING_SPACING];
     [attrString addAttribute:NSParagraphStyleAttributeName
@@ -66,33 +90,33 @@
 
 - (IBAction)digBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
-        [_delegate rateResourceWithSid:_resource.sid type:1 indexPath:_indexPath];
+        [_delegate rateResourceWithSid:self.sid type:1 indexPath:_indexPath];
         [self.digBtn setSelected:YES];
         self.digCountLabel.textColor = kCoreColor;
-        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
+        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.dig];
         [self disableRateBtn];
     }
 }
 
 - (IBAction)buryBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
-        [_delegate rateResourceWithSid:_resource.sid type:2 indexPath:_indexPath];
+        [_delegate rateResourceWithSid:self.sid type:2 indexPath:_indexPath];
         [self.buryBtn setSelected:YES];
         self.buryCountLabel.textColor = kCoreColor;
-        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
+        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.bury];
         [self disableRateBtn];
     }
 }
 
 - (IBAction)commentBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(commentResourceWithSid:)]) {
-        [_delegate commentResourceWithSid:_resource.sid];
+        [_delegate commentResourceWithSid:self.sid];
     }
 }
 
 - (IBAction)shareBtnClicked:(id)sender {
-    if (_delegate && [_delegate respondsToSelector:@selector(shareResoureWithSid:content:)]) {
-        [_delegate shareResoureWithSid:_resource.sid content:_resource.content];
+    if (_delegate && [_delegate respondsToSelector:@selector(shareResoureWithSid:imgSid:content:isTopic:)]) {
+        [_delegate shareResoureWithSid:self.sid imgSid:nil content:self.content isTopic:self.isTopic];
     }
 }
 

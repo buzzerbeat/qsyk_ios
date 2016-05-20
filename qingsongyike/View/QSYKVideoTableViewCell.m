@@ -53,14 +53,45 @@
         return;
     }
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
-    self.usernameLabel.text    = _resource.username;
-    self.pubTimeLabel.text     = _resource.pubTime;
-    self.videoLengthLabel.text = _resource.video.length;
-    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
-    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
+    if ([_resource isKindOfClass:[QSYKResourceModel class]]) {
+        QSYKResourceModel *res = (QSYKResourceModel *)_resource;
+        
+        self.userName = res.username;
+        self.userAvatar = res.userAvatar;
+        self.content = res.content;
+        self.sid = res.sid;
+        self.video = res.video;
+        self.pubTime = res.pubTime;
+        self.dig = res.dig;
+        self.bury = res.bury;
+        self.isTopic = (res.type == 1);
+    } else {
+        QSYKFavoriteResourceModel *res = (QSYKFavoriteResourceModel *)_resource;
+        
+        self.userName = res.userName;
+        self.userAvatar = res.userAvatar;
+        self.content = res.desc;
+        self.sid = res.sid;
+        self.video = res.relVideo;
+        self.pubTime = res.pubTimeElapsed;
+        self.dig = res.dig;
+        self.bury = res.bury;
+        self.isTopic = (res.type == 1);
+    }
     
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_resource.content];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabel.text    = self.userName;
+    self.pubTimeLabel.text     = self.pubTime;
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
+
+//    double videoLength = [self.video.length doubleValue];
+//    double minutes = floor(videoLength / 60.0);;
+//    double seconds = floor(fmod(videoLength, 60.0));;
+//    NSString *time = [NSString stringWithFormat:@"%02.0f:%02.0f", minutes, seconds];
+    self.videoLengthLabel.text = [NSString stringWithFormat:@" %@ ", self.video.length];
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:self.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:TEXT_LING_SPACING];
     [attrString addAttribute:NSParagraphStyleAttributeName
@@ -68,9 +99,9 @@
                        range:NSMakeRange(0, attrString.length)];
     self.contentLabel.attributedText = attrString;
     
-    NSURL *URL = [NSURL URLWithString:[QSYKUtility imgUrl:_resource.video.thumb
-                                                    width:_resource.video.width
-                                                   height:_resource.video.height
+    NSURL *URL = [NSURL URLWithString:[QSYKUtility imgUrl:self.video.thumb
+                                                    width:self.video.width
+                                                   height:self.video.height
                                                 extension:@"jpg"]];
     [[SDWebImageManager sharedManager] downloadImageWithURL:URL
                                                     options:0
@@ -93,7 +124,7 @@
                                         goActionTitle:@"继续"
                                        preferredStyle:UIAlertControllerStyleAlert
                                               handler:^(UIAlertAction * _Nonnull action) {
-                                                  [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
+                                                  [self playVideoWithURL:[NSURL URLWithString:self.video.url]];
                                                   [self.backView addSubview:self.videoController.view];
                                               }];
             
@@ -104,7 +135,7 @@
         }
         
     } else {
-        [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
+        [self playVideoWithURL:[NSURL URLWithString:self.video.url]];
         [self.backView addSubview:self.videoController.view];
     }
 }
@@ -113,7 +144,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
-        [self playVideoWithURL:[NSURL URLWithString:_resource.video.url]];
+        [self playVideoWithURL:[NSURL URLWithString:self.video.url]];
         [self.backView addSubview:self.videoController.view];
     }
 }
@@ -138,33 +169,33 @@
 
 - (IBAction)digBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
-        [_delegate rateResourceWithSid:_resource.sid type:1 indexPath:_indexPath];
+        [_delegate rateResourceWithSid:self.sid type:1 indexPath:_indexPath];
         [self.digBtn setSelected:YES];
         self.digCountLabel.textColor = kCoreColor;
-        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
+        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.dig];
         [self disableRateBtn];
     }
 }
 
 - (IBAction)buryBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
-        [_delegate rateResourceWithSid:_resource.sid type:2 indexPath:_indexPath];
+        [_delegate rateResourceWithSid:self.sid type:2 indexPath:_indexPath];
         [self.buryBtn setSelected:YES];
         self.buryCountLabel.textColor = kCoreColor;
-        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
+        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.bury];
         [self disableRateBtn];
     }
 }
 
 - (IBAction)commentBtnClicked:(id)sender {
     if (_delegate && [_delegate respondsToSelector:@selector(commentResourceWithSid:)]) {
-        [_delegate commentResourceWithSid:_resource.sid];
+        [_delegate commentResourceWithSid:self.sid];
     }
 }
 
 - (IBAction)shareBtnClicked:(id)sender {
-    if (_delegate && [_delegate respondsToSelector:@selector(shareResoureWithSid:content:)]) {
-        [_delegate shareResoureWithSid:_resource.sid content:_resource.content];
+    if (_delegate && [_delegate respondsToSelector:@selector(shareResoureWithSid:imgSid:content:isTopic:)]) {
+        [_delegate shareResoureWithSid:self.sid imgSid:self.video.thumb content:self.content isTopic:self.isTopic];
     }
 }
 

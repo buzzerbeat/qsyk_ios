@@ -6,12 +6,11 @@
 //  Copyright © 2016 subo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "QSYKCellDelegate.h"
+#import "QSYKBaseTableViewCell.h"
 
 #define kCellIdentifier_videoCell @"QSYKVideoTableViewCell"
 
-@interface QSYKVideoTableViewCell : UITableViewCell
+@interface QSYKVideoTableViewCell : QSYKBaseTableViewCell
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
@@ -29,7 +28,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
-@property (nonatomic, strong) QSYKResourceModel *resource;
+//@property (nonatomic, strong) QSYKResourceModel *resource;
+@property (nonatomic, strong) id resource;
+@property (nonatomic, assign) BOOL flag;    // 标识是否显示在收藏、赞 页面
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
 - (void)reset;

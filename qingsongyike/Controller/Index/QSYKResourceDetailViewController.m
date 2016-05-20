@@ -298,8 +298,8 @@
 
 #pragma mark Cell Delegate
 
-- (void)shareResoureWithSid:(NSString *)sid content:(NSString *)content {
-    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid content:content];
+- (void)shareResoureWithSid:(NSString *)sid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic{
+    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid imgSid:imgSid content:content isTopic:isTopic];
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {

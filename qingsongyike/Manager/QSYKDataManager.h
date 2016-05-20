@@ -25,4 +25,6 @@ typedef NS_ENUM(NSInteger, QSYKHTTPMethod) {
                                     success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                                     failure:(void (^)(NSError *error))failure;
 
+- (void)registerAction;
+
 @end

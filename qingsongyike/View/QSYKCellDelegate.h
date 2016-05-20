@@ -13,7 +13,7 @@
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath;
 - (void)commentResourceWithSid:(NSString *)sid;
-- (void)shareResoureWithSid:(NSString *)sid content:(NSString *)content;
+- (void)shareResoureWithSid:(NSString *)sid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic;
 
 @optional
 - (void)playBtnClicked;

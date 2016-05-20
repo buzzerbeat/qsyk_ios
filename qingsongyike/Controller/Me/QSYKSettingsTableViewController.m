@@ -72,6 +72,7 @@
     for (UIView *view in cell.contentView.subviews) {
         [view removeFromSuperview];
     }
+    
     cell.textLabel.text = _cellTitles[indexPath.row];
     
     if (indexPath.row == 0) {

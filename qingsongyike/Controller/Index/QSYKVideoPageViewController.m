@@ -54,7 +54,11 @@
     [super viewDidDisappear:animated];
     
     // 当页面离开屏幕时关闭视频播放
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
+    for (NSIndexPath *indexPath in visibleRows) {
+        QSYKVideoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [cell reset];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -164,8 +168,8 @@
 
 #pragma mark CellDelegate
 
-- (void)shareResoureWithSid:(NSString *)sid content:(NSString *)content {
-    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid content:content];
+- (void)shareResoureWithSid:(NSString *)sid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic{
+    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid imgSid:imgSid content:content isTopic:isTopic];
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {

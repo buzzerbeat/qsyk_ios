@@ -25,7 +25,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"轻松一刻";
+    self.title = @"首页";
+    self.navigationItem.title = @"轻松一刻";
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.itemTitles = @[
@@ -41,18 +42,11 @@
     [_carbonTabSwipeNavigation insertIntoRootViewController:self];
     [self configCarbonTabNav];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(pushToSettingsPage:)];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)pushToSettingsPage:(id)sender {
-    QSYKSettingsTableViewController *settingsVC = [[QSYKSettingsTableViewController alloc] init];
-    
-    [self.navigationController pushViewController:settingsVC animated:YES];
 }
 
 - (void)configCarbonTabNav {

@@ -58,6 +58,12 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
             break;
     }
     
+    if (button.tag == 102 || button.tag == 103 || button.tag == 104) {
+        self.shareTitle = @"轻松一刻";
+    } else {
+        self.shareContent = [NSString stringWithFormat:@"轻松一刻：%@", self.shareContent];
+    }
+    
     self.dismissPopupBlock();
     
     // 请求分享接口
@@ -71,47 +77,83 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 }
 
 - (void)beginSharing {
+    
     if ([_platformType isEqualToString:UMShareToSina]) {
+        /*
+        // sina 分享字数限制小于140，需要截取文字（"轻松一刻："前缀占5个字符，还需要把URL长度算进去）
+        int maxLength = 140 - 3 - 5 - (int)_shareURL.length;
+        if (_shareContent.length > maxLength) {
+            // x = 140 - 3（"..."） - 5（"轻松一刻："）- shareURL.length
+            NSString *newContent = [_shareContent substringWithRange:NSMakeRange(0, maxLength)];
+            _shareContent = [NSString stringWithFormat:@"%@...%@", newContent, _shareURL];
+        } else {
+            _shareContent = [NSString stringWithFormat:@"%@%@", _shareContent, _shareURL];
+        }*/
+        
+        _shareContent = [NSString stringWithFormat:@"%@%@", _shareContent, _shareURL];
+        
         //设置分享内容和回调对象
-        [[UMSocialControllerService defaultControllerService] setShareText:[NSString stringWithFormat:@"%@%@", _shareContent, _shareURL]
-                                                                shareImage:[UIImage imageNamed:@"AppIcon_512"] socialUIDelegate:self];
+        [[UMSocialControllerService defaultControllerService]
+                             setShareText:_shareContent
+                               shareImage:[UIImage imageNamed:@"AppIcon_512"]
+                         socialUIDelegate:self];
+        
         [UMSocialSnsPlatformManager getSocialPlatformWithName:
          UMShareToSina].snsClickHandler(_target,[UMSocialControllerService defaultControllerService],YES);
         
         return;
     }
     
-    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
+    
     [[QSYKUMengManager shardManager] shareToThirdPlatformWithType:_platformType
-                                                          title:self.shareTitle
-                                                            url:self.shareURL
-                                                        content:self.shareContent
-                                                            image:[UIImage imageNamed:@"AppIcon_60"]
-                                                       location:nil
-                                                    urlResource:self.shareURLResource
-                                            presentedController:_target
-                                                        success:^{
-                                                            [SVProgressHUD showSuccessWithStatus:@"分享成功"];
-                                                        }
-                                                        failure:^(NSInteger responseCode) {
-                                                            if (responseCode == UMSResponseCodeCancel) {
-                                                                [SVProgressHUD showErrorWithStatus:@"已取消"];
-                                                            } else {
-                                                                [SVProgressHUD showErrorWithStatus:@"分享失败"];
-                                                            }
-                                                        }];
+                                          title:self.shareTitle
+                                            url:self.shareURL
+                                        content:self.shareContent
+                                            image:self.shareImage
+                                       location:nil
+                                    urlResource:self.shareURLResource
+                            presentedController:_target
+                                        success:^{
+                                            [SVProgressHUD showSuccessWithStatus:@"分享成功"];
+                                            [self shareSuccess];
+                                        }
+                                        failure:^(NSInteger responseCode) {
+                                            if (responseCode == UMSResponseCodeCancel) {
+                                                [SVProgressHUD showErrorWithStatus:@"已取消"];
+                                            } else {
+                                                [SVProgressHUD showErrorWithStatus:@"分享失败"];
+                                            }
+                                        }];
 }
 
+// sina 分享回掉
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response {
 //    UIViewController *viewController = (UIViewController *)self.delegate;
     
     if (response.responseCode == UMSResponseCodeSuccess) {
         [SVProgressHUD showSuccessWithStatus:@"分享成功"];
+        [self shareSuccess];
+        
     } else if (response.responseCode == UMSResponseCodeCancel) {
         [SVProgressHUD showErrorWithStatus:@"已取消"];
+        
     }else {
         [SVProgressHUD showErrorWithStatus:@"分享失败"];
     }
+}
+
+- (void)shareSuccess {
+    // 完成分享任务（请求分享任务接口）
+    [[QSYKDataManager sharedManager]
+     requestWithMethod:QSYKHTTPMethodPOST
+     URLString:[NSString stringWithFormat:@"%@/user/share-task", kAuthBaseURL]
+     parameters:nil
+     success:^(NSURLSessionDataTask *task, id responseObject) {
+         [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
+     }
+     failure:^(NSError *error) {
+         
+     }];
 }
 
 - (IBAction)copyResourceAction:(id)sender {
@@ -121,7 +163,26 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 }
 
 - (IBAction)collectResourceAction:(id)sender {
+    self.dismissPopupBlock();
     
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                             URLString:[NSString stringWithFormat:@"%@/resource/fav", kAuthBaseURL]
+                                            parameters:@{@"sid": _resourceSid}
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   NSError *error = nil;
+                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:&error];
+                                                   if (error) {
+                                                       NSLog(@"error = %@", error);
+                                                   } else if (!result.status) {
+                                                       [self showHUDWithString:@"收藏成功"];
+                                                   } else {
+                                                       [self showHUDWithString:result.message];
+                                                   }
+                                               }
+                                               failure:^(NSError *error) {
+                                                   [self showHUDWithString:@"收藏失败"];
+                                                   NSLog(@"error = %@", error);
+                                               }];
 }
 
 - (IBAction)reportResourceAction:(id)sender {
@@ -162,8 +223,9 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 
 - (void)submitReportWithType:(NSInteger)type {
     // 0广告，1辱骂，2色情
+    NSLog(@"sid=%@,type=%ld", _resourceSid, type);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:@"http://c.appcq.cn/resource/report"
+                                             URLString:[NSString stringWithFormat:@"%@/resource/report", kAuthBaseURL]
                                             parameters:@{
                                                          @"sid": _resourceSid,
                                                          @"type": @(type)
@@ -173,17 +235,18 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
                                                    QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:&error];
                                                    if (error) {
                                                        NSLog(@"error = %@", error);
-                                                   } else if (result.success) {
+                                                   } else if (!result.status) {
                                                        [self showHUDWithString:@"举报成功"];
+                                                   } else {
+                                                       [self showHUDWithString:result.message];
                                                    }
                                                } failure:^(NSError *error) {
                                                    [self showHUDWithString:@"举报失败"];
+                                                   NSLog(@"error = %@", error);
                                                }];
 }
 
 - (void)showHUDWithString:(NSString *)string {
-    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
-    [SVProgressHUD setCornerRadius:5.f];
     [SVProgressHUD showImage:nil status:string];
     self.dismissPopupBlock();
 }

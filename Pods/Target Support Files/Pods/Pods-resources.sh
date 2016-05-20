@@ -58,6 +58,7 @@ install_resource()
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_resource "DKNightVersion/DKNightVersion/ColorTable/DKColorTable.txt"
   install_resource "MJRefresh/MJRefresh/MJRefresh.bundle"
   install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/UMSocialSDKResourcesNew.bundle"
@@ -76,6 +77,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${BUILT_PRODUCTS_DIR}/KRVideoPlayer.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_resource "DKNightVersion/DKNightVersion/ColorTable/DKColorTable.txt"
   install_resource "MJRefresh/MJRefresh/MJRefresh.bundle"
   install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/UMSocialSDKResourcesNew.bundle"

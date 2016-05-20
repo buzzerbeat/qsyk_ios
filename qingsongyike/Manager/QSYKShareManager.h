@@ -12,6 +12,6 @@
 
 + (QSYKShareManager *)sharedManager;
 
-- (void)showInVC:(UIViewController *)target resourceSid:(NSString *)resourceSid content:(NSString *)content;
+- (void)showInVC:(UIViewController *)target resourceSid:(NSString *)resourceSid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic;
 
 @end

@@ -41,12 +41,32 @@
     return instance;
 }
 
-- (void)showInVC:(UIViewController *)target resourceSid:(NSString *)resourceSid content:(NSString *)content {
+- (void)showInVC:(UIViewController *)target resourceSid:(NSString *)resourceSid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic {
     _shareContentView.target = target;
-    _shareContentView.shareTitle = content;
-    _shareContentView.shareContent = content;
     _shareContentView.resourceSid = resourceSid;
-    _shareContentView.shareURL = [NSString stringWithFormat:@"http://c.appcq.cn/share?sid=%@", resourceSid];
+    _shareContentView.shareURL = [NSString stringWithFormat:@"%@/share?sid=%@", kBaseURL, resourceSid];
+    
+    if (isTopic) {
+        _shareContentView.shareImage = [UIImage imageNamed:@"AppIcon_180"];
+        
+        
+        // sina 分享字数先知小于140，需要截取文字（"轻松一刻："前缀占5个字符，还需要把URL长度算进去）
+        int maxLength = 140 - 3 - 5 - (int)_shareContentView.shareURL.length;
+        if (content.length > maxLength) {
+            NSString *newContent = [content substringWithRange:NSMakeRange(0, maxLength)];
+            _shareContentView.shareContent = [NSString stringWithFormat:@"%@...", newContent];
+            
+        } else {
+            _shareContentView.shareContent = content;
+        }
+        
+    } else {
+        _shareContentView.shareContent = content;
+        
+        NSURL *imgURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@img/show/sid/%@/w/180/h/180/t/1/show.jpg", kPictureBaseURL, imgSid]];
+        NSData *imgData = [NSData dataWithContentsOfURL:imgURL];
+        _shareContentView.shareImage = imgData;
+    }
     
     self.popup = [KLCPopup popupWithContentView:_shareContentView
                                        showType:KLCPopupShowTypeSlideInFromBottom

@@ -11,6 +11,7 @@
 #import "QSYKTopicTableViewCell.h"
 #import "QSYKVideoTableViewCell.h"
 #import "QSYKResourceDetailViewController.h"
+#import "QSYKFavoriteResourceModel.h"
 @import MediaPlayer;
 
 @interface QSYKRecommendPageViewController () <QSYKCellDelegate>
@@ -54,13 +55,21 @@
     
     self.resourceList = [NSMutableArray new];
     [self loadData];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     // 当页面离开屏幕时关闭视频播放
-    [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
+    for (NSIndexPath *indexPath in visibleRows) {
+        QSYKResourceModel *aResource = _resourceList[indexPath.row];
+        if (aResource.type == 3) {
+            QSYKVideoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            [cell reset];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,9 +105,10 @@
         }
     }
     
-    @weakify(self);
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     [SVProgressHUD show];
     
+    @weakify(self);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
                                              URLString:URLString
                                             parameters:parameters
@@ -181,6 +191,10 @@
             cell.indexPath = indexPath;
             cell.delegate = self;
             
+//            cell.contentView.dk_backgroundColorPicker = DKColorPickerWithKey(BG);
+//            for (UIView *subView in cell.contentView.subviews) {
+//                subView.dk_backgroundColorPicker = DKColorPickerWithKey(BG);
+//            }
             return cell;
         }
             break;
@@ -242,8 +256,8 @@
 
 #pragma mark CellDelegate
 
-- (void)shareResoureWithSid:(NSString *)sid content:(NSString *)content {
-    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid content:content];
+- (void)shareResoureWithSid:(NSString *)sid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic{
+    [[QSYKShareManager sharedManager] showInVC:self resourceSid:sid imgSid:imgSid content:content isTopic:isTopic];
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {

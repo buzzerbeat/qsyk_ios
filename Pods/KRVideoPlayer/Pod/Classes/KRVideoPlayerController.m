@@ -20,6 +20,10 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 @property (nonatomic, strong) NSTimer *durationTimer;
 @property (nonatomic, strong) UIView *originView;
 
+@property (nonatomic, assign) float x;     // 开始滑动时手指的x坐标
+@property (nonatomic, assign) float sliderValue;   //开始滑动时slider的value
+@property (nonatomic, assign) CGFloat sliderWidth;
+
 @end
 
 @implementation KRVideoPlayerController
@@ -51,6 +55,9 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     [self stop];
     [super setContentURL:contentURL];
     [self play];
+    self.videoControl.pauseButton.hidden = YES;
+    self.videoControl.playButton.hidden = YES;
+    [self.videoControl.indicatorView startAnimating];
 }
 
 #pragma mark - Publick Method
@@ -83,6 +90,7 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
             self.dimissCompleteBlock();
         }
     }];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 }
 
@@ -107,13 +115,19 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 {
     [self.videoControl.playButton addTarget:self action:@selector(playButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.videoControl.pauseButton addTarget:self action:@selector(pauseButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.videoControl.closeButton addTarget:self action:@selector(closeButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.videoControl.backButton addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.videoControl.fullScreenButton addTarget:self action:@selector(fullScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.videoControl.shrinkScreenButton addTarget:self action:@selector(shrinkScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.videoControl.progressSlider addTarget:self action:@selector(progressSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.videoControl.progressSlider addTarget:self action:@selector(progressSliderTouchBegan:) forControlEvents:UIControlEventTouchDown];
     [self.videoControl.progressSlider addTarget:self action:@selector(progressSliderTouchEnded:) forControlEvents:UIControlEventTouchUpInside];
     [self.videoControl.progressSlider addTarget:self action:@selector(progressSliderTouchEnded:) forControlEvents:UIControlEventTouchUpOutside];
+    
+    
+    UIPanGestureRecognizer *swipeGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipeBegin:)];
+    [self.videoControl.bottomBar addGestureRecognizer:swipeGesture];
+    self.sliderWidth = self.videoControl.progressSlider.frame.size.width;
+    
     [self setProgressSliderMaxMinValues];
     [self monitorVideoPlayback];
 }
@@ -123,14 +137,15 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     if (self.playbackState == MPMoviePlaybackStatePlaying) {
         self.videoControl.pauseButton.hidden = NO;
         self.videoControl.playButton.hidden = YES;
+        self.videoControl.backButton.hidden = YES;
         [self startDurationTimer];
-        [self.videoControl.indicatorView stopAnimating];
         [self.videoControl autoFadeOutControlBar];
+//        [self.videoControl animateHide];
     } else {
         self.videoControl.pauseButton.hidden = YES;
         self.videoControl.playButton.hidden = NO;
         [self stopDurationTimer];
-        if (self.playbackState == MPMoviePlaybackStateStopped) {
+        if (self.playbackState == MPMoviePlaybackStatePaused) {
             [self.videoControl animateShow];
         }
     }
@@ -138,9 +153,9 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 
 - (void)onMPMoviePlayerLoadStateDidChangeNotification
 {
-    if (self.loadState & MPMovieLoadStateStalled) {
-        [self.videoControl.indicatorView startAnimating];
-    }
+//    if (self.loadState == MPMovieLoadStatePlayable) {
+//        [self.videoControl.indicatorView startAnimating];
+//    }
 }
 
 - (void)onMPMoviePlayerReadyForDisplayDidChangeNotification
@@ -150,6 +165,8 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 
 - (void)onMPMovieDurationAvailableNotification
 {
+    [self.videoControl animateHide];    // 开始播放时隐藏视频状态栏
+    [self.videoControl.indicatorView stopAnimating];
     [self setProgressSliderMaxMinValues];
 }
 
@@ -171,9 +188,10 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     self.videoControl.pauseButton.hidden = YES; 
 }
 
-- (void)closeButtonClick
+- (void)backButtonClick
 {
-    [self dismiss];
+//    [self dismiss];
+    [self shrinkScreenButtonClick];
 }
 
 - (void)fullScreenButtonClick
@@ -198,6 +216,7 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
         [self.view setTransform:CGAffineTransformMakeRotation(M_PI_2)];
     } completion:^(BOOL finished) {
         self.isFullscreenMode = YES;
+        self.videoControl.backButton.hidden = NO;
         self.videoControl.fullScreenButton.hidden = YES;
         self.videoControl.shrinkScreenButton.hidden = NO;
     }];
@@ -218,6 +237,7 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
         self.frame = self.originFrame;
     } completion:^(BOOL finished) {
         self.isFullscreenMode = NO;
+        self.videoControl.backButton.hidden = YES;
         self.videoControl.fullScreenButton.hidden = NO;
         self.videoControl.shrinkScreenButton.hidden = YES;
     }];
@@ -225,10 +245,33 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 }
 
+- (void)swipeBegin:(UIPanGestureRecognizer *)pan {
+    CGPoint point = [pan translationInView:pan.view];
+    if (pan.state == UIGestureRecognizerStateBegan) {
+        self.x = point.x;
+        [self pause];
+        self.sliderValue = self.videoControl.progressSlider.value;
+        [self.videoControl cancelAutoFadeOutControlBar];
+        
+    } else if (pan.state == UIGestureRecognizerStateChanged) {
+        float curValue = self.sliderValue + ((point.x - self.x) / 1.5 * self.duration / self.sliderWidth);
+        self.videoControl.progressSlider.value = curValue;
+        
+        double currentTime = floor(self.videoControl.progressSlider.value);
+        double totalTime = floor(self.duration);
+        [self setTimeLabelValues:currentTime totalTime:totalTime];
+        
+    } else if (pan.state == UIGestureRecognizerStateEnded) {
+        [self setCurrentPlaybackTime:floor(self.videoControl.progressSlider.value)];
+        [self play];
+        [self.videoControl autoFadeOutControlBar];
+    }
+}
+
 - (void)setProgressSliderMaxMinValues {
     CGFloat duration = self.duration;
     self.videoControl.progressSlider.minimumValue = 0.f;
-    self.videoControl.progressSlider.maximumValue = duration;
+    self.videoControl.progressSlider.maximumValue = floor(duration);
 }
 
 - (void)progressSliderTouchBegan:(UISlider *)slider {
@@ -250,10 +293,10 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 
 - (void)monitorVideoPlayback
 {
-    double currentTime = floor(self.currentPlaybackTime);
+    double currentTime = (self.currentPlaybackTime);
     double totalTime = floor(self.duration);
     [self setTimeLabelValues:currentTime totalTime:totalTime];
-    self.videoControl.progressSlider.value = ceil(currentTime);
+    self.videoControl.progressSlider.value = floor(currentTime);
 }
 
 - (void)setTimeLabelValues:(double)currentTime totalTime:(double)totalTime {
@@ -264,13 +307,23 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     double minutesRemaining = floor(totalTime / 60.0);;
     double secondsRemaining = floor(fmod(totalTime, 60.0));;
     NSString *timeRmainingString = [NSString stringWithFormat:@"%02.0f:%02.0f", minutesRemaining, secondsRemaining];
+    self.videoControl.timeLabel.text = timeRmainingString;
+//    self.videoControl.timeLabel.text = [NSString stringWithFormat:@"%@/%@",timeElapsedString,timeRmainingString];
+
     
-    self.videoControl.timeLabel.text = [NSString stringWithFormat:@"%@/%@",timeElapsedString,timeRmainingString];
+    self.videoControl.timeElapsedLabel.text = timeElapsedString;
 }
 
 - (void)startDurationTimer
 {
-    self.durationTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(monitorVideoPlayback) userInfo:nil repeats:YES];
+    // 显示视频总时常
+//    double totalTime = floor(self.duration);
+//    double minutesRemaining = floor(totalTime / 60.0);;
+//    double secondsRemaining = floor(fmod(totalTime, 60.0));;
+//    NSString *timeRmainingString = [NSString stringWithFormat:@"%02.0f:%02.0f", minutesRemaining, secondsRemaining];
+//    self.videoControl.timeLabel.text = timeRmainingString;
+    
+    self.durationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(monitorVideoPlayback) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.durationTimer forMode:NSDefaultRunLoopMode];
 }
 

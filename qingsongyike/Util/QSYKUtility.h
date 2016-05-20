@@ -35,4 +35,6 @@
 
 + (void)rateResourceWithSid:(NSString * _Nonnull)sid type:(NSInteger)type;
 
++ (void)loadSplash;
+
 @end

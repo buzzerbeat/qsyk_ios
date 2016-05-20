@@ -16,6 +16,19 @@ PODS:
     - AFNetworking/NSURLSession
   - CarbonKit (2.1.6)
   - DACircularProgress (2.3.1)
+  - DKNightVersion (2.3.0):
+    - DKNightVersion/Core (= 2.3.0)
+    - DKNightVersion/CoreAnimation (= 2.3.0)
+    - DKNightVersion/UIKit (= 2.3.0)
+  - DKNightVersion/Core (2.3.0):
+    - DKNightVersion/Core/DeallocBlockExecutor (= 2.3.0)
+    - DKNightVersion/Core/extobjc (= 2.3.0)
+  - DKNightVersion/Core/DeallocBlockExecutor (2.3.0)
+  - DKNightVersion/Core/extobjc (2.3.0)
+  - DKNightVersion/CoreAnimation (2.3.0):
+    - DKNightVersion/Core
+  - DKNightVersion/UIKit (2.3.0):
+    - DKNightVersion/Core
   - FDFullscreenPopGesture (1.1)
   - JPush (2.1.6)
   - JSONModel (1.2.0)
@@ -68,6 +81,7 @@ DEPENDENCIES:
   - AFNetworking (~> 3.1.0)
   - CarbonKit (~> 2.1.6)
   - DACircularProgress (~> 2.3.1)
+  - DKNightVersion (~> 2.3.0)
   - FDFullscreenPopGesture (~> 1.1)
   - JPush (~> 2.1.6)
   - JSONModel (~> 1.2.0)
@@ -84,6 +98,7 @@ SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   CarbonKit: 101a21d2c50ab9453fa4fcbf29de7c81008d8b65
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  DKNightVersion: 459438cbfd14edb9e41a777ff14b18e5661b9269
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   JPush: 9732a2a9e6a34729f660d6275704a5803d661e83
   JSONModel: 12523685c4b623553ccf844bbbf7007624317b2c
