@@ -71,6 +71,18 @@
     return [NSString stringWithFormat:@"%@ iOS v%@ mid:%@", appName, version, mid];
 }
 
++ (void)startApp {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
+                                             URLString:[NSString stringWithFormat:@"%@/user/sign-task", kAuthBaseURL]
+                                            parameters:nil
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
+                                               }
+                                               failure:^(NSError *error) {
+                                                   
+                                               }];
+}
+
 + (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type {
     NSString *URLStr = type == 1 ? @"/resource/like" : @"/resource/hate";
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
@@ -92,17 +104,38 @@
 
 + (void)loadSplash {
     
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/splash", kAuthBaseURL]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setValue:[QSYKUtility UAString] forHTTPHeaderField:@"User-Agent"];
+    [request setHTTPMethod:@"GET"];
+    
     dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_sync(concurrentQueue, ^{
         
         // 1.请求加密的数据
+        NSURLResponse *response;
         NSError *encodeError = nil;
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/splash", kAuthBaseURL]];
-        NSData *encodedData = [NSData dataWithContentsOfURL:url options:0 error:&encodeError];
+        NSData *encodedData = [NSURLConnection sendSynchronousRequest:request
+                                                     returningResponse:&response
+                                                                 error:&encodeError];
+        
+        if (encodeError) {
+            // Deal with your error
+            if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+                NSLog(@"HTTP Error: %ld %@", (long)httpResponse.statusCode, encodeError);
+                return;
+            }
+            NSLog(@"Error %@", encodeError);
+            return;
+        }
+        
+//        NSString *responeString = [[NSString alloc] initWithData:encodedData
+//                                                        encoding:NSUTF8StringEncoding];
+
         
         // 2.解码数据
         NSData *decodedData = [[NSData alloc] initWithBase64EncodedData:encodedData options:0];
-//        NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
         
         // 3.把解密后的数据转换为字典类型
         NSError *parseError = nil;
@@ -117,8 +150,21 @@
         [[NSUserDefaults standardUserDefaults] setBool:lotteryEnable forKey:@"lotteryEnable"];
         BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"saveSuccess = %d", saveSuccess);
-        
     });
+    
+    /*
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
+                                             URLString:[NSString stringWithFormat:@"%@/splash", kAuthBaseURL]
+                                            parameters:nil
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   NSData *decodedData = [[NSData alloc] initWithBase64EncodedData:responseObject options:0];
+                                                   NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:decodedData options:0 error:nil];
+                                                   NSLog(@"dic = %@", dic);
+                                               }
+                                               failure:^(NSError *error) {
+                                                   
+                                               }];
+     */
 }
 
 @end
