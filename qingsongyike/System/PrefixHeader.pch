@@ -40,6 +40,7 @@
 #define kCurrentAppVersion [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
 #define kToken [[NSUserDefaults standardUserDefaults] valueForKey:@"token"]
 #define kLotteryEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"lotteryEnable"]
+#define kBeautyEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"beautyEnable"]
 
 
 #define TEXT_LING_SPACING 10.f

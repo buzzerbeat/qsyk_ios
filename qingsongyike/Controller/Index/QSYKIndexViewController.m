@@ -29,14 +29,25 @@
     self.navigationItem.title = @"轻松一刻";
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.itemTitles = @[
-                        @"推荐",
-                        @"视频",
-                        @"动图",
-                        @"图片",
-                        @"段子",
-                        @"美女",
-                        ];
+    if (kBeautyEnable) {
+        self.itemTitles = @[
+                            @"推荐",
+                            @"视频",
+                            @"动图",
+                            @"图片",
+                            @"段子",
+                            @"美女",
+                            ];
+    } else {
+        self.itemTitles = @[
+                            @"推荐",
+                            @"视频",
+                            @"动图",
+                            @"图片",
+                            @"段子",
+                            ];
+    }
+    
     
     self.carbonTabSwipeNavigation = [[CarbonTabSwipeNavigation alloc] initWithItems:_itemTitles delegate:self];
     [_carbonTabSwipeNavigation insertIntoRootViewController:self];
@@ -71,16 +82,8 @@
 - (UIViewController *)carbonTabSwipeNavigation:(CarbonTabSwipeNavigation *)carbonTabSwipeNavigation viewControllerAtIndex:(NSUInteger)index {
     
     switch (index) {
-        case 0:{
-            QSYKRecommendPageViewController *recommendVC = [[QSYKRecommendPageViewController alloc] init];
-            if (index == 5) {
-                recommendVC.isBeautyTag = YES;
-            }
-            
-            return recommendVC;
-        }
-            break;
-        case 5:{
+        case 0:
+        case 5: {
             QSYKRecommendPageViewController *recommendVC = [[QSYKRecommendPageViewController alloc] init];
             if (index == 5) {
                 recommendVC.isBeautyTag = YES;

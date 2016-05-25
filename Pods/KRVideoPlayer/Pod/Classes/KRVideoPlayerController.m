@@ -202,14 +202,14 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     self.originFrame = self.view.frame;
     CGFloat height = [[UIScreen mainScreen] bounds].size.width;
     CGFloat width = [[UIScreen mainScreen] bounds].size.height;
-    CGRect frame = CGRectMake((height - width) / 2, (width - height) / 2, width, height);
+    CGRect frame = CGRectMake(0, 0, height, width);//CGRectMake((height - width) / 2, (width - height) / 2, width, height);
     
-    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-    if (!keyWindow) {
-        keyWindow = [[[UIApplication sharedApplication] windows] firstObject];
-    }
-    self.originView = self.view.superview;
-    [keyWindow addSubview:self.view];
+//    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+//    if (!keyWindow) {
+//        keyWindow = [[[UIApplication sharedApplication] windows] firstObject];
+//    }
+//    self.originView = self.view.superview;
+//    [keyWindow addSubview:self.view];
     
     [UIView animateWithDuration:0.3f animations:^{
         self.frame = frame;

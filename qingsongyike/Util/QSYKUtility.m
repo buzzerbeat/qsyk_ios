@@ -144,10 +144,11 @@
         
         // 提取开关设置
         BOOL lotteryEnable = [dic[@"config"][@"lotteryEnable"] boolValue];
-        NSLog(@"%d", lotteryEnable);
+        BOOL beautyEnable  = [dic[@"config"][@"beautyEnable"] boolValue];
         
         // 存到本地
         [[NSUserDefaults standardUserDefaults] setBool:lotteryEnable forKey:@"lotteryEnable"];
+        [[NSUserDefaults standardUserDefaults] setBool:beautyEnable forKey:@"beautyEnable"];
         BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"saveSuccess = %d", saveSuccess);
     });
