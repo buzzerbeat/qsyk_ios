@@ -32,7 +32,6 @@ PODS:
   - FDFullscreenPopGesture (1.1)
   - JPush (2.1.6)
   - JSONModel (1.2.0)
-  - KRVideoPlayer (1.0.1)
   - libextobjc (0.4.1):
     - libextobjc/EXTADT (= 0.4.1)
     - libextobjc/EXTConcreteProtocol (= 0.4.1)
@@ -85,7 +84,6 @@ DEPENDENCIES:
   - FDFullscreenPopGesture (~> 1.1)
   - JPush (~> 2.1.6)
   - JSONModel (~> 1.2.0)
-  - KRVideoPlayer (~> 1.0.1)
   - libextobjc (~> 0.4.1)
   - Masonry (~> 1.0.0)
   - MJRefresh (~> 3.1.0)
@@ -102,7 +100,6 @@ SPEC CHECKSUMS:
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   JPush: 9732a2a9e6a34729f660d6275704a5803d661e83
   JSONModel: 12523685c4b623553ccf844bbbf7007624317b2c
-  KRVideoPlayer: 08918da1b99cae35fd4c15b2ec2b49358d4c985f
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   Masonry: b529bb169217897b6354d4b56b1fada6d475b13d
   MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4

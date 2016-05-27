@@ -7,9 +7,8 @@
 //
 
 #import "QSYKVideoTableViewCell.h"
-#import "KRVideoPlayerController.h"
 #import <AVFoundation/AVFoundation.h>
-#import <KRVideoPlayerController.h>
+#import "KRVideoPlayerController.h"
 
 @interface QSYKVideoTableViewCell() <UIAlertViewDelegate>
 @property (nonatomic, strong) KRVideoPlayerController *videoController;
@@ -81,7 +80,6 @@
     
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text    = self.userName;
-    self.pubTimeLabel.text     = self.pubTime;
     self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
 
@@ -113,6 +111,9 @@
                                                           NSLog(@"error = %@", error);
                                                       }
                                                   }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVideoViewFrame:) name:kVideoViewShrinkedNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVideoViewFrame:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (IBAction)playVideoBtnClicked:(id)sender {
@@ -137,6 +138,11 @@
     } else {
         [self playVideoWithURL:[NSURL URLWithString:self.video.url]];
         [self.backView addSubview:self.videoController.view];
+//        if (!kIsIphone) {
+//            [self.videoController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.edges.equalTo(self.videoThumbImageView);
+//            }];
+//        }
     }
 }
 
@@ -146,6 +152,11 @@
     if (buttonIndex == 1) {
         [self playVideoWithURL:[NSURL URLWithString:self.video.url]];
         [self.backView addSubview:self.videoController.view];
+//        if (!kIsIphone) {
+//            [self.videoController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.edges.equalTo(self.videoThumbImageView);
+//            }];
+//        }
     }
 }
 
@@ -165,6 +176,21 @@
 - (void)reset {
     [self.videoController dismiss];
     self.videoController = nil;
+}
+
+- (void)updateVideoViewFrame:(NSNotification *)noti {
+//    if (!self.videoController.videoControl.isFullscreen) {
+        self.videoController.frame = self.videoThumbImageView.frame;
+        [self.backView layoutSubviews];
+        
+//    }
+}
+
+- (void)removeConstraintForVideo {
+    if (!(kIsIphone)) {
+        [self.videoController.view mas_remakeConstraints:^(MASConstraintMaker *make) {
+        }];
+    }
 }
 
 - (IBAction)digBtnClicked:(id)sender {

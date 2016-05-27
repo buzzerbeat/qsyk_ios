@@ -74,7 +74,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/SocialSDKXib/UMSShareListController.xib"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/en.lproj"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/zh-Hans.lproj"
-  install_resource "${BUILT_PRODUCTS_DIR}/KRVideoPlayer.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "DKNightVersion/DKNightVersion/ColorTable/DKColorTable.txt"
@@ -93,7 +92,6 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/SocialSDKXib/UMSShareListController.xib"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/en.lproj"
   install_resource "UMengSocial/Umeng_SDK_Social_iOS_ARM64_5.0/UMSocial_Sdk_5.0/zh-Hans.lproj"
-  install_resource "${BUILT_PRODUCTS_DIR}/KRVideoPlayer.bundle"
 fi
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

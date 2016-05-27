@@ -8,6 +8,8 @@
 
 #import "QSYKUtility.h"
 #import "SSKeychain.h"
+#import "LYTopWindow.h"
+#import "QSYKTopWindow.h"
 
 @implementation QSYKUtility
 
@@ -104,7 +106,12 @@
 
 + (void)loadSplash {
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/splash", kAuthBaseURL]];
+    NSString *device = [UIDevice currentDevice].model;
+    NSString *sysver = [UIDevice currentDevice].systemVersion;
+    NSString *urlStr = [NSString stringWithFormat:@"%@/splash?device=%@&sysver=%@", kAuthBaseURL, device, sysver];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSLog(@"splash URL = %@", url);
+    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setValue:[QSYKUtility UAString] forHTTPHeaderField:@"User-Agent"];
     [request setHTTPMethod:@"GET"];
@@ -166,6 +173,24 @@
                                                    
                                                }];
      */
+}
+
+// 隐藏topWindow
++ (void)hideTopWindow {
+    if (SYSTEM_VERSION >= 8.0) {
+        [LYTopWindow sharedTopWindow].hidden = YES;
+    } else {
+        [QSYKTopWindow hide];
+    }
+}
+
+// 显示topWindow
++ (void)showTopWindow {
+    if (SYSTEM_VERSION >= 8.0) {
+        [LYTopWindow sharedTopWindow].hidden = NO;
+    } else {
+        [QSYKTopWindow show];
+    }
 }
 
 @end

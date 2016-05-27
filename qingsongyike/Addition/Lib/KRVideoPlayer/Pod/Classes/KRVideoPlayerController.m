@@ -103,7 +103,8 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMPMoviePlayerReadyForDisplayDidChangeNotification) name:MPMoviePlayerReadyForDisplayDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMPMovieDurationAvailableNotification) name:MPMovieDurationAvailableNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMPMoviePlayerPlaybackDidFinishNotification) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-    
+ 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFrame:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)cancelObserver
@@ -140,10 +141,10 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
         self.videoControl.backButton.hidden = YES;
         [self startDurationTimer];
         [self.videoControl autoFadeOutControlBar];
-//        [self.videoControl animateHide];
     } else {
         self.videoControl.pauseButton.hidden = YES;
         self.videoControl.playButton.hidden = NO;
+        self.videoControl.backButton.hidden = YES;
         [self stopDurationTimer];
         if (self.playbackState == MPMoviePlaybackStatePaused) {
             [self.videoControl animateShow];
@@ -172,6 +173,9 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 
 - (void)onMPMoviePlayerPlaybackDidFinishNotification {
     [self pauseButtonClick];
+    
+    // 播放结束后退出全屏
+    [self shrinkScreenButtonClick];
 }
 
 - (void)playButtonClick
@@ -199,21 +203,26 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
     if (self.isFullscreenMode) {
         return;
     }
-    self.originFrame = self.view.frame;
-    CGFloat height = [[UIScreen mainScreen] bounds].size.width;
-    CGFloat width = [[UIScreen mainScreen] bounds].size.height;
-    CGRect frame = CGRectMake(0, 0, height, width);//CGRectMake((height - width) / 2, (width - height) / 2, width, height);
     
-//    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-//    if (!keyWindow) {
-//        keyWindow = [[[UIApplication sharedApplication] windows] firstObject];
-//    }
-//    self.originView = self.view.superview;
-//    [keyWindow addSubview:self.view];
+    [QSYKUtility hideTopWindow];
+    
+    self.originFrame = self.view.frame;
+    CGFloat width = [[UIScreen mainScreen] bounds].size.width;
+    CGFloat height = [[UIScreen mainScreen] bounds].size.height;
+    CGRect frame = frame = [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone ? CGRectMake((width - height) / 2, (height - width) / 2, height, width) : CGRectMake(0, 0, width, height);
+    
+    UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+    if (!keyWindow) {
+        keyWindow = [[[UIApplication sharedApplication] windows] firstObject];
+    }
+    self.originView = self.view.superview;
+    [keyWindow addSubview:self.view];
     
     [UIView animateWithDuration:0.3f animations:^{
         self.frame = frame;
-        [self.view setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+            [self.view setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+        }
     } completion:^(BOOL finished) {
         self.isFullscreenMode = YES;
         self.videoControl.backButton.hidden = NO;
@@ -230,6 +239,8 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
         return;
     }
     
+    [QSYKUtility hideTopWindow];
+    
     [self.originView addSubview:self.view];
     
     [UIView animateWithDuration:0.3f animations:^{
@@ -242,7 +253,28 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
         self.videoControl.shrinkScreenButton.hidden = YES;
     }];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VideoViewShrinkedNotification" object:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+}
+
+- (void)updateFrame:(NSNotification *)noti {
+    if (self.isFullscreenMode) {
+        CGFloat height = [[UIScreen mainScreen] bounds].size.width;
+        CGFloat width = [[UIScreen mainScreen] bounds].size.height;
+        CGRect frame = CGRectMake(0, 0, height, width);
+        [UIView animateWithDuration:0.3f animations:^{
+            self.frame = frame;
+        } completion:^(BOOL finished) {
+            self.isFullscreenMode = YES;
+            self.videoControl.backButton.hidden = NO;
+            self.videoControl.fullScreenButton.hidden = YES;
+            self.videoControl.shrinkScreenButton.hidden = NO;
+        }];
+        
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"VideoViewShrinkedNotification" object:nil];
+    }
 }
 
 - (void)swipeBegin:(UIPanGestureRecognizer *)pan {
@@ -295,6 +327,7 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 {
     double currentTime = (self.currentPlaybackTime);
     double totalTime = floor(self.duration);
+    
     [self setTimeLabelValues:currentTime totalTime:totalTime];
     self.videoControl.progressSlider.value = floor(currentTime);
 }
@@ -316,14 +349,7 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 
 - (void)startDurationTimer
 {
-    // 显示视频总时常
-//    double totalTime = floor(self.duration);
-//    double minutesRemaining = floor(totalTime / 60.0);;
-//    double secondsRemaining = floor(fmod(totalTime, 60.0));;
-//    NSString *timeRmainingString = [NSString stringWithFormat:@"%02.0f:%02.0f", minutesRemaining, secondsRemaining];
-//    self.videoControl.timeLabel.text = timeRmainingString;
-    
-    self.durationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(monitorVideoPlayback) userInfo:nil repeats:YES];
+    self.durationTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(monitorVideoPlayback) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:self.durationTimer forMode:NSDefaultRunLoopMode];
 }
 

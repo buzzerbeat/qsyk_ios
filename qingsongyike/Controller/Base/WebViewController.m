@@ -43,7 +43,7 @@
     
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
-    self.webView.scalesPageToFit = YES;
+
     [self.view addSubview:self.webView];
     [self.webView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);

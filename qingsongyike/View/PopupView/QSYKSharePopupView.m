@@ -212,10 +212,21 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
         }];
         [actionSheet addAction:eroticAction];
         
+        if (!(kIsIphone)) {
+            actionSheet.popoverPresentationController.permittedArrowDirections = NO;
+            actionSheet.popoverPresentationController.sourceView = _target.view;
+            actionSheet.popoverPresentationController.sourceRect = _target.view.bounds;
+        }
         [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:actionSheet animated:YES completion:nil];
+        
     } else {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"举报" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"广告", @"辱骂", @"色情", nil];
-        [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
+        
+        if (kIsIphone) {
+            [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
+        } else {
+            [actionSheet showFromRect:_target.view.frame inView:_target.view animated:YES];
+        }
     }
     
     
@@ -223,7 +234,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 
 - (void)submitReportWithType:(NSInteger)type {
     // 0广告，1辱骂，2色情
-    NSLog(@"sid=%@,type=%ld", _resourceSid, type);
+    NSLog(@"sid=%@,type=%ld", _resourceSid, (long)type);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
                                              URLString:[NSString stringWithFormat:@"%@/resource/report", kAuthBaseURL]
                                             parameters:@{

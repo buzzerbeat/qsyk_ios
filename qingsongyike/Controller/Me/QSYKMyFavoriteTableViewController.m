@@ -14,9 +14,10 @@
 #import "QSYKResourceDetailViewController.h"
 @import MediaPlayer;
 
-@interface QSYKMyFavoriteTableViewController () <QSYKCellDelegate>
+@interface QSYKMyFavoriteTableViewController () <UITableViewDelegate, UITableViewDataSource, QSYKCellDelegate>
+@property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *models;
-
+@property (nonatomic, strong) UILabel *noDataIndicatorLabel;
 
 @end
 
@@ -24,13 +25,50 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
-    [self.tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
-    [self.tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
+    self.tableView = ({
+        UITableView *tableView = [[UITableView alloc] init];
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
+        
+        [self.view addSubview:tableView];
+        [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (kIsIphone) {
+                make.edges.equalTo(self.view);
+            } else {
+                make.top.equalTo(self.view);
+                make.bottom.equalTo(self.view);
+                make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+                make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+            }
+        }];
+        
+        tableView;
+    });
+    
+    self.noDataIndicatorLabel = ({
+        UILabel *label = [UILabel new];
+        label.text = @"空空如也~";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor grayColor];
+        label.font = [UIFont systemFontOfSize:18.];
+        label.hidden = YES;
+        [self.view addSubview:label];
+        
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self.view);
+            make.centerY.equalTo(self.view.mas_centerY).offset(-50);
+        }];
+        
+        label;
+    });
     
     [self loadResource];
 }
@@ -57,12 +95,16 @@
                                                    
                                                    QSYKFavoriteResourceList *model = [[QSYKFavoriteResourceList alloc] initWithArray:responseObject];
                                                    if (model.list.count) {
+                                                       self.noDataIndicatorLabel.hidden = YES;
                                                        self.models = [NSMutableArray arrayWithArray:model.list];
                                                        [self.tableView reloadData];
+                                                   } else {
+                                                       self.noDataIndicatorLabel.hidden = NO;
                                                    }
                                                    
                                                } failure:^(NSError *error) {
-                                                   [SVProgressHUD showErrorWithStatus:@"请求失败"];
+                                                   self.noDataIndicatorLabel.hidden = YES;
+                                                   [SVProgressHUD showErrorWithStatus:@"服务器开小差了~"];
                                                    NSLog(@"error = %@", error);
                                                }];
 }
@@ -157,7 +199,6 @@
     
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
-    resourceDetailVC.type = resource.type;
     resourceDetailVC.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController pushViewController:resourceDetailVC animated:YES];

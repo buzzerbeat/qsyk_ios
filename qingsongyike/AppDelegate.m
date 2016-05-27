@@ -16,6 +16,7 @@
 #import "LYTopWindow.h"
 #import "QSYKRootTabBarController.h"
 #import "QSYKTopWindow.h"
+#import "QSYKResourceDetailViewController.h"
 
 @interface AppDelegate ()
 
@@ -26,6 +27,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (remoteNotification) {
+        NSString *resourceSid = [NSString stringWithFormat:@"%@", remoteNotification[@"resourceSid"]];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kLoadFromRemotePushNotification object:nil userInfo:@{@"resourceSid": resourceSid}];
+        [[NSUserDefaults standardUserDefaults] setObject:resourceSid forKey:kRemotePushedResourceSid];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     //AFNetwork state monitoring
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
@@ -48,6 +57,9 @@
     
     // 极光推送
     [QSYKJPushManager sharedManager];
+    // 注册通知监听自定义推送消息
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+    
     // 友盟
     [QSYKUMengManager shardManager];
     // 设置APP最大缓存为 100M
@@ -57,10 +69,8 @@
     if (!kToken) {
         [[QSYKDataManager sharedManager] registerAction];
     }
-    [self startApp];
+    [QSYKUtility startApp];
     
-    // 注册通知监听自定义推送消息
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -71,7 +81,7 @@
     [QSYKUtility loadSplash];
     
     // 展示SplashView
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Default"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_4.7"]];
     imageView.frame = SCREEN_FRAME;
     UIViewController *tempVC = [[UIViewController alloc] init];
     [tempVC.view addSubview:imageView];
@@ -84,30 +94,26 @@
     return YES;
 }
 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    // iPhone只支持竖屏
+    if (kIsIphone) {
+        return UIInterfaceOrientationMaskPortrait;
+    } else {
+        return UIInterfaceOrientationMaskAll;
+    }
+}
+
 - (void)timeoutForSplashView {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     
     self.window.rootViewController = [[QSYKRootTabBarController alloc] init];
 }
 
-- (void)startApp {
-    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                     URLString:[NSString stringWithFormat:@"%@/user/sign-task", kAuthBaseURL]
-                    parameters:nil
-                       success:^(NSURLSessionDataTask *task, id responseObject) {
-                           [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
-                       }
-                       failure:^(NSError *error) {
-                           
-                       }];
-}
-
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
 //    NSDictionary * userInfo = [notification userInfo];
 //    NSString *content = [userInfo valueForKey:@"content"];
 //    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-//    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
-    
+//    NSString *resourceSid = [extras valueForKey:@"resourceSid"]; //自定义参数，key是自己定义的
 }
 
 
@@ -154,6 +160,10 @@
     // JPush
     [JPUSHService registerDeviceToken:deviceToken];
     NSLog(@"Device Token: %@", deviceToken);
+    
+    [JPUSHService setTags:nil alias:@"mhy" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+        NSLog(@"%d", iResCode);
+    }];
 }
 
 // 当 DeviceToken 获取失败时，系统会回调此方法
@@ -166,6 +176,21 @@
     // IOS 7 Support Required
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
+    
+    NSLog(@"%@", userInfo);
+    
+    // 参数resourceSid，打开本sid的资源，左上角返回后，返回首页
+    // 当resourceSid为空，或者不存在本参数时，直接打开客户端首页即可
+    NSString *resourceSid = userInfo[@"resourceSid"];
+    if (resourceSid && resourceSid.length) {
+//        QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+//        QSYKBaseNavigationController *nav = [[QSYKBaseNavigationController alloc] initWithRootViewController:resourceDetailVC];
+//        resourceDetailVC.sid = resourceSid;
+//        
+//        [self.window.rootViewController presentViewController:nav animated:YES completion:nil];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLoadFromRemotePushNotification object:nil userInfo:@{@"resourceSid": resourceSid}];
+    }
 }
 
 @end

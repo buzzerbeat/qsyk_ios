@@ -68,14 +68,16 @@
         self.isTopic = (res.type == 1);
     }
     
+    // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    
     // 解决cell的contentView不随着cell高度的变化而变化（原因未找到）
     self.contentView.height = [QSYKUtility heightForMutilLineLabel:self.content
                                                               font:16.f
-                                                             width:SCREEN_WIDTH - 8 * 4] + 140 ;
+                                                             width:width] + 140 ;
     
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabe.text = self.userName;
-    self.pubTimeLabel.text = self.pubTime;
     self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
     

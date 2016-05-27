@@ -92,7 +92,6 @@
     self.progressView.hidden = YES;
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text = self.userName;
-    self.pubTimeLabel.text = self.pubTime;
     self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
     

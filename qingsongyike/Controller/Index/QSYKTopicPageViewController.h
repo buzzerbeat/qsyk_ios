@@ -9,6 +9,5 @@
 #import "QSYKBaseViewController.h"
 
 @interface QSYKTopicPageViewController : QSYKBaseViewController  <UITableViewDataSource, UITableViewDelegate>
-@property (nonatomic, strong) UITableView *tableView;
 
 @end

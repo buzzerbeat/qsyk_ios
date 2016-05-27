@@ -15,6 +15,7 @@
 @interface QSYKRootTabBarController ()
 @property (nonatomic, strong) NSArray *tabBarItemTitles;
 @property (nonatomic, strong) NSArray *tabBarItemImages;
+@property (nonatomic, assign) NSInteger selectedItemIndex;
 
 @end
 
@@ -32,7 +33,7 @@
         self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
     }
     
-    
+    self.selectedItemIndex = 0;
     [self setupViewControllers];
 }
 
@@ -55,7 +56,8 @@
     [indexVC setTabBarItem:[self configureItemAtIndex:index++]];
     
     if (kLotteryEnable) {
-        [webView setTabBarItem:[self configureItemAtIndex:index++]];
+//        [webView setTabBarItem:[self configureItemAtIndex:index++]];
+        index++;
     }
     
     [myPageVC setTabBarItem:[self configureItemAtIndex:index++]];
@@ -73,9 +75,21 @@
     UIImage *selectedImage   = [self formatImageWithName:[NSString stringWithFormat:@"%@_pressed", [_tabBarItemImages objectAtIndex:index]]];
     
     UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:_tabBarItemTitles[index] image:unselectedImage selectedImage:selectedImage];
+    item.tag = index;
     [item setTitleTextAttributes:@{NSForegroundColorAttributeName : kCoreColor} forState:UIControlStateSelected];
     
     return item;
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    // 如果某个item已被选择再点击则刷新这个 item 对应的 viewContrller
+    if (item.tag == self.selectedItemIndex) {
+        // send notification to refresh
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshIndexPageNotification object:nil];
+    }
+    
+    self.selectedItemIndex = item.tag;
+    NSLog(@"点击了第%ld个item", (long)item.tag);
 }
 
 - (UIImage *)formatImageWithName:(NSString *)imageName {

@@ -44,7 +44,7 @@
 - (void)showInVC:(UIViewController *)target resourceSid:(NSString *)resourceSid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic {
     _shareContentView.target = target;
     _shareContentView.resourceSid = resourceSid;
-    _shareContentView.shareURL = [NSString stringWithFormat:@"%@/share?sid=%@", kBaseURL, resourceSid];
+    _shareContentView.shareURL = [NSString stringWithFormat:@"%@/share?sid=%@", kShareBaseURL, resourceSid];
     
     if (isTopic) {
         _shareContentView.shareImage = [UIImage imageNamed:@"AppIcon_180"];

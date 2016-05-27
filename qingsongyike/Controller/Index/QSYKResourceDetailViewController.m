@@ -15,11 +15,13 @@
 @import MediaPlayer;
 
 @interface QSYKResourceDetailViewController () <QSYKCellDelegate>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+//@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (nonatomic, strong) QSYKResourceModel *resource;
+@property (nonatomic, assign) NSInteger type;
 @property (nonatomic, strong) QSYKPostModel *post;
 
 @end
@@ -29,6 +31,36 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.tableView = ({
+        UITableView *tableView = [[UITableView alloc] init];
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
+        
+        [self.view addSubview:tableView];
+        [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (kIsIphone) {
+                make.edges.equalTo(self.view);
+            } else {
+                make.top.equalTo(self.view);
+                make.bottom.equalTo(self.view);
+                make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+                make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+            }
+        }];
+        
+        tableView;
+    });
+    
+    [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
+    self.view.backgroundColor = self.tableView.backgroundColor;
+    
+    /*
     self.tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -44,11 +76,21 @@
     //    }];
     
     self.sendCommentBtn.layer.cornerRadius = 3.f;
+     */
     
     [self loadResourceData];
     [self loadPostData];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    // 监听用户点击推送消息
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotiResource:) name:kLoadFromRemotePushNotification object:nil];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+        make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,6 +104,21 @@
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [curCell reset];
     }
+    
+    // 当页面消失时注销对消息的监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+- (void)showRemoteNotiResource:(NSNotification *)noti {
+    NSLog(@"noti = %@", noti.userInfo);
+    
+//    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+//    resourceDetailVC.sid = noti.userInfo[@"resourceSid"];
+//    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+//    
+//    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+    
+    self.sid = noti.userInfo[@"resourceSid"];
+    [self loadResourceData];
 }
 
 - (void)keyboardWillChangeFrame:(NSNotification *)noti {
@@ -92,6 +149,7 @@
                                                                      [SVProgressHUD dismiss];
                                                                      
                                                                      self.resource = resource;
+                                                                     self.type = self.resource.type;
                                                                      [self.tableView reloadData];
                                                                      
                                                                  } failure:^(NSError *error) {
@@ -150,10 +208,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        // width = content标签左右边距离屏幕左右边的距离的和
+
+        // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
+        CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+        
         CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_resource.content
                                                               font:16.f
-                                                             width:SCREEN_WIDTH - 8 * 4];
+                                                             width:width];
         
         switch (_type) {
             case 1: {
@@ -163,16 +224,16 @@
                 break;
             case 2: {
                 // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-                extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.img.height / _resource.img.width;
+                extraHeight += width * _resource.img.height / _resource.img.width;
                 return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
             }
                 break;
             case 3: {
                 // video类型cell
                 if (_resource.video.height > _resource.video.width) {
-                    extraHeight += (SCREEN_WIDTH - 8 * 4);
+                    extraHeight += width;
                 } else {
-                    extraHeight += (SCREEN_WIDTH - 8 * 4) * _resource.video.height / _resource.video.width;
+                    extraHeight += width * _resource.video.height / _resource.video.width;
                 }
                 
                 return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;

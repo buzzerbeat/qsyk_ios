@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -31,16 +31,10 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="---" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="kKW-jo-wZT">
-                                <rect key="frame" x="277" y="21" width="17" height="14.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="---" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="yhm-dc-iAs">
                                 <rect key="frame" x="8" y="60" width="288" height="19.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q67-9h-baI">
@@ -120,7 +114,6 @@
                             <constraint firstItem="djt-u9-RvD" firstAttribute="top" secondItem="q67-9h-baI" secondAttribute="bottom" constant="5" id="94q-8I-N6H"/>
                             <constraint firstItem="yhm-dc-iAs" firstAttribute="top" secondItem="AlG-Aj-Ywu" secondAttribute="bottom" constant="15" id="B9B-J5-Fla"/>
                             <constraint firstAttribute="trailing" secondItem="O8I-eM-XbB" secondAttribute="trailing" constant="10" id="CFg-oN-czy"/>
-                            <constraint firstItem="kKW-jo-wZT" firstAttribute="centerY" secondItem="AlG-Aj-Ywu" secondAttribute="centerY" id="CiE-J7-91e"/>
                             <constraint firstItem="eI1-d3-Vve" firstAttribute="centerY" secondItem="djt-u9-RvD" secondAttribute="centerY" id="DMl-He-M2n"/>
                             <constraint firstItem="8aV-Sl-aNV" firstAttribute="centerY" secondItem="9ks-11-eOl" secondAttribute="centerY" id="Dul-e5-fr1"/>
                             <constraint firstAttribute="bottom" secondItem="djt-u9-RvD" secondAttribute="bottom" constant="5" id="EHb-4t-qFc"/>
@@ -130,7 +123,6 @@
                             <constraint firstItem="q67-9h-baI" firstAttribute="top" secondItem="yhm-dc-iAs" secondAttribute="bottom" constant="10" id="QtX-YN-Tb6"/>
                             <constraint firstItem="Kwn-vU-vc3" firstAttribute="leading" secondItem="9ks-11-eOl" secondAttribute="trailing" constant="50" id="TLt-oZ-JeZ"/>
                             <constraint firstItem="8aV-Sl-aNV" firstAttribute="leading" secondItem="9ks-11-eOl" secondAttribute="trailing" id="U1a-Ex-tD5"/>
-                            <constraint firstAttribute="trailing" secondItem="kKW-jo-wZT" secondAttribute="trailing" constant="10" id="VPy-9u-R9G"/>
                             <constraint firstItem="AlG-Aj-Ywu" firstAttribute="leading" secondItem="D9J-yx-NLp" secondAttribute="leading" constant="8" id="WNh-yA-MXa"/>
                             <constraint firstItem="q67-9h-baI" firstAttribute="leading" secondItem="D9J-yx-NLp" secondAttribute="leading" constant="8" id="ZUe-mW-sXY"/>
                             <constraint firstItem="djt-u9-RvD" firstAttribute="leading" secondItem="D9J-yx-NLp" secondAttribute="leading" constant="10" id="a67-cC-5SZ"/>
@@ -154,7 +146,7 @@
                         </variation>
                     </view>
                 </subviews>
-                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="D9J-yx-NLp" secondAttribute="bottom" constant="7" id="5G0-Q0-7v1"/>
                     <constraint firstItem="D9J-yx-NLp" firstAttribute="top" secondItem="fT5-8W-2yC" secondAttribute="topMargin" id="lt4-tw-qFd"/>
@@ -175,7 +167,6 @@
                 <outlet property="contentLabel" destination="yhm-dc-iAs" id="w4K-nP-2Ei"/>
                 <outlet property="digBtn" destination="djt-u9-RvD" id="d4r-e8-RUw"/>
                 <outlet property="digCountLabel" destination="eI1-d3-Vve" id="zOM-Wp-77l"/>
-                <outlet property="pubTimeLabel" destination="kKW-jo-wZT" id="YXa-9i-eU4"/>
                 <outlet property="separatorHeightCon" destination="P8o-FB-btw" id="G5d-cn-qrd"/>
                 <outlet property="shareBtn" destination="O8I-eM-XbB" id="bXQ-uK-Y0b"/>
                 <outlet property="usernameLabe" destination="t2c-Xg-l89" id="yiv-vS-rTj"/>

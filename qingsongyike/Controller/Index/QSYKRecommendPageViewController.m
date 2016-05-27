@@ -47,21 +47,75 @@
         
         [self.view addSubview:tableView];
         [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
+            if (kIsIphone) {
+                make.edges.equalTo(self.view);
+            } else {
+                make.top.equalTo(self.view);
+                make.bottom.equalTo(self.view);
+                make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+                make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+            }
         }];
         
         tableView;
     });
     
-    self.resourceList = [NSMutableArray new];
-    [self loadData];
+    [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
+    self.view.backgroundColor = self.tableView.backgroundColor;
     
+    self.resourceList = [NSMutableArray new];
+    [self.tableView.mj_header beginRefreshing];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (!(kIsIphone)) {
+        [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+            make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+        }];
+    }
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (!(kIsIphone)) {
+        NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
+        for (NSIndexPath *anIndexPath in visibleRows) {
+            QSYKResourceModel *aModel = _resourceList[anIndexPath.row];
+            // 旋转设备时需要刷新类型为“段子”的cell（段子类型的cell约束有点问题导致cell 的 frame不能自适应，原因未找到）
+            if (aModel.type == 1) {
+                [self.tableView reloadRowsAtIndexPaths:@[anIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+        }
+    }
+}
+
+- (void)viewWillLayoutSubviews {
+    NSString *resourceSid = (NSString *)[[NSUserDefaults standardUserDefaults] objectForKey:kRemotePushedResourceSid];
+    //    [[[UIAlertView alloc] initWithTitle:nil message:resourceSid delegate:nil cancelButtonTitle:@"111" otherButtonTitles:nil] show];
+    if (resourceSid && resourceSid.length) {
+        QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+        resourceDetailVC.sid = resourceSid;
+        resourceDetailVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:resourceDetailVC animated:YES];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kRemotePushedResourceSid];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    // 监听用户点击推送消息
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotiResource:) name:kLoadFromRemotePushNotification object:nil];
+    
+    // 当在首页的时候，再点击一下首页，返回顶部并刷新获取。
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToTopAndRefresh) name:kRefreshIndexPageNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     // 当页面离开屏幕时关闭视频播放
+    // 找到屏幕中类型为 video 的 cell
     NSArray *visibleRows = [self.tableView indexPathsForVisibleRows];
     for (NSIndexPath *indexPath in visibleRows) {
         QSYKResourceModel *aResource = _resourceList[indexPath.row];
@@ -70,11 +124,28 @@
             [cell reset];
         }
     }
+    
+    // 当页面消失时注销对消息的监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)scrollToTopAndRefresh {
+    [self.tableView.mj_header beginRefreshing];
+}
+
+- (void)showRemoteNotiResource:(NSNotification *)noti {
+    NSLog(@"noti = %@", noti.userInfo);
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = noti.userInfo[@"resourceSid"];
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
 }
 
 - (void)loadData {
@@ -106,7 +177,7 @@
     }
     
     [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
-    [SVProgressHUD show];
+//    [SVProgressHUD show];
     
     @weakify(self);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
@@ -119,7 +190,7 @@
                                                    @strongify(self);
                                                    [self.tableView.mj_header endRefreshing];
                                                    [self.tableView.mj_footer endRefreshing];
-                                                   [SVProgressHUD dismiss];
+//                                                   [SVProgressHUD dismiss];
                                                    
                                                    if (resourceList.list.count) {
                                                        if (self.isRefresh) {
@@ -135,7 +206,7 @@
                                                failure:^(NSError *error) {
                                                    [self.tableView.mj_header endRefreshing];
                                                    [self.tableView.mj_footer endRefreshing];
-                                                   [SVProgressHUD dismiss];
+//                                                   [SVProgressHUD dismiss];
                                                    [SVProgressHUD showErrorWithStatus:@"加载失败"];
                                                    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
                                                    NSLog(@"error = %@", error);
@@ -152,10 +223,12 @@
     QSYKResourceModel *resource = _resourceList[indexPath.row];
     NSInteger cellType = resource.type;
     
-    // width = content标签左右边距离屏幕左右边的距离的和
+    // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
                                                           font:16.f
-                                                         width:SCREEN_WIDTH - 8 * 4];
+                                                         width:width];
     
     if (cellType == 1) {
         return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
@@ -163,18 +236,18 @@
     } else if (cellType == 2) {
         // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
         if (resource.img.height > 2 * resource.img.width && !resource.img.dynamic) {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
+            extraHeight += width * 1.5;
         } else {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
+            extraHeight += width * resource.img.height / resource.img.width;
         }
         
         return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
     } else {
         // video类型同图片
         if (resource.video.height > resource.video.width) {
-            extraHeight += (SCREEN_WIDTH - 8 * 4);
+            extraHeight += width;
         } else {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.video.height / resource.video.width;
+            extraHeight += width * resource.video.height / resource.video.width;
         }
         
         return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
@@ -228,7 +301,6 @@
     
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
-    resourceDetailVC.type = resource.type;
     resourceDetailVC.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController pushViewController:resourceDetailVC animated:YES];
@@ -253,6 +325,7 @@
         }
     }
 }
+
 
 #pragma mark CellDelegate
 

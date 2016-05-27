@@ -34,6 +34,7 @@
 #define SCREEN_FRAME  [[UIScreen mainScreen] bounds]
 #define SYSTEM_VERSION [UIDevice currentDevice].systemVersion.floatValue
 #define UUID [[[UIDevice currentDevice] identifierForVendor] UUIDString]
+#define kIsIphone UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
 
 #define kIsNetworkViaWiFi ([[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus] == AFNetworkReachabilityStatusReachableViaWiFi)
 #define kIsAutoLoadImgOnlyInWifi [[NSUserDefaults standardUserDefaults] boolForKey:kIsAutoLoadImgOnlyInWifiKey]
@@ -51,9 +52,14 @@
 static NSString * const kBaseURL = @"http://c.appcq.cn/";
 static NSString * const kAuthBaseURL = @"http://c2.appcq.cn";
 static NSString * const kPictureBaseURL = @"http://ic.appcq.cn/";
+static NSString * const kShareBaseURL = @"http://www.kanqu.com";
 
 
-static NSString * const kIsAutoLoadImgOnlyInWifiKey = @"IsAutoLoadImgOnlyInWifiKey";
-static NSString * const kUserInfoChangedNotification = @"UserInfoChangedNotification";
+static NSString * const kIsAutoLoadImgOnlyInWifiKey     = @"IsAutoLoadImgOnlyInWifiKey";
+static NSString * const kRemotePushedResourceSid        = @"RemotePushedResourceSid";
+static NSString * const kUserInfoChangedNotification    = @"UserInfoChangedNotification";
+static NSString * const kVideoViewShrinkedNotification  = @"VideoViewShrinkedNotification";
+static NSString * const kRefreshIndexPageNotification   = @"RefreshIndexPageNotification";
+static NSString * const kLoadFromRemotePushNotification = @"LoadFromRemotePushNotification";
 
 #endif /* PrefixHeader_pch */

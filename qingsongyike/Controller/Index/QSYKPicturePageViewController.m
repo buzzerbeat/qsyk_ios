@@ -31,6 +31,7 @@
         tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            self.isRefresh = YES;
             [self loadData];
         }];
         tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
@@ -39,18 +40,63 @@
         
         [self.view addSubview:tableView];
         [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
+            if (kIsIphone) {
+                make.edges.equalTo(self.view);
+            } else {
+                make.top.equalTo(self.view);
+                make.bottom.equalTo(self.view);
+                make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+                make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+            }
         }];
         
         tableView;
     });
+    [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
+    self.view.backgroundColor = self.tableView.backgroundColor;
     
-    [self loadData];
+    [self.tableView.mj_header beginRefreshing];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    // 监听用户点击推送消息
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotiResource:) name:kLoadFromRemotePushNotification object:nil];
+    
+    // 当在首页的时候，再点击一下首页，返回顶部并刷新获取。
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToTopAndRefresh) name:kRefreshIndexPageNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    // 当页面消失时注销对消息的监听
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
+        make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)showRemoteNotiResource:(NSNotification *)noti {
+    NSLog(@"noti = %@", noti.userInfo);
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = noti.userInfo[@"resourceSid"];
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+}
+
+- (void)scrollToTopAndRefresh {
+    [self.tableView.mj_header beginRefreshing];
 }
 
 - (void)loadData {
@@ -70,13 +116,13 @@
     }
     
     @weakify(self);
-    [SVProgressHUD show];
+//    [SVProgressHUD show];
     [[QSYKResourceManager sharedManager] getResourceWithParameters:paramaters
                                                            success:^(NSArray<QSYKResourceModel *> *resourceList) {
                                                                @strongify(self);
                                                                [self.tableView.mj_header endRefreshing];
                                                                [self.tableView.mj_footer endRefreshing];
-                                                               [SVProgressHUD dismiss];
+//                                                               [SVProgressHUD dismiss];
                                                                
                                                                if (resourceList.count) {
                                                                    if (self.isRefresh) {
@@ -92,7 +138,7 @@
                                                            } failure:^(NSError *error) {
                                                                [self.tableView.mj_header endRefreshing];
                                                                [self.tableView.mj_footer endRefreshing];
-                                                               [SVProgressHUD dismiss];
+//                                                               [SVProgressHUD dismiss];
                                                                [SVProgressHUD showErrorWithStatus:@"加载失败"];
                                                                [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
                                                                NSLog(@"error = %@", error);
@@ -107,15 +153,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     QSYKResourceModel *resource = _resourceList[indexPath.row];
-    // width = content标签左右边距离屏幕左右边的距离的和
+    
+    // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
                                                           font:16.f
-                                                         width:SCREEN_WIDTH - 8 * 4];
+                                                         width:width];
     
     if (resource.img.height > resource.img.width * 2 && !resource.img.dynamic) {
-        extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
+        extraHeight += width * 1.5;
     } else {
-        extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.img.height / resource.img.width;
+        extraHeight += width * resource.img.height / resource.img.width;
     }
     
     return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
@@ -135,7 +184,6 @@
     QSYKResourceModel *resource = _resourceList[indexPath.row];
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
-    resourceDetailVC.type = resource.type;
     resourceDetailVC.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController pushViewController:resourceDetailVC animated:YES];

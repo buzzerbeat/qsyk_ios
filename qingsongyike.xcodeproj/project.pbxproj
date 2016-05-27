@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C13D2991CEABB6C00C1BE9B /* default_4.7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C13D2981CEABB6C00C1BE9B /* default_4.7.png */; };
-		8C13D29B1CEB42F100C1BE9B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */; };
 		8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */; };
 		8C3546CE1CD9EBFD002807DD /* QSYKJPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */; };
 		8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */; };
@@ -25,8 +23,24 @@
 		8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB299441CD051D30024E471 /* QSYKSharePopupView.xib */; };
 		8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299491CD05C5C0024E471 /* KLCPopup.m */; };
 		8CB2994D1CD05DE30024E471 /* QSYKShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB2994C1CD05DE30024E471 /* QSYKShareManager.m */; };
-		8CB2994F1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB2994E1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib */; };
+		8CB49B531CF7EFD600FC058E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB49B521CF7EFD600FC058E /* LaunchScreen.xib */; };
 		8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */; };
+		8CBEC74B1CF5C1020092F2AD /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7361CF5C1020092F2AD /* LICENSE */; };
+		8CBEC74C1CF5C1020092F2AD /* kr-video-player-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7391CF5C1020092F2AD /* kr-video-player-close@2x.png */; };
+		8CBEC74D1CF5C1020092F2AD /* kr-video-player-close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73A1CF5C1020092F2AD /* kr-video-player-close@3x.png */; };
+		8CBEC74E1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73B1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png */; };
+		8CBEC74F1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73C1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png */; };
+		8CBEC7501CF5C1020092F2AD /* kr-video-player-pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73D1CF5C1020092F2AD /* kr-video-player-pause@2x.png */; };
+		8CBEC7511CF5C1020092F2AD /* kr-video-player-pause@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73E1CF5C1020092F2AD /* kr-video-player-pause@3x.png */; };
+		8CBEC7521CF5C1020092F2AD /* kr-video-player-play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73F1CF5C1020092F2AD /* kr-video-player-play@2x.png */; };
+		8CBEC7531CF5C1020092F2AD /* kr-video-player-play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7401CF5C1020092F2AD /* kr-video-player-play@3x.png */; };
+		8CBEC7541CF5C1020092F2AD /* kr-video-player-point@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7411CF5C1020092F2AD /* kr-video-player-point@2x.png */; };
+		8CBEC7551CF5C1020092F2AD /* kr-video-player-point@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7421CF5C1020092F2AD /* kr-video-player-point@3x.png */; };
+		8CBEC7561CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7431CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png */; };
+		8CBEC7571CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7441CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png */; };
+		8CBEC7581CF5C1020092F2AD /* KRVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC7471CF5C1020092F2AD /* KRVideoPlayerController.m */; };
+		8CBEC7591CF5C1020092F2AD /* KRVideoPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC7491CF5C1020092F2AD /* KRVideoPlayerControlView.m */; };
+		8CBEC75A1CF5C1020092F2AD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC74A1CF5C1020092F2AD /* README.md */; };
 		8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */; };
 		8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4741CCC5FD500B82E2D /* QSYKVideoPageViewController.m */; };
 		8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4771CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m */; };
@@ -74,8 +88,6 @@
 		1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		5C37A885890D3BFB11B5E67D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C13D2981CEABB6C00C1BE9B /* default_4.7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_4.7.png; sourceTree = "<group>"; };
-		8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		8C282F311CCE1D24003FC86A /* QSYKDetailPicutreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKDetailPicutreViewController.h; sourceTree = "<group>"; };
 		8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKDetailPicutreViewController.m; sourceTree = "<group>"; };
 		8C3546CC1CD9EBFD002807DD /* QSYKJPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKJPushManager.h; sourceTree = "<group>"; };
@@ -105,9 +117,27 @@
 		8CB299491CD05C5C0024E471 /* KLCPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLCPopup.m; sourceTree = "<group>"; };
 		8CB2994B1CD05DE30024E471 /* QSYKShareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKShareManager.h; sourceTree = "<group>"; };
 		8CB2994C1CD05DE30024E471 /* QSYKShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKShareManager.m; sourceTree = "<group>"; };
-		8CB2994E1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKResourceDetailViewController.xib; sourceTree = "<group>"; };
+		8CB49B521CF7EFD600FC058E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		8CBABCC01CEC0B68002EA776 /* QSYKSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKSlider.h; sourceTree = "<group>"; };
 		8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKSlider.m; sourceTree = "<group>"; };
+		8CBEC7361CF5C1020092F2AD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		8CBEC7391CF5C1020092F2AD /* kr-video-player-close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-close@2x.png"; sourceTree = "<group>"; };
+		8CBEC73A1CF5C1020092F2AD /* kr-video-player-close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-close@3x.png"; sourceTree = "<group>"; };
+		8CBEC73B1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-fullscreen@2x.png"; sourceTree = "<group>"; };
+		8CBEC73C1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-fullscreen@3x.png"; sourceTree = "<group>"; };
+		8CBEC73D1CF5C1020092F2AD /* kr-video-player-pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-pause@2x.png"; sourceTree = "<group>"; };
+		8CBEC73E1CF5C1020092F2AD /* kr-video-player-pause@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-pause@3x.png"; sourceTree = "<group>"; };
+		8CBEC73F1CF5C1020092F2AD /* kr-video-player-play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-play@2x.png"; sourceTree = "<group>"; };
+		8CBEC7401CF5C1020092F2AD /* kr-video-player-play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-play@3x.png"; sourceTree = "<group>"; };
+		8CBEC7411CF5C1020092F2AD /* kr-video-player-point@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-point@2x.png"; sourceTree = "<group>"; };
+		8CBEC7421CF5C1020092F2AD /* kr-video-player-point@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-point@3x.png"; sourceTree = "<group>"; };
+		8CBEC7431CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-shrinkscreen@2x.png"; sourceTree = "<group>"; };
+		8CBEC7441CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-shrinkscreen@3x.png"; sourceTree = "<group>"; };
+		8CBEC7461CF5C1020092F2AD /* KRVideoPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRVideoPlayerController.h; sourceTree = "<group>"; };
+		8CBEC7471CF5C1020092F2AD /* KRVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRVideoPlayerController.m; sourceTree = "<group>"; };
+		8CBEC7481CF5C1020092F2AD /* KRVideoPlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRVideoPlayerControlView.h; sourceTree = "<group>"; };
+		8CBEC7491CF5C1020092F2AD /* KRVideoPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRVideoPlayerControlView.m; sourceTree = "<group>"; };
+		8CBEC74A1CF5C1020092F2AD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8CBFC46D1CCC5E1C00B82E2D /* QSYKIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKIndexViewController.h; sourceTree = "<group>"; };
 		8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKIndexViewController.m; sourceTree = "<group>"; };
 		8CBFC4731CCC5FD500B82E2D /* QSYKVideoPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKVideoPageViewController.h; sourceTree = "<group>"; };
@@ -361,10 +391,9 @@
 				8C95B8D21CCC529D0058B82D /* AppDelegate.m */,
 				8C95B8D71CCC529D0058B82D /* Main.storyboard */,
 				8C95B8DA1CCC529E0058B82D /* Assets.xcassets */,
-				8C13D2981CEABB6C00C1BE9B /* default_4.7.png */,
-				8C13D29A1CEB42F100C1BE9B /* LaunchScreen.xib */,
 				8C95B8DF1CCC529E0058B82D /* Info.plist */,
 				8CBFC47F1CCC649D00B82E2D /* PrefixHeader.pch */,
+				8CB49B521CF7EFD600FC058E /* LaunchScreen.xib */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -400,6 +429,7 @@
 				8C6707A61CE203F5002CA1E1 /* LYTopWindow */,
 				8CDB3EA41CDB6A57003B1F55 /* KeychainItemWrapper */,
 				8CB299471CD05C5C0024E471 /* KLCPopup */,
+				8CBEC7351CF5C1020092F2AD /* KRVideoPlayer */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -411,6 +441,55 @@
 				8CB299491CD05C5C0024E471 /* KLCPopup.m */,
 			);
 			path = KLCPopup;
+			sourceTree = "<group>";
+		};
+		8CBEC7351CF5C1020092F2AD /* KRVideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				8CBEC7361CF5C1020092F2AD /* LICENSE */,
+				8CBEC7371CF5C1020092F2AD /* Pod */,
+				8CBEC74A1CF5C1020092F2AD /* README.md */,
+			);
+			path = KRVideoPlayer;
+			sourceTree = "<group>";
+		};
+		8CBEC7371CF5C1020092F2AD /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				8CBEC7381CF5C1020092F2AD /* Assets */,
+				8CBEC7451CF5C1020092F2AD /* Classes */,
+			);
+			path = Pod;
+			sourceTree = "<group>";
+		};
+		8CBEC7381CF5C1020092F2AD /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				8CBEC7391CF5C1020092F2AD /* kr-video-player-close@2x.png */,
+				8CBEC73A1CF5C1020092F2AD /* kr-video-player-close@3x.png */,
+				8CBEC73B1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png */,
+				8CBEC73C1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png */,
+				8CBEC73D1CF5C1020092F2AD /* kr-video-player-pause@2x.png */,
+				8CBEC73E1CF5C1020092F2AD /* kr-video-player-pause@3x.png */,
+				8CBEC73F1CF5C1020092F2AD /* kr-video-player-play@2x.png */,
+				8CBEC7401CF5C1020092F2AD /* kr-video-player-play@3x.png */,
+				8CBEC7411CF5C1020092F2AD /* kr-video-player-point@2x.png */,
+				8CBEC7421CF5C1020092F2AD /* kr-video-player-point@3x.png */,
+				8CBEC7431CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png */,
+				8CBEC7441CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		8CBEC7451CF5C1020092F2AD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				8CBEC7461CF5C1020092F2AD /* KRVideoPlayerController.h */,
+				8CBEC7471CF5C1020092F2AD /* KRVideoPlayerController.m */,
+				8CBEC7481CF5C1020092F2AD /* KRVideoPlayerControlView.h */,
+				8CBEC7491CF5C1020092F2AD /* KRVideoPlayerControlView.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		8CBFC46C1CCC5E1C00B82E2D /* Index */ = {
@@ -428,7 +507,6 @@
 				8CBFC47D1CCC609600B82E2D /* QSYKTopicPageViewController.m */,
 				8CF9C6C21CCDC9730008FCA0 /* QSYKResourceDetailViewController.h */,
 				8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */,
-				8CB2994E1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib */,
 				8C282F311CCE1D24003FC86A /* QSYKDetailPicutreViewController.h */,
 				8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */,
 			);
@@ -558,16 +636,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C13D29B1CEB42F100C1BE9B /* LaunchScreen.xib in Resources */,
+				8CBEC7551CF5C1020092F2AD /* kr-video-player-point@3x.png in Resources */,
+				8CBEC7511CF5C1020092F2AD /* kr-video-player-pause@3x.png in Resources */,
+				8CBEC7561CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png in Resources */,
 				8CBFC4A31CCCA11600B82E2D /* QSYKPictureTableViewCell.xib in Resources */,
+				8CBEC7531CF5C1020092F2AD /* kr-video-player-play@3x.png in Resources */,
+				8CBEC7521CF5C1020092F2AD /* kr-video-player-play@2x.png in Resources */,
 				8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */,
 				8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */,
-				8C13D2991CEABB6C00C1BE9B /* default_4.7.png in Resources */,
+				8CBEC74D1CF5C1020092F2AD /* kr-video-player-close@3x.png in Resources */,
+				8CBEC74B1CF5C1020092F2AD /* LICENSE in Resources */,
+				8CBEC74E1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png in Resources */,
+				8CBEC74F1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png in Resources */,
+				8CBEC7541CF5C1020092F2AD /* kr-video-player-point@2x.png in Resources */,
+				8CBEC7501CF5C1020092F2AD /* kr-video-player-pause@2x.png in Resources */,
+				8CBEC7571CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png in Resources */,
+				8CBEC74C1CF5C1020092F2AD /* kr-video-player-close@2x.png in Resources */,
 				8C95B8DB1CCC529E0058B82D /* Assets.xcassets in Resources */,
 				8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */,
 				8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */,
+				8CB49B531CF7EFD600FC058E /* LaunchScreen.xib in Resources */,
 				8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */,
-				8CB2994F1CD08D8C0024E471 /* QSYKResourceDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,6 +748,7 @@
 				8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */,
 				8CE38CC01CD30E3E001EC3D6 /* QSYKResultModel.m in Sources */,
 				8CEB70AE1CE9582C008220D3 /* QSYKRootTabBarController.m in Sources */,
+				8CBEC7581CF5C1020092F2AD /* KRVideoPlayerController.m in Sources */,
 				8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */,
 				8CF9C6AE1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m in Sources */,
 				8CBFC4921CCC801800B82E2D /* QSYKVideoModel.m in Sources */,
@@ -670,9 +760,11 @@
 				8CEB70B51CE9AE67008220D3 /* QSYKTopWindow.m in Sources */,
 				8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */,
 				8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */,
+				8CBEC75A1CF5C1020092F2AD /* README.md in Sources */,
 				8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */,
 				8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */,
 				8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */,
+				8CBEC7591CF5C1020092F2AD /* KRVideoPlayerControlView.m in Sources */,
 				8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,7 +824,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -773,7 +865,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -795,11 +887,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/System/PrefixHeader.pch";
 				INFOPLIST_FILE = qingsongyike/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -818,11 +911,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/System/PrefixHeader.pch";
 				INFOPLIST_FILE = qingsongyike/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *cellTitles;
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) NSInteger oldType;
+@property (nonatomic, strong) UILabel *cacheLabel;
 
 @end
 
@@ -78,24 +79,27 @@
     if (indexPath.row == 0) {
         cell.accessoryType = UITableViewCellAccessoryNone;
         
-        UILabel *valueLabel = [[UILabel alloc] init];
+        UILabel *valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
         valueLabel.font = [UIFont systemFontOfSize:14.f];
+        valueLabel.textAlignment = NSTextAlignmentRight;
         valueLabel.text = kCurrentAppVersion;
+        cell.accessoryView = valueLabel;
         
-        [cell.contentView addSubview:valueLabel];
-        [valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView);
-            make.right.equalTo(cell.contentView).with.offset(-10.f);
-        }];
+//        [cell.contentView addSubview:valueLabel];
+//        [valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.centerY.equalTo(cell.contentView);
+//            make.right.equalTo(cell.contentView).with.offset(-10.f);
+//        }];
     } else if (indexPath.row == 1) {
         
     }  else if (indexPath.row == 2) {
-        UILabel *valueLabel = [[UILabel alloc] init];
-        valueLabel.font = [UIFont systemFontOfSize:14.f];
-        valueLabel.text = [NSString stringWithFormat:@"%.0fM", ((float)[SDImageCache sharedImageCache].getSize / 1024 / 1024)];
+        self.cacheLabel = [[UILabel alloc] init];
+        self.cacheLabel.tag = 100;
+        self.cacheLabel.font = [UIFont systemFontOfSize:14.f];
+        self.cacheLabel.text = [NSString stringWithFormat:@"%.0fM", ((float)[SDImageCache sharedImageCache].getSize / 1024 / 1024)];
         
-        [cell.contentView addSubview:valueLabel];
-        [valueLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        [cell.contentView addSubview:self.cacheLabel];
+        [self.cacheLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(cell.contentView);
             make.right.equalTo(cell.contentView);
         }];
@@ -105,11 +109,12 @@
         UISwitch *wifiSwitch = [[UISwitch alloc] init];
         wifiSwitch.on = kIsAutoLoadImgOnlyInWifi;
         [wifiSwitch addTarget:self action:@selector(wifiSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
-        [cell.contentView addSubview:wifiSwitch];
-        [wifiSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView);
-            make.right.equalTo(cell.contentView).with.offset(-10.f);
-        }];
+        cell.accessoryView = wifiSwitch;
+//        [cell.contentView addSubview:wifiSwitch];
+//        [wifiSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.centerY.equalTo(cell.contentView);
+//            make.right.equalTo(cell.contentView).with.offset(-10.f);
+//        }];
     } else if (indexPath.row == 4) {
         UILabel *valueLabel = [[UILabel alloc] init];
         valueLabel.font = [UIFont systemFontOfSize:14.f];
@@ -141,21 +146,32 @@
     } else if(indexPath.row == 2) {
         
         if (SYSTEM_VERSION >= 8.0) {
-            UIAlertController *alert = [QSYKUtility alertControllerWithTitle:nil
+            UIAlertController *acitonSheet = [QSYKUtility alertControllerWithTitle:nil
                                                                      message:@"确定清除缓存？"
                                                            cancleActionTitle:@"取消"
-                                                               goActionTitle:@"确定"
+                                                               goActionTitle:@"清除"
                                                               preferredStyle:UIAlertControllerStyleActionSheet
                                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                                          
                                                                          [self clearCache];
                                                                      }];
             
-            [self presentViewController:alert animated:YES completion:nil];
+            if (!(kIsIphone)) {
+                acitonSheet.popoverPresentationController.sourceView = self.cacheLabel;
+                acitonSheet.popoverPresentationController.sourceRect = self.cacheLabel.bounds;
+//                acitonSheet.popoverPresentationController.permittedArrowDirections = NO;
+            }
+            [self presentViewController:acitonSheet animated:YES completion:nil];
+            
         } else {
-            UIActionSheet *acitonSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"确定", nil];
+            UIActionSheet *acitonSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"清除", nil];
 
-            [acitonSheet showInView:self.view];
+            if (kIsIphone) {
+                [acitonSheet showInView:self.view];
+            } else {
+                [acitonSheet showFromRect:self.view.frame inView:self.view animated:YES];
+            }
+            
         }
         
     } else if(indexPath.row == 4) {
@@ -180,7 +196,7 @@
     [imageCache clearMemory];
     [imageCache clearDisk];
     
-    [self.tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)wifiSwitchValueChanged:(UISwitch *)aSwitch {

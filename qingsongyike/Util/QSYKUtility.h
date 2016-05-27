@@ -33,8 +33,14 @@
 
 + (NSString * _Nonnull)UAString;
 
++ (void)startApp;
+
 + (void)rateResourceWithSid:(NSString * _Nonnull)sid type:(NSInteger)type;
 
 + (void)loadSplash;
+
++ (void)hideTopWindow;
+
++ (void)showTopWindow;
 
 @end

@@ -62,7 +62,7 @@ static const CGFloat kVideoControlBarAutoFadeOutTimeinterval = 3.0;
 {
     [super layoutSubviews];
     self.topBar.frame = CGRectMake(CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds), CGRectGetWidth(self.bounds), kVideoControlBarHeight);
-    self.backButton.frame = CGRectMake(5, 5, CGRectGetWidth(self.backButton.bounds), CGRectGetHeight(self.backButton.bounds));
+    self.backButton.frame = CGRectMake(15, 15, CGRectGetWidth(self.backButton.bounds), CGRectGetHeight(self.backButton.bounds));
     self.bottomBar.frame = CGRectMake(CGRectGetMinX(self.bounds), CGRectGetHeight(self.bounds) - kVideoControlBarHeight, CGRectGetWidth(self.bounds), kVideoControlBarHeight);
 //    self.playButton.frame = CGRectMake(CGRectGetMinX(self.bottomBar.bounds), CGRectGetHeight(self.bottomBar.bounds)/2 - CGRectGetHeight(self.playButton.bounds)/2, CGRectGetWidth(self.playButton.bounds), CGRectGetHeight(self.playButton.bounds));
     self.playButton.frame = self.bounds;
@@ -184,7 +184,7 @@ static const CGFloat kVideoControlBarAutoFadeOutTimeinterval = 3.0;
 {
     if (!_fullScreenButton) {
         _fullScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_fullScreenButton setImage:[UIImage imageNamed:[self videoImageName:@"kr-video-player-fullscreen"]] forState:UIControlStateNormal];
+        [_fullScreenButton setImage:[UIImage imageNamed:@"kr-video-player-fullscreen"] forState:UIControlStateNormal];
         _fullScreenButton.bounds = CGRectMake(0, 0, kVideoControlBarHeight, kVideoControlBarHeight);
     }
     return _fullScreenButton;
@@ -194,7 +194,7 @@ static const CGFloat kVideoControlBarAutoFadeOutTimeinterval = 3.0;
 {
     if (!_shrinkScreenButton) {
         _shrinkScreenButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_shrinkScreenButton setImage:[UIImage imageNamed:[self videoImageName:@"kr-video-player-shrinkscreen"]] forState:UIControlStateNormal];
+        [_shrinkScreenButton setImage:[UIImage imageNamed:@"kr-video-player-shrinkscreen"] forState:UIControlStateNormal];
         _shrinkScreenButton.bounds = CGRectMake(0, 0, kVideoControlBarHeight, kVideoControlBarHeight);
     }
     return _shrinkScreenButton;
@@ -204,7 +204,7 @@ static const CGFloat kVideoControlBarAutoFadeOutTimeinterval = 3.0;
 {
     if (!_progressSlider) {
         _progressSlider = [[UISlider alloc] init];
-        [_progressSlider setThumbImage:[UIImage imageNamed:[self videoImageName:@"kr-video-player-point"]] forState:UIControlStateNormal];
+        [_progressSlider setThumbImage:[UIImage imageNamed:@"kr-video-player-point"] forState:UIControlStateNormal];
         
         [_progressSlider setMinimumTrackTintColor:[UIColor whiteColor]];
         [_progressSlider setMaximumTrackTintColor:[UIColor lightGrayColor]];

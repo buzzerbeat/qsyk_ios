@@ -22,7 +22,9 @@
     if (self) {
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
         self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+//        [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
+//        [self.manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"text/raw", @"application/json", @"text/json", @"text/javascript", nil]];
         [self.manager.requestSerializer setValue:[QSYKUtility UAString] forHTTPHeaderField:@"User-Agent"];
     }
     return self;
@@ -99,9 +101,10 @@
                         if (result && !result.status) {
                             // 注册成功后把返回的token保存到本地
                             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                            
                             [userDefaults setValue:result.user[@"auth_key"] forKey:@"token"];
                             [userDefaults synchronize];
+                            
+                            [QSYKUtility startApp];
                         }
                     } failure:^(NSError *error) {
                         NSLog(@"error = %@", error);

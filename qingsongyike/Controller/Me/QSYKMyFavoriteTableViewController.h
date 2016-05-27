@@ -6,9 +6,9 @@
 //  Copyright © 2016 subo. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "QSYKBaseViewController.h"
 
-@interface QSYKMyFavoriteTableViewController : UITableViewController
+@interface QSYKMyFavoriteTableViewController : QSYKBaseViewController
 @property (nonatomic, copy) NSString *URLStr;
 
 @end

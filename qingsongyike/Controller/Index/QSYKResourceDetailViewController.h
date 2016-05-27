@@ -9,8 +9,6 @@
 #import "QSYKBaseViewController.h"
 
 @interface QSYKResourceDetailViewController : QSYKBaseViewController <UITableViewDelegate, UITableViewDataSource>
-
 @property (nonatomic, copy) NSString *sid;  // 资源sid
-@property (nonatomic, assign) NSInteger type;
 
 @end
