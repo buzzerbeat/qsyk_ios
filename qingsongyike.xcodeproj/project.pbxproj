@@ -25,7 +25,6 @@
 		8CB2994D1CD05DE30024E471 /* QSYKShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB2994C1CD05DE30024E471 /* QSYKShareManager.m */; };
 		8CB49B531CF7EFD600FC058E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB49B521CF7EFD600FC058E /* LaunchScreen.xib */; };
 		8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */; };
-		8CBEC74B1CF5C1020092F2AD /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7361CF5C1020092F2AD /* LICENSE */; };
 		8CBEC74C1CF5C1020092F2AD /* kr-video-player-close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7391CF5C1020092F2AD /* kr-video-player-close@2x.png */; };
 		8CBEC74D1CF5C1020092F2AD /* kr-video-player-close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73A1CF5C1020092F2AD /* kr-video-player-close@3x.png */; };
 		8CBEC74E1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC73B1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png */; };
@@ -40,7 +39,6 @@
 		8CBEC7571CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBEC7441CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png */; };
 		8CBEC7581CF5C1020092F2AD /* KRVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC7471CF5C1020092F2AD /* KRVideoPlayerController.m */; };
 		8CBEC7591CF5C1020092F2AD /* KRVideoPlayerControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC7491CF5C1020092F2AD /* KRVideoPlayerControlView.m */; };
-		8CBEC75A1CF5C1020092F2AD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC74A1CF5C1020092F2AD /* README.md */; };
 		8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */; };
 		8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4741CCC5FD500B82E2D /* QSYKVideoPageViewController.m */; };
 		8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4771CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m */; };
@@ -120,7 +118,6 @@
 		8CB49B521CF7EFD600FC058E /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		8CBABCC01CEC0B68002EA776 /* QSYKSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKSlider.h; sourceTree = "<group>"; };
 		8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKSlider.m; sourceTree = "<group>"; };
-		8CBEC7361CF5C1020092F2AD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8CBEC7391CF5C1020092F2AD /* kr-video-player-close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-close@2x.png"; sourceTree = "<group>"; };
 		8CBEC73A1CF5C1020092F2AD /* kr-video-player-close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-close@3x.png"; sourceTree = "<group>"; };
 		8CBEC73B1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kr-video-player-fullscreen@2x.png"; sourceTree = "<group>"; };
@@ -137,7 +134,6 @@
 		8CBEC7471CF5C1020092F2AD /* KRVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRVideoPlayerController.m; sourceTree = "<group>"; };
 		8CBEC7481CF5C1020092F2AD /* KRVideoPlayerControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRVideoPlayerControlView.h; sourceTree = "<group>"; };
 		8CBEC7491CF5C1020092F2AD /* KRVideoPlayerControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRVideoPlayerControlView.m; sourceTree = "<group>"; };
-		8CBEC74A1CF5C1020092F2AD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8CBFC46D1CCC5E1C00B82E2D /* QSYKIndexViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKIndexViewController.h; sourceTree = "<group>"; };
 		8CBFC46E1CCC5E1C00B82E2D /* QSYKIndexViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKIndexViewController.m; sourceTree = "<group>"; };
 		8CBFC4731CCC5FD500B82E2D /* QSYKVideoPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKVideoPageViewController.h; sourceTree = "<group>"; };
@@ -446,9 +442,7 @@
 		8CBEC7351CF5C1020092F2AD /* KRVideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				8CBEC7361CF5C1020092F2AD /* LICENSE */,
 				8CBEC7371CF5C1020092F2AD /* Pod */,
-				8CBEC74A1CF5C1020092F2AD /* README.md */,
 			);
 			path = KRVideoPlayer;
 			sourceTree = "<group>";
@@ -645,7 +639,6 @@
 				8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */,
 				8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */,
 				8CBEC74D1CF5C1020092F2AD /* kr-video-player-close@3x.png in Resources */,
-				8CBEC74B1CF5C1020092F2AD /* LICENSE in Resources */,
 				8CBEC74E1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png in Resources */,
 				8CBEC74F1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png in Resources */,
 				8CBEC7541CF5C1020092F2AD /* kr-video-player-point@2x.png in Resources */,
@@ -760,7 +753,6 @@
 				8CEB70B51CE9AE67008220D3 /* QSYKTopWindow.m in Sources */,
 				8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */,
 				8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */,
-				8CBEC75A1CF5C1020092F2AD /* README.md in Sources */,
 				8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */,
 				8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */,
 				8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */,
