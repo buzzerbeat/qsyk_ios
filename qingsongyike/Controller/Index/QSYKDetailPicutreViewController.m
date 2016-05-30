@@ -59,7 +59,13 @@
 -(void)initialViews {
     
     [self.view addSubview:self.scrollView];
+//    [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    }];
     [self.scrollView addSubview:self.imageView];
+//    [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.scrollView);
+//    }];
     [self.view addSubview:self.backBtn];
     [self.view addSubview:self.saveBtn];
     [self.scrollView addSubview:self.shareBtn];

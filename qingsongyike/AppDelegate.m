@@ -81,7 +81,19 @@
     [QSYKUtility loadSplash];
     
     // 展示SplashView
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_4.7"]];
+    UIImage *launchImg = nil;
+    if (kIsIphone) {
+        launchImg = [UIImage imageNamed:@"default_4.7"];
+    } else {
+        UIInterfaceOrientation orientation = application.statusBarOrientation;
+        if (UIInterfaceOrientationIsPortrait(orientation)) {
+            launchImg = [UIImage imageNamed:@"iPad_portrait"];
+        } else if (UIInterfaceOrientationIsLandscape(orientation)) {
+            launchImg = [UIImage imageNamed:@"iPad_landscape"];
+        }
+    }
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:launchImg];
     imageView.frame = SCREEN_FRAME;
     UIViewController *tempVC = [[UIViewController alloc] init];
     [tempVC.view addSubview:imageView];

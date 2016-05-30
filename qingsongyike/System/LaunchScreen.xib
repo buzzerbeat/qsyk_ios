@@ -7,22 +7,23 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" semanticContentAttribute="spatial" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_4.7" translatesAutoresizingMaskIntoConstraints="NO" id="rv1-jp-eVi">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_4.7" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-tT-4Qi">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="rv1-jp-eVi" secondAttribute="bottom" id="5ZE-Dc-XDZ"/>
-                <constraint firstItem="rv1-jp-eVi" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="epg-sV-QOJ"/>
-                <constraint firstAttribute="trailing" secondItem="rv1-jp-eVi" secondAttribute="trailing" id="fMm-UR-5IX"/>
-                <constraint firstItem="rv1-jp-eVi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="faS-1R-UZ5"/>
+                <constraint firstItem="hVK-tT-4Qi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Dts-fO-SBA"/>
+                <constraint firstAttribute="bottom" secondItem="hVK-tT-4Qi" secondAttribute="bottom" id="O75-ok-X3K"/>
+                <constraint firstItem="hVK-tT-4Qi" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="YDt-FI-nOP"/>
+                <constraint firstAttribute="trailing" secondItem="hVK-tT-4Qi" secondAttribute="trailing" id="yCK-VC-Ktd"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
         </view>
     </objects>
     <resources>
