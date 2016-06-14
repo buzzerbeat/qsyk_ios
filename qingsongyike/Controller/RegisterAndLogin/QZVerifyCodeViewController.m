@@ -109,7 +109,7 @@ static int remainSeconds = 60;
     
     [SVProgressHUD show];
     
-    [[QSYKUserManager shardManager] forgotPasswordWithPhoneNumber:self.mobielNumberTextField.text
+    [[QSYKUserManager sharedManager] forgotPasswordWithPhoneNumber:self.mobielNumberTextField.text
                                                       success:^{
                                                           
                                                           [self disableGetVerifyCodeLabelUserInteraction];
@@ -160,7 +160,7 @@ static int remainSeconds = 60;
     [SVProgressHUD show];
     @weakify(self);
     
-    [[QSYKUserManager shardManager] verifyCodeCorrectWithPhoneNumber:self.mobielNumberTextField.text
+    [[QSYKUserManager sharedManager] verifyCodeCorrectWithPhoneNumber:self.mobielNumberTextField.text
                                                       verifyCode:self.verifyCodeTextField.text
                                                          success:^{
                                                              [SVProgressHUD dismiss];

@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C1803C71CFD30DE003186ED /* QSYKGodPostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C1803C61CFD30DE003186ED /* QSYKGodPostView.m */; };
+		8C1803C91CFD30EB003186ED /* QSYKGodPostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C1803C81CFD30EB003186ED /* QSYKGodPostView.xib */; };
 		8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */; };
 		8C3546CE1CD9EBFD002807DD /* QSYKJPushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */; };
+		8C5ABBC81CFE958F006A2EA5 /* QSYKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5ABBC71CFE958F006A2EA5 /* QSYKWebViewController.m */; };
+		8C5ABBCE1CFF04DA006A2EA5 /* UIViewController+IsVisible.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5ABBCD1CFF04DA006A2EA5 /* UIViewController+IsVisible.m */; };
+		8C5ABBD11CFF05A5006A2EA5 /* QSYKTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5ABBD01CFF05A5006A2EA5 /* QSYKTabBar.m */; };
 		8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */; };
 		8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */; };
 		8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C94A1AE1CE3433C00D78CDE /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -16,6 +21,8 @@
 		8C95B8D31CCC529D0058B82D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C95B8D21CCC529D0058B82D /* AppDelegate.m */; };
 		8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C95B8D71CCC529D0058B82D /* Main.storyboard */; };
 		8C95B8DB1CCC529E0058B82D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C95B8DA1CCC529E0058B82D /* Assets.xcassets */; };
+		8CAF37BA1D0D024200A9A891 /* QSYKEditSignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF37B81D0D024200A9A891 /* QSYKEditSignViewController.m */; };
+		8CAF37BB1D0D024200A9A891 /* QSYKEditSignViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF37B91D0D024200A9A891 /* QSYKEditSignViewController.xib */; };
 		8CB299151CCF186C0024E471 /* QSYKSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */; };
 		8CB2993A1CD04BB80024E471 /* QSYKUMengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299391CD04BB80024E471 /* QSYKUMengManager.m */; };
 		8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -56,8 +63,43 @@
 		8CBFC4A71CCCD20500B82E2D /* QSYKUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBFC4A61CCCD20500B82E2D /* QSYKUtility.m */; };
 		8CC171C01CE041AC00FEF2F3 /* UIImage+Round.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC171BF1CE041AC00FEF2F3 /* UIImage+Round.m */; };
 		8CC171C31CE0427000FEF2F3 /* UIImageView+Avatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC171C21CE0427000FEF2F3 /* UIImageView+Avatar.m */; };
+		8CCECFDF1D052A010076B9F7 /* QZCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFCD1D052A010076B9F7 /* QZCompleteUserInfoViewController.m */; };
+		8CCECFE01D052A010076B9F7 /* QZCompleteUserInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFCE1D052A010076B9F7 /* QZCompleteUserInfoViewController.xib */; };
+		8CCECFE31D052A010076B9F7 /* QZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFD31D052A010076B9F7 /* QZLoginViewController.m */; };
+		8CCECFE41D052A010076B9F7 /* QZLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFD41D052A010076B9F7 /* QZLoginViewController.xib */; };
+		8CCECFE51D052A010076B9F7 /* QZRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFD61D052A010076B9F7 /* QZRegisterViewController.m */; };
+		8CCECFE61D052A010076B9F7 /* QZRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFD71D052A010076B9F7 /* QZRegisterViewController.xib */; };
+		8CCECFE71D052A010076B9F7 /* QZResetPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFD91D052A010076B9F7 /* QZResetPasswordViewController.m */; };
+		8CCECFE81D052A010076B9F7 /* QZResetPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFDA1D052A010076B9F7 /* QZResetPasswordViewController.xib */; };
+		8CCECFE91D052A010076B9F7 /* QZVerifyCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFDC1D052A010076B9F7 /* QZVerifyCodeViewController.m */; };
+		8CCECFEA1D052A010076B9F7 /* QZVerifyCodeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFDD1D052A010076B9F7 /* QZVerifyCodeViewController.xib */; };
+		8CCECFED1D052AAA0076B9F7 /* QSYKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFEC1D052AAA0076B9F7 /* QSYKError.m */; };
+		8CCECFF01D0531D30076B9F7 /* QSYKUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFEF1D0531D30076B9F7 /* QSYKUserModel.m */; };
+		8CCECFF31D05340A0076B9F7 /* QSYKUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFF21D05340A0076B9F7 /* QSYKUserManager.m */; };
+		8CCECFF61D055C2B0076B9F7 /* MyHeadImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFF51D055C2B0076B9F7 /* MyHeadImageViewController.m */; };
+		8CCECFFE1D055F840076B9F7 /* CustomDatePickView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFF91D055F840076B9F7 /* CustomDatePickView.m */; };
+		8CCECFFF1D055F840076B9F7 /* CustomDatePickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFFA1D055F840076B9F7 /* CustomDatePickView.xib */; };
+		8CCED0001D055F840076B9F7 /* CustomPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCECFFC1D055F840076B9F7 /* CustomPickerView.m */; };
+		8CCED0011D055F840076B9F7 /* CustomPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCECFFD1D055F840076B9F7 /* CustomPickerView.xib */; };
+		8CCED0041D0579420076B9F7 /* QSYKPresentNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED0031D0579420076B9F7 /* QSYKPresentNavigationController.m */; };
+		8CCED0081D06BCBE0076B9F7 /* QZProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED0061D06BCBE0076B9F7 /* QZProfileViewController.m */; };
+		8CCED0091D06BCBE0076B9F7 /* QZProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED0071D06BCBE0076B9F7 /* QZProfileViewController.xib */; };
+		8CCED00D1D06BD5E0076B9F7 /* ProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED00B1D06BD5E0076B9F7 /* ProfileTableViewCell.m */; };
+		8CCED00E1D06BD5E0076B9F7 /* ProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED00C1D06BD5E0076B9F7 /* ProfileTableViewCell.xib */; };
+		8CCED0121D06BDFB0076B9F7 /* UserHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED0101D06BDFB0076B9F7 /* UserHeaderView.m */; };
+		8CCED0131D06BDFB0076B9F7 /* UserHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED0111D06BDFB0076B9F7 /* UserHeaderView.xib */; };
+		8CCED0171D06C11D0076B9F7 /* QZEditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED0151D06C11D0076B9F7 /* QZEditProfileViewController.m */; };
+		8CCED0181D06C11D0076B9F7 /* QZEditProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED0161D06C11D0076B9F7 /* QZEditProfileViewController.xib */; };
+		8CCED01E1D06C2540076B9F7 /* QZBindMobileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED01A1D06C2540076B9F7 /* QZBindMobileViewController.m */; };
+		8CCED01F1D06C2540076B9F7 /* QZBindMobileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED01B1D06C2540076B9F7 /* QZBindMobileViewController.xib */; };
+		8CCED0201D06C2540076B9F7 /* QZBindThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED01D1D06C2540076B9F7 /* QZBindThirdViewController.m */; };
+		8CCED0291D06CA050076B9F7 /* QZBindThirdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED0271D06CA050076B9F7 /* QZBindThirdCell.m */; };
+		8CCED02A1D06CA050076B9F7 /* QZBindThirdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED0281D06CA050076B9F7 /* QZBindThirdCell.xib */; };
 		8CDB3EA91CDB6A57003B1F55 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */; };
 		8CDB3EAA1CDB6A57003B1F55 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */; };
+		8CDFF3231D0E894000E14CDC /* QSYKResourceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDFF3221D0E894000E14CDC /* QSYKResourceDetailViewController.xib */; };
+		8CE30A0B1D07B29E00902493 /* QSYKUserBriefInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE30A0A1D07B29E00902493 /* QSYKUserBriefInfoCell.m */; };
+		8CE30A0D1D07B2B000902493 /* QSYKUserBriefInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE30A0C1D07B2B000902493 /* QSYKUserBriefInfoCell.xib */; };
 		8CE38CBC1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE38CBA1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m */; };
 		8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE38CBB1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib */; };
 		8CE38CC01CD30E3E001EC3D6 /* QSYKResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE38CBF1CD30E3E001EC3D6 /* QSYKResultModel.m */; };
@@ -70,7 +112,6 @@
 		8CEB70B81CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70B71CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m */; };
 		8CEB70BB1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */; };
 		8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */; };
-		8CF911581CEEA43800B28ADD /* QSYKUserInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */; };
 		8CF9115B1CEEC6E100B28ADD /* QSYKTaskTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9115A1CEEC6E100B28ADD /* QSYKTaskTableViewController.m */; };
 		8CF9C6AE1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6AC1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m */; };
 		8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF9C6AD1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib */; };
@@ -79,17 +120,25 @@
 		8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF9C6BC1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib */; };
 		8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C01CCDBCDC0008FCA0 /* QSYKRefreshFooter.m */; };
 		8CF9C6C41CCDC9730008FCA0 /* QSYKResourceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */; };
-		E520945C0ABF1FD5C2958939 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C37A885890D3BFB11B5E67D /* libPods.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		E6C98688E8228383101A0CDD /* libPods-qingsongyike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E020389BB0FBB42A05CE50F9 /* libPods-qingsongyike.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		5C37A885890D3BFB11B5E67D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EFAF63430C1C1C677B85EF5 /* Pods-qingsongyike.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qingsongyike.debug.xcconfig"; path = "Pods/Target Support Files/Pods-qingsongyike/Pods-qingsongyike.debug.xcconfig"; sourceTree = "<group>"; };
+		66C5CC05036223E07B44703D /* Pods-qingsongyike.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qingsongyike.release.xcconfig"; path = "Pods/Target Support Files/Pods-qingsongyike/Pods-qingsongyike.release.xcconfig"; sourceTree = "<group>"; };
+		8C1803C51CFD30DE003186ED /* QSYKGodPostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKGodPostView.h; sourceTree = "<group>"; };
+		8C1803C61CFD30DE003186ED /* QSYKGodPostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKGodPostView.m; sourceTree = "<group>"; };
+		8C1803C81CFD30EB003186ED /* QSYKGodPostView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKGodPostView.xib; sourceTree = "<group>"; };
 		8C282F311CCE1D24003FC86A /* QSYKDetailPicutreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKDetailPicutreViewController.h; sourceTree = "<group>"; };
 		8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKDetailPicutreViewController.m; sourceTree = "<group>"; };
 		8C3546CC1CD9EBFD002807DD /* QSYKJPushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKJPushManager.h; sourceTree = "<group>"; };
 		8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKJPushManager.m; sourceTree = "<group>"; };
+		8C5ABBC61CFE958F006A2EA5 /* QSYKWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKWebViewController.h; sourceTree = "<group>"; };
+		8C5ABBC71CFE958F006A2EA5 /* QSYKWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKWebViewController.m; sourceTree = "<group>"; };
+		8C5ABBCC1CFF04DA006A2EA5 /* UIViewController+IsVisible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+IsVisible.h"; sourceTree = "<group>"; };
+		8C5ABBCD1CFF04DA006A2EA5 /* UIViewController+IsVisible.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+IsVisible.m"; sourceTree = "<group>"; };
+		8C5ABBCF1CFF05A5006A2EA5 /* QSYKTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTabBar.h; sourceTree = "<group>"; };
+		8C5ABBD01CFF05A5006A2EA5 /* QSYKTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTabBar.m; sourceTree = "<group>"; };
 		8C6707A71CE203F5002CA1E1 /* LYTopRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopRootController.h; sourceTree = "<group>"; };
 		8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYTopRootController.m; sourceTree = "<group>"; };
 		8C6707A91CE203F5002CA1E1 /* LYTopWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYTopWindow.h; sourceTree = "<group>"; };
@@ -102,6 +151,9 @@
 		8C95B8D81CCC529D0058B82D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8C95B8DA1CCC529E0058B82D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../Assets.xcassets; sourceTree = "<group>"; };
 		8C95B8DF1CCC529E0058B82D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
+		8CAF37B71D0D024200A9A891 /* QSYKEditSignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKEditSignViewController.h; sourceTree = "<group>"; };
+		8CAF37B81D0D024200A9A891 /* QSYKEditSignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKEditSignViewController.m; sourceTree = "<group>"; };
+		8CAF37B91D0D024200A9A891 /* QSYKEditSignViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKEditSignViewController.xib; sourceTree = "<group>"; };
 		8CB299131CCF186C0024E471 /* QSYKSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKSettingsTableViewController.h; sourceTree = "<group>"; };
 		8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKSettingsTableViewController.m; sourceTree = "<group>"; };
 		8CB299381CD04BB80024E471 /* QSYKUMengManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUMengManager.h; sourceTree = "<group>"; };
@@ -168,10 +220,65 @@
 		8CC171BF1CE041AC00FEF2F3 /* UIImage+Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Round.m"; sourceTree = "<group>"; };
 		8CC171C11CE0427000FEF2F3 /* UIImageView+Avatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Avatar.h"; sourceTree = "<group>"; };
 		8CC171C21CE0427000FEF2F3 /* UIImageView+Avatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Avatar.m"; sourceTree = "<group>"; };
+		8CCECFCC1D052A010076B9F7 /* QZCompleteUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZCompleteUserInfoViewController.h; sourceTree = "<group>"; };
+		8CCECFCD1D052A010076B9F7 /* QZCompleteUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZCompleteUserInfoViewController.m; sourceTree = "<group>"; };
+		8CCECFCE1D052A010076B9F7 /* QZCompleteUserInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZCompleteUserInfoViewController.xib; sourceTree = "<group>"; };
+		8CCECFD21D052A010076B9F7 /* QZLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZLoginViewController.h; sourceTree = "<group>"; };
+		8CCECFD31D052A010076B9F7 /* QZLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZLoginViewController.m; sourceTree = "<group>"; };
+		8CCECFD41D052A010076B9F7 /* QZLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZLoginViewController.xib; sourceTree = "<group>"; };
+		8CCECFD51D052A010076B9F7 /* QZRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZRegisterViewController.h; sourceTree = "<group>"; };
+		8CCECFD61D052A010076B9F7 /* QZRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZRegisterViewController.m; sourceTree = "<group>"; };
+		8CCECFD71D052A010076B9F7 /* QZRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZRegisterViewController.xib; sourceTree = "<group>"; };
+		8CCECFD81D052A010076B9F7 /* QZResetPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZResetPasswordViewController.h; sourceTree = "<group>"; };
+		8CCECFD91D052A010076B9F7 /* QZResetPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZResetPasswordViewController.m; sourceTree = "<group>"; };
+		8CCECFDA1D052A010076B9F7 /* QZResetPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZResetPasswordViewController.xib; sourceTree = "<group>"; };
+		8CCECFDB1D052A010076B9F7 /* QZVerifyCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZVerifyCodeViewController.h; sourceTree = "<group>"; };
+		8CCECFDC1D052A010076B9F7 /* QZVerifyCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZVerifyCodeViewController.m; sourceTree = "<group>"; };
+		8CCECFDD1D052A010076B9F7 /* QZVerifyCodeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZVerifyCodeViewController.xib; sourceTree = "<group>"; };
+		8CCECFEB1D052AAA0076B9F7 /* QSYKError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKError.h; sourceTree = "<group>"; };
+		8CCECFEC1D052AAA0076B9F7 /* QSYKError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKError.m; sourceTree = "<group>"; };
+		8CCECFEE1D0531D30076B9F7 /* QSYKUserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserModel.h; sourceTree = "<group>"; };
+		8CCECFEF1D0531D30076B9F7 /* QSYKUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserModel.m; sourceTree = "<group>"; };
+		8CCECFF11D05340A0076B9F7 /* QSYKUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserManager.h; sourceTree = "<group>"; };
+		8CCECFF21D05340A0076B9F7 /* QSYKUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserManager.m; sourceTree = "<group>"; };
+		8CCECFF41D055C2B0076B9F7 /* MyHeadImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyHeadImageViewController.h; sourceTree = "<group>"; };
+		8CCECFF51D055C2B0076B9F7 /* MyHeadImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyHeadImageViewController.m; sourceTree = "<group>"; };
+		8CCECFF81D055F840076B9F7 /* CustomDatePickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDatePickView.h; sourceTree = "<group>"; };
+		8CCECFF91D055F840076B9F7 /* CustomDatePickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDatePickView.m; sourceTree = "<group>"; };
+		8CCECFFA1D055F840076B9F7 /* CustomDatePickView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomDatePickView.xib; sourceTree = "<group>"; };
+		8CCECFFB1D055F840076B9F7 /* CustomPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPickerView.h; sourceTree = "<group>"; };
+		8CCECFFC1D055F840076B9F7 /* CustomPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPickerView.m; sourceTree = "<group>"; };
+		8CCECFFD1D055F840076B9F7 /* CustomPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomPickerView.xib; sourceTree = "<group>"; };
+		8CCED0021D0579420076B9F7 /* QSYKPresentNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKPresentNavigationController.h; sourceTree = "<group>"; };
+		8CCED0031D0579420076B9F7 /* QSYKPresentNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKPresentNavigationController.m; sourceTree = "<group>"; };
+		8CCED0051D06BCBE0076B9F7 /* QZProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZProfileViewController.h; sourceTree = "<group>"; };
+		8CCED0061D06BCBE0076B9F7 /* QZProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZProfileViewController.m; sourceTree = "<group>"; };
+		8CCED0071D06BCBE0076B9F7 /* QZProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZProfileViewController.xib; sourceTree = "<group>"; };
+		8CCED00A1D06BD5E0076B9F7 /* ProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileTableViewCell.h; sourceTree = "<group>"; };
+		8CCED00B1D06BD5E0076B9F7 /* ProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTableViewCell.m; sourceTree = "<group>"; };
+		8CCED00C1D06BD5E0076B9F7 /* ProfileTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileTableViewCell.xib; sourceTree = "<group>"; };
+		8CCED00F1D06BDFB0076B9F7 /* UserHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeaderView.h; sourceTree = "<group>"; };
+		8CCED0101D06BDFB0076B9F7 /* UserHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHeaderView.m; sourceTree = "<group>"; };
+		8CCED0111D06BDFB0076B9F7 /* UserHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserHeaderView.xib; sourceTree = "<group>"; };
+		8CCED0141D06C11D0076B9F7 /* QZEditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZEditProfileViewController.h; sourceTree = "<group>"; };
+		8CCED0151D06C11D0076B9F7 /* QZEditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZEditProfileViewController.m; sourceTree = "<group>"; };
+		8CCED0161D06C11D0076B9F7 /* QZEditProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZEditProfileViewController.xib; sourceTree = "<group>"; };
+		8CCED0191D06C2540076B9F7 /* QZBindMobileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZBindMobileViewController.h; sourceTree = "<group>"; };
+		8CCED01A1D06C2540076B9F7 /* QZBindMobileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZBindMobileViewController.m; sourceTree = "<group>"; };
+		8CCED01B1D06C2540076B9F7 /* QZBindMobileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZBindMobileViewController.xib; sourceTree = "<group>"; };
+		8CCED01C1D06C2540076B9F7 /* QZBindThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZBindThirdViewController.h; sourceTree = "<group>"; };
+		8CCED01D1D06C2540076B9F7 /* QZBindThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZBindThirdViewController.m; sourceTree = "<group>"; };
+		8CCED0261D06CA050076B9F7 /* QZBindThirdCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZBindThirdCell.h; sourceTree = "<group>"; };
+		8CCED0271D06CA050076B9F7 /* QZBindThirdCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZBindThirdCell.m; sourceTree = "<group>"; };
+		8CCED0281D06CA050076B9F7 /* QZBindThirdCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZBindThirdCell.xib; sourceTree = "<group>"; };
 		8CDB3EA51CDB6A57003B1F55 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		8CDB3EA71CDB6A57003B1F55 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
 		8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
+		8CDFF3221D0E894000E14CDC /* QSYKResourceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKResourceDetailViewController.xib; sourceTree = "<group>"; };
+		8CE30A091D07B29E00902493 /* QSYKUserBriefInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserBriefInfoCell.h; sourceTree = "<group>"; };
+		8CE30A0A1D07B29E00902493 /* QSYKUserBriefInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserBriefInfoCell.m; sourceTree = "<group>"; };
+		8CE30A0C1D07B2B000902493 /* QSYKUserBriefInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKUserBriefInfoCell.xib; sourceTree = "<group>"; };
 		8CE38CB81CD1A555001EC3D6 /* QSYKCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSYKCellDelegate.h; sourceTree = "<group>"; };
 		8CE38CB91CD1B328001EC3D6 /* QSYKCommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKCommentTableViewCell.h; sourceTree = "<group>"; };
 		8CE38CBA1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKCommentTableViewCell.m; sourceTree = "<group>"; };
@@ -196,8 +303,6 @@
 		8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKFavoriteResourceModel.m; sourceTree = "<group>"; };
 		8CEB70BC1CE9D39C008220D3 /* QSYKBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKBaseTableViewCell.h; sourceTree = "<group>"; };
 		8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKBaseTableViewCell.m; sourceTree = "<group>"; };
-		8CF911561CEEA43800B28ADD /* QSYKUserInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserInfoModel.h; sourceTree = "<group>"; };
-		8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserInfoModel.m; sourceTree = "<group>"; };
 		8CF911591CEEC6E100B28ADD /* QSYKTaskTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTaskTableViewController.h; sourceTree = "<group>"; };
 		8CF9115A1CEEC6E100B28ADD /* QSYKTaskTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKTaskTableViewController.m; sourceTree = "<group>"; };
 		8CF9C6AB1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKTopicTableViewCell.h; sourceTree = "<group>"; };
@@ -212,6 +317,7 @@
 		8CF9C6C01CCDBCDC0008FCA0 /* QSYKRefreshFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKRefreshFooter.m; sourceTree = "<group>"; };
 		8CF9C6C21CCDC9730008FCA0 /* QSYKResourceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKResourceDetailViewController.h; sourceTree = "<group>"; };
 		8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKResourceDetailViewController.m; sourceTree = "<group>"; };
+		E020389BB0FBB42A05CE50F9 /* libPods-qingsongyike.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qingsongyike.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,31 +327,31 @@
 			files = (
 				8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */,
 				8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */,
-				E520945C0ABF1FD5C2958939 /* libPods.a in Frameworks */,
+				E6C98688E8228383101A0CDD /* libPods-qingsongyike.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47E989E60E97203136FB1D83 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4EFAF63430C1C1C677B85EF5 /* Pods-qingsongyike.debug.xcconfig */,
+				66C5CC05036223E07B44703D /* Pods-qingsongyike.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		584AA0AA95BEF5FF26F0CCFA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				8C94A1AE1CE3433C00D78CDE /* UIKit.framework */,
 				8CB2993D1CD04DF90024E471 /* MapKit.framework */,
 				8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */,
-				5C37A885890D3BFB11B5E67D /* libPods.a */,
+				E020389BB0FBB42A05CE50F9 /* libPods-qingsongyike.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		7165593E4914ED6521BA5771 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */,
-				1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		8C6707A61CE203F5002CA1E1 /* LYTopWindow */ = {
@@ -266,8 +372,8 @@
 			children = (
 				8C95B8CD1CCC529D0058B82D /* qingsongyike */,
 				8C95B8CC1CCC529D0058B82D /* Products */,
-				7165593E4914ED6521BA5771 /* Pods */,
 				584AA0AA95BEF5FF26F0CCFA /* Frameworks */,
+				47E989E60E97203136FB1D83 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -307,6 +413,8 @@
 			children = (
 				8CBABCC01CEC0B68002EA776 /* QSYKSlider.h */,
 				8CBABCC11CEC0B68002EA776 /* QSYKSlider.m */,
+				8C5ABBCF1CFF05A5006A2EA5 /* QSYKTabBar.h */,
+				8C5ABBD01CFF05A5006A2EA5 /* QSYKTabBar.m */,
 				8CB299461CD05C5C0024E471 /* Lib */,
 				8CF9C6B01CCDA4CB0008FCA0 /* Category */,
 			);
@@ -316,6 +424,7 @@
 		8C95B8E61CCC576B0058B82D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8CCECFC91D052A010076B9F7 /* RegisterAndLogin */,
 				8CEB70A31CE957C5008220D3 /* Base */,
 				8CB299121CCF18450024E471 /* Me */,
 				8CBFC46C1CCC5E1C00B82E2D /* Index */,
@@ -340,8 +449,8 @@
 				8CE38CBF1CD30E3E001EC3D6 /* QSYKResultModel.m */,
 				8CEB70B91CE9BA95008220D3 /* QSYKFavoriteResourceModel.h */,
 				8CEB70BA1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m */,
-				8CF911561CEEA43800B28ADD /* QSYKUserInfoModel.h */,
-				8CF911571CEEA43800B28ADD /* QSYKUserInfoModel.m */,
+				8CCECFEE1D0531D30076B9F7 /* QSYKUserModel.h */,
+				8CCECFEF1D0531D30076B9F7 /* QSYKUserModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -353,6 +462,10 @@
 				8CBFC4A61CCCD20500B82E2D /* QSYKUtility.m */,
 				8CF9C6BF1CCDBCDC0008FCA0 /* QSYKRefreshFooter.h */,
 				8CF9C6C01CCDBCDC0008FCA0 /* QSYKRefreshFooter.m */,
+				8CCECFEB1D052AAA0076B9F7 /* QSYKError.h */,
+				8CCECFEC1D052AAA0076B9F7 /* QSYKError.m */,
+				8CCECFF41D055C2B0076B9F7 /* MyHeadImageViewController.h */,
+				8CCECFF51D055C2B0076B9F7 /* MyHeadImageViewController.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -360,6 +473,7 @@
 		8C95B8E91CCC576B0058B82D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8CCECFF71D055F840076B9F7 /* Tools */,
 				8CB299401CD051740024E471 /* PopupView */,
 				8CBFC49F1CCCA11600B82E2D /* QSYKPictureTableViewCell.h */,
 				8CBFC4A01CCCA11600B82E2D /* QSYKPictureTableViewCell.m */,
@@ -376,6 +490,21 @@
 				8CE38CBB1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib */,
 				8CEB70BC1CE9D39C008220D3 /* QSYKBaseTableViewCell.h */,
 				8CEB70BD1CE9D39C008220D3 /* QSYKBaseTableViewCell.m */,
+				8C1803C51CFD30DE003186ED /* QSYKGodPostView.h */,
+				8C1803C61CFD30DE003186ED /* QSYKGodPostView.m */,
+				8C1803C81CFD30EB003186ED /* QSYKGodPostView.xib */,
+				8CCED00A1D06BD5E0076B9F7 /* ProfileTableViewCell.h */,
+				8CCED00B1D06BD5E0076B9F7 /* ProfileTableViewCell.m */,
+				8CCED00C1D06BD5E0076B9F7 /* ProfileTableViewCell.xib */,
+				8CCED00F1D06BDFB0076B9F7 /* UserHeaderView.h */,
+				8CCED0101D06BDFB0076B9F7 /* UserHeaderView.m */,
+				8CCED0111D06BDFB0076B9F7 /* UserHeaderView.xib */,
+				8CCED0261D06CA050076B9F7 /* QZBindThirdCell.h */,
+				8CCED0271D06CA050076B9F7 /* QZBindThirdCell.m */,
+				8CCED0281D06CA050076B9F7 /* QZBindThirdCell.xib */,
+				8CE30A091D07B29E00902493 /* QSYKUserBriefInfoCell.h */,
+				8CE30A0A1D07B29E00902493 /* QSYKUserBriefInfoCell.m */,
+				8CE30A0C1D07B2B000902493 /* QSYKUserBriefInfoCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -399,6 +528,20 @@
 			children = (
 				8CEB70B01CE96196008220D3 /* QSYKMyPageViewController.h */,
 				8CEB70B11CE96196008220D3 /* QSYKMyPageViewController.m */,
+				8CCED0051D06BCBE0076B9F7 /* QZProfileViewController.h */,
+				8CCED0061D06BCBE0076B9F7 /* QZProfileViewController.m */,
+				8CCED0071D06BCBE0076B9F7 /* QZProfileViewController.xib */,
+				8CCED0141D06C11D0076B9F7 /* QZEditProfileViewController.h */,
+				8CCED0151D06C11D0076B9F7 /* QZEditProfileViewController.m */,
+				8CCED0161D06C11D0076B9F7 /* QZEditProfileViewController.xib */,
+				8CAF37B71D0D024200A9A891 /* QSYKEditSignViewController.h */,
+				8CAF37B81D0D024200A9A891 /* QSYKEditSignViewController.m */,
+				8CAF37B91D0D024200A9A891 /* QSYKEditSignViewController.xib */,
+				8CCED0191D06C2540076B9F7 /* QZBindMobileViewController.h */,
+				8CCED01A1D06C2540076B9F7 /* QZBindMobileViewController.m */,
+				8CCED01B1D06C2540076B9F7 /* QZBindMobileViewController.xib */,
+				8CCED01C1D06C2540076B9F7 /* QZBindThirdViewController.h */,
+				8CCED01D1D06C2540076B9F7 /* QZBindThirdViewController.m */,
 				8CB299131CCF186C0024E471 /* QSYKSettingsTableViewController.h */,
 				8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */,
 				8CEB70B61CE9B936008220D3 /* QSYKMyFavoriteTableViewController.h */,
@@ -501,6 +644,7 @@
 				8CBFC47D1CCC609600B82E2D /* QSYKTopicPageViewController.m */,
 				8CF9C6C21CCDC9730008FCA0 /* QSYKResourceDetailViewController.h */,
 				8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */,
+				8CDFF3221D0E894000E14CDC /* QSYKResourceDetailViewController.xib */,
 				8C282F311CCE1D24003FC86A /* QSYKDetailPicutreViewController.h */,
 				8C282F321CCE1D24003FC86A /* QSYKDetailPicutreViewController.m */,
 			);
@@ -510,6 +654,8 @@
 		8CBFC4831CCC715A00B82E2D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				8CCECFF11D05340A0076B9F7 /* QSYKUserManager.h */,
+				8CCECFF21D05340A0076B9F7 /* QSYKUserManager.m */,
 				8CBFC4841CCC722B00B82E2D /* QSYKDataManager.h */,
 				8CBFC4851CCC722B00B82E2D /* QSYKDataManager.m */,
 				8CBFC4871CCC7C2300B82E2D /* QSYKResourceManager.h */,
@@ -522,6 +668,41 @@
 				8C3546CD1CD9EBFD002807DD /* QSYKJPushManager.m */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		8CCECFC91D052A010076B9F7 /* RegisterAndLogin */ = {
+			isa = PBXGroup;
+			children = (
+				8CCECFCC1D052A010076B9F7 /* QZCompleteUserInfoViewController.h */,
+				8CCECFCD1D052A010076B9F7 /* QZCompleteUserInfoViewController.m */,
+				8CCECFCE1D052A010076B9F7 /* QZCompleteUserInfoViewController.xib */,
+				8CCECFD21D052A010076B9F7 /* QZLoginViewController.h */,
+				8CCECFD31D052A010076B9F7 /* QZLoginViewController.m */,
+				8CCECFD41D052A010076B9F7 /* QZLoginViewController.xib */,
+				8CCECFD51D052A010076B9F7 /* QZRegisterViewController.h */,
+				8CCECFD61D052A010076B9F7 /* QZRegisterViewController.m */,
+				8CCECFD71D052A010076B9F7 /* QZRegisterViewController.xib */,
+				8CCECFD81D052A010076B9F7 /* QZResetPasswordViewController.h */,
+				8CCECFD91D052A010076B9F7 /* QZResetPasswordViewController.m */,
+				8CCECFDA1D052A010076B9F7 /* QZResetPasswordViewController.xib */,
+				8CCECFDB1D052A010076B9F7 /* QZVerifyCodeViewController.h */,
+				8CCECFDC1D052A010076B9F7 /* QZVerifyCodeViewController.m */,
+				8CCECFDD1D052A010076B9F7 /* QZVerifyCodeViewController.xib */,
+			);
+			path = RegisterAndLogin;
+			sourceTree = "<group>";
+		};
+		8CCECFF71D055F840076B9F7 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				8CCECFF81D055F840076B9F7 /* CustomDatePickView.h */,
+				8CCECFF91D055F840076B9F7 /* CustomDatePickView.m */,
+				8CCECFFA1D055F840076B9F7 /* CustomDatePickView.xib */,
+				8CCECFFB1D055F840076B9F7 /* CustomPickerView.h */,
+				8CCECFFC1D055F840076B9F7 /* CustomPickerView.m */,
+				8CCECFFD1D055F840076B9F7 /* CustomPickerView.xib */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		8CDB3EA41CDB6A57003B1F55 /* KeychainItemWrapper */ = {
@@ -546,6 +727,10 @@
 				8CEB70A71CE9582C008220D3 /* QSYKBaseViewController.m */,
 				8CEB70AA1CE9582C008220D3 /* WebViewController.h */,
 				8CEB70AB1CE9582C008220D3 /* WebViewController.m */,
+				8C5ABBC61CFE958F006A2EA5 /* QSYKWebViewController.h */,
+				8C5ABBC71CFE958F006A2EA5 /* QSYKWebViewController.m */,
+				8CCED0021D0579420076B9F7 /* QSYKPresentNavigationController.h */,
+				8CCED0031D0579420076B9F7 /* QSYKPresentNavigationController.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -559,6 +744,8 @@
 				8CC171BF1CE041AC00FEF2F3 /* UIImage+Round.m */,
 				8CC171C11CE0427000FEF2F3 /* UIImageView+Avatar.h */,
 				8CC171C21CE0427000FEF2F3 /* UIImageView+Avatar.m */,
+				8C5ABBCC1CFF04DA006A2EA5 /* UIViewController+IsVisible.h */,
+				8C5ABBCD1CFF04DA006A2EA5 /* UIViewController+IsVisible.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -570,12 +757,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C95B8E21CCC529E0058B82D /* Build configuration list for PBXNativeTarget "qingsongyike" */;
 			buildPhases = (
-				6A7870376D6ECA21499E93AF /* Check Pods Manifest.lock */,
+				7D0A403B5DB6962C5E7BF1CF /* [CP] Check Pods Manifest.lock */,
 				8C95B8C71CCC529D0058B82D /* Sources */,
 				8C95B8C81CCC529D0058B82D /* Frameworks */,
 				8C95B8C91CCC529D0058B82D /* Resources */,
-				4B7D28905E20E4FF3DF46F48 /* Embed Pods Frameworks */,
-				6ED7B8BBA1D4B3DBF1140B70 /* Copy Pods Resources */,
+				964D84DDFE5983EF2993B611 /* [CP] Embed Pods Frameworks */,
+				4027526EC11BED71CA7C8E92 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -635,50 +822,67 @@
 				8CBEC7561CF5C1020092F2AD /* kr-video-player-shrinkscreen@2x.png in Resources */,
 				8CBFC4A31CCCA11600B82E2D /* QSYKPictureTableViewCell.xib in Resources */,
 				8CBEC7531CF5C1020092F2AD /* kr-video-player-play@3x.png in Resources */,
+				8CCED0091D06BCBE0076B9F7 /* QZProfileViewController.xib in Resources */,
+				8CCECFEA1D052A010076B9F7 /* QZVerifyCodeViewController.xib in Resources */,
+				8CCECFE41D052A010076B9F7 /* QZLoginViewController.xib in Resources */,
 				8CBEC7521CF5C1020092F2AD /* kr-video-player-play@2x.png in Resources */,
 				8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */,
+				8CCED0131D06BDFB0076B9F7 /* UserHeaderView.xib in Resources */,
 				8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */,
 				8CBEC74D1CF5C1020092F2AD /* kr-video-player-close@3x.png in Resources */,
 				8CBEC74E1CF5C1020092F2AD /* kr-video-player-fullscreen@2x.png in Resources */,
+				8C1803C91CFD30EB003186ED /* QSYKGodPostView.xib in Resources */,
+				8CCED01F1D06C2540076B9F7 /* QZBindMobileViewController.xib in Resources */,
 				8CBEC74F1CF5C1020092F2AD /* kr-video-player-fullscreen@3x.png in Resources */,
 				8CBEC7541CF5C1020092F2AD /* kr-video-player-point@2x.png in Resources */,
+				8CCED0181D06C11D0076B9F7 /* QZEditProfileViewController.xib in Resources */,
 				8CBEC7501CF5C1020092F2AD /* kr-video-player-pause@2x.png in Resources */,
 				8CBEC7571CF5C1020092F2AD /* kr-video-player-shrinkscreen@3x.png in Resources */,
+				8CAF37BB1D0D024200A9A891 /* QSYKEditSignViewController.xib in Resources */,
 				8CBEC74C1CF5C1020092F2AD /* kr-video-player-close@2x.png in Resources */,
 				8C95B8DB1CCC529E0058B82D /* Assets.xcassets in Resources */,
+				8CCECFE61D052A010076B9F7 /* QZRegisterViewController.xib in Resources */,
+				8CCED0011D055F840076B9F7 /* CustomPickerView.xib in Resources */,
 				8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */,
 				8CF9C6AF1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.xib in Resources */,
 				8CB49B531CF7EFD600FC058E /* LaunchScreen.xib in Resources */,
+				8CE30A0D1D07B2B000902493 /* QSYKUserBriefInfoCell.xib in Resources */,
+				8CDFF3231D0E894000E14CDC /* QSYKResourceDetailViewController.xib in Resources */,
 				8CE38CBD1CD1B328001EC3D6 /* QSYKCommentTableViewCell.xib in Resources */,
+				8CCECFE81D052A010076B9F7 /* QZResetPasswordViewController.xib in Resources */,
+				8CCECFFF1D055F840076B9F7 /* CustomDatePickView.xib in Resources */,
+				8CCED02A1D06CA050076B9F7 /* QZBindThirdCell.xib in Resources */,
+				8CCECFE01D052A010076B9F7 /* QZCompleteUserInfoViewController.xib in Resources */,
+				8CCED00E1D06BD5E0076B9F7 /* ProfileTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4B7D28905E20E4FF3DF46F48 /* Embed Pods Frameworks */ = {
+		4027526EC11BED71CA7C8E92 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-qingsongyike/Pods-qingsongyike-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6A7870376D6ECA21499E93AF /* Check Pods Manifest.lock */ = {
+		7D0A403B5DB6962C5E7BF1CF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -686,19 +890,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		6ED7B8BBA1D4B3DBF1140B70 /* Copy Pods Resources */ = {
+		964D84DDFE5983EF2993B611 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-qingsongyike/Pods-qingsongyike-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -709,19 +913,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CEB70B21CE96196008220D3 /* QSYKMyPageViewController.m in Sources */,
+				8CCECFF31D05340A0076B9F7 /* QSYKUserManager.m in Sources */,
+				8CCED0121D06BDFB0076B9F7 /* UserHeaderView.m in Sources */,
 				8CEB70B81CE9B936008220D3 /* QSYKMyFavoriteTableViewController.m in Sources */,
 				8CB2993A1CD04BB80024E471 /* QSYKUMengManager.m in Sources */,
+				8C1803C71CFD30DE003186ED /* QSYKGodPostView.m in Sources */,
 				8CC171C01CE041AC00FEF2F3 /* UIImage+Round.m in Sources */,
 				8CBFC49E1CCC91F400B82E2D /* QSYKReplyModel.m in Sources */,
 				8CF9C6BD1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.m in Sources */,
 				8CB299151CCF186C0024E471 /* QSYKSettingsTableViewController.m in Sources */,
+				8CCECFFE1D055F840076B9F7 /* CustomDatePickView.m in Sources */,
 				8C95B8D31CCC529D0058B82D /* AppDelegate.m in Sources */,
 				8CF9C6C41CCDC9730008FCA0 /* QSYKResourceDetailViewController.m in Sources */,
 				8CBFC4A71CCCD20500B82E2D /* QSYKUtility.m in Sources */,
 				8CF9115B1CEEC6E100B28ADD /* QSYKTaskTableViewController.m in Sources */,
 				8CF9C6B91CCDA68E0008FCA0 /* UIView+Commn.m in Sources */,
 				8CEB70BB1CE9BA95008220D3 /* QSYKFavoriteResourceModel.m in Sources */,
+				8CCED0041D0579420076B9F7 /* QSYKPresentNavigationController.m in Sources */,
 				8CDB3EA91CDB6A57003B1F55 /* SSKeychain.m in Sources */,
+				8CCECFF61D055C2B0076B9F7 /* MyHeadImageViewController.m in Sources */,
 				8CB299431CD051C80024E471 /* QSYKSharePopupView.m in Sources */,
 				8CEB70AF1CE9582C008220D3 /* WebViewController.m in Sources */,
 				8C95B8D01CCC529D0058B82D /* main.m in Sources */,
@@ -732,32 +942,50 @@
 				8CBFC48F1CCC7D9C00B82E2D /* QSYKResourceModel.m in Sources */,
 				8CBFC47B1CCC608400B82E2D /* QSYKPicturePageViewController.m in Sources */,
 				8CBFC4951CCC802700B82E2D /* QSYKImageModel.m in Sources */,
+				8CCED00D1D06BD5E0076B9F7 /* ProfileTableViewCell.m in Sources */,
 				8CBFC47E1CCC609600B82E2D /* QSYKTopicPageViewController.m in Sources */,
 				8CBFC4861CCC722B00B82E2D /* QSYKDataManager.m in Sources */,
+				8CCECFF01D0531D30076B9F7 /* QSYKUserModel.m in Sources */,
 				8CBFC49B1CCC8E1700B82E2D /* QSYKPostModel.m in Sources */,
 				8CC171C31CE0427000FEF2F3 /* UIImageView+Avatar.m in Sources */,
 				8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */,
-				8CF911581CEEA43800B28ADD /* QSYKUserInfoModel.m in Sources */,
 				8CBFC46F1CCC5E1C00B82E2D /* QSYKIndexViewController.m in Sources */,
+				8CCED0171D06C11D0076B9F7 /* QZEditProfileViewController.m in Sources */,
 				8CE38CC01CD30E3E001EC3D6 /* QSYKResultModel.m in Sources */,
 				8CEB70AE1CE9582C008220D3 /* QSYKRootTabBarController.m in Sources */,
 				8CBEC7581CF5C1020092F2AD /* KRVideoPlayerController.m in Sources */,
+				8CCECFED1D052AAA0076B9F7 /* QSYKError.m in Sources */,
+				8CCED01E1D06C2540076B9F7 /* QZBindMobileViewController.m in Sources */,
 				8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */,
+				8CCECFE71D052A010076B9F7 /* QZResetPasswordViewController.m in Sources */,
+				8CCED0001D055F840076B9F7 /* CustomPickerView.m in Sources */,
 				8CF9C6AE1CCDA2FF0008FCA0 /* QSYKTopicTableViewCell.m in Sources */,
 				8CBFC4921CCC801800B82E2D /* QSYKVideoModel.m in Sources */,
 				8CB2994D1CD05DE30024E471 /* QSYKShareManager.m in Sources */,
 				8C3546CE1CD9EBFD002807DD /* QSYKJPushManager.m in Sources */,
 				8CDB3EAA1CDB6A57003B1F55 /* SSKeychainQuery.m in Sources */,
+				8CE30A0B1D07B29E00902493 /* QSYKUserBriefInfoCell.m in Sources */,
+				8CCECFE31D052A010076B9F7 /* QZLoginViewController.m in Sources */,
 				8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */,
 				8CE38CBC1CD1B328001EC3D6 /* QSYKCommentTableViewCell.m in Sources */,
+				8CCED0201D06C2540076B9F7 /* QZBindThirdViewController.m in Sources */,
+				8C5ABBC81CFE958F006A2EA5 /* QSYKWebViewController.m in Sources */,
+				8C5ABBCE1CFF04DA006A2EA5 /* UIViewController+IsVisible.m in Sources */,
+				8CCED0291D06CA050076B9F7 /* QZBindThirdCell.m in Sources */,
+				8C5ABBD11CFF05A5006A2EA5 /* QSYKTabBar.m in Sources */,
+				8CCED0081D06BCBE0076B9F7 /* QZProfileViewController.m in Sources */,
 				8CEB70B51CE9AE67008220D3 /* QSYKTopWindow.m in Sources */,
 				8CBFC4781CCC5FFA00B82E2D /* QSYKRecommendPageViewController.m in Sources */,
+				8CCECFE51D052A010076B9F7 /* QZRegisterViewController.m in Sources */,
+				8CAF37BA1D0D024200A9A891 /* QSYKEditSignViewController.m in Sources */,
 				8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */,
 				8CEB70BE1CE9D39C008220D3 /* QSYKBaseTableViewCell.m in Sources */,
 				8CBFC4751CCC5FD500B82E2D /* QSYKVideoPageViewController.m in Sources */,
 				8CBABCC21CEC0B68002EA776 /* QSYKSlider.m in Sources */,
 				8CBEC7591CF5C1020092F2AD /* KRVideoPlayerControlView.m in Sources */,
 				8C282F331CCE1D24003FC86A /* QSYKDetailPicutreViewController.m in Sources */,
+				8CCECFE91D052A010076B9F7 /* QZVerifyCodeViewController.m in Sources */,
+				8CCECFDF1D052A010076B9F7 /* QZCompleteUserInfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -866,7 +1094,7 @@
 		};
 		8C95B8E31CCC529E0058B82D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 41232A19C4C1864CDC35C6B9 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 4EFAF63430C1C1C677B85EF5 /* Pods-qingsongyike.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -890,7 +1118,7 @@
 		};
 		8C95B8E41CCC529E0058B82D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1A7BD978A93AB6A19867CB8E /* Pods.release.xcconfig */;
+			baseConfigurationReference = 66C5CC05036223E07B44703D /* Pods-qingsongyike.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

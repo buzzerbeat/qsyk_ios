@@ -23,7 +23,7 @@
 
 @interface QSYKUserManager : NSObject
 @property (weak, nonatomic) id <UserCallBackDelegate> delegate;
-+ (QSYKUserManager *)shardManager;
++ (QSYKUserManager *)sharedManager;
 
 @property (nonatomic, strong) QSYKUserModel *user;
 
@@ -90,5 +90,10 @@
 - (NSURLSessionDataTask *)validatePhoneNumber:(NSString *)pno
                                       success:(void (^)(void))success
                                       failure:(void (^)(NSError *error))failure;
+
+- (NSURLSessionDataTask *)validateThirdWithOid:(NSString *)oid
+                                          from:(NSString *)from
+                                       success:(void (^)(void))success
+                                       failure:(void (^)(NSError *error))failure;
 
 @end

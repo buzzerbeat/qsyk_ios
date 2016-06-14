@@ -10,7 +10,6 @@
 #import "ProfileTableViewCell.h"
 #import "UserHeaderView.h"
 #import "CustomPickerView.h"
-#import "CustomDatePickView.h"
 #import "MyHeadImageViewController.h"
 #import "QSYKUserModel.h"
 #import "QZEditProfileViewController.h"
@@ -18,14 +17,14 @@
 #import "QZBindMobileViewController.h"
 #import "QZLoginViewController.h"
 #import <UMSocial.h>
+#import "QSYKEditSignViewController.h"
 
-@interface QZProfileViewController () <UITableViewDataSource, UITableViewDelegate, CustomPickerViewDelegate, CustomDatePickViewDelegate, MyHeadImageDelegate>
+@interface QZProfileViewController () <UITableViewDataSource, UITableViewDelegate, CustomPickerViewDelegate, MyHeadImageDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) NSArray *cellTitlesArray;
 @property (strong, nonatomic) UserHeaderView *headerView;
 @property (strong, nonatomic) MyHeadImageViewController *setHeadImageVC;
-@property (strong, nonatomic) CustomDatePickView *customDatePickView;
 @property (strong, nonatomic) QSYKUserModel *user;
 @property (strong, nonatomic) MyHeadImageViewController *setAvatarImageVC;
 
@@ -39,9 +38,8 @@
     self.tableView.backgroundColor = [UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.f];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.user = [QSYKUserManager shardManager].user;
+    self.user = [QSYKUserManager sharedManager].user;
     
-    self.cellTitlesArray = [NSMutableArray arrayWithArray:@[@[@"昵称", @"性别", @"生日", @"简介"], @[@"手机", @"绑定其他平台"], @[@"退出登录"]]];
     self.cellTitlesArray = [NSMutableArray arrayWithArray:@[@[@"昵称", @"个性签名", @"性别"], @[@"手机", @"微信", @"QQ", @"微博"], @[@"退出登录"]]];
     
     [self layoutTableHeaderView];
@@ -54,16 +52,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kEditProfileNotification object:nil];
 }
 
-- (CustomDatePickView *)customDatePickView
-{
-    if (!_customDatePickView) {
-        _customDatePickView = [CustomDatePickView loadFromXib];
-        _customDatePickView.datePicker.maximumDate = [NSDate date];
-        _customDatePickView.delegate = self;
-    }
-    return _customDatePickView;
-}
-
 - (void)layoutTableHeaderView {
     
     self.headerView = [UserHeaderView loadFromXib];
@@ -71,7 +59,7 @@
     self.headerView.separatorViewHeightCons.constant = 1 / [UIScreen mainScreen].scale;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetAvatar:)];
     [self.headerView addGestureRecognizer:tapGesture];
-    [self.headerView.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:120 height:120 extension:@"png"]];
+    [self.headerView.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:300 height:300 extension:@"png"]];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 90)];
     [view addSubview:self.headerView];
@@ -82,15 +70,13 @@
 
 - (void)refreshCell:(NSNotification *)notification
 {
-    _user = [QSYKUserManager shardManager].user;
+    _user = [QSYKUserManager sharedManager].user;
     NSString *notificationKey = notification.object[@"key"];
     
     if ([notificationKey isEqualToString:@"name"]) {
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     } else if([notificationKey isEqualToString:@"sign"]) {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    } else if ([notificationKey isEqualToString:@"thirdType"]) {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     } else if ([notificationKey isEqualToString:@"mobile"]) {
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -122,7 +108,7 @@
     NSLog(@"%@", filePath);
     NSData *avatarData = [NSData dataWithContentsOfFile:filePath];
     
-    [self deleteLocalAvatar:filePath];
+//    [self deleteLocalAvatar:filePath];
     
     [SVProgressHUD show];
     
@@ -138,16 +124,17 @@
                                                  if (result && !result.status) {
                                                      [SVProgressHUD showSuccessWithStatus:@"上传成功"];
                                                      
-                                                     _user.userAvatar = result.user[@"avatarSid"];
-                                                     [QSYKUserManager shardManager].user = _user;
+//                                                     _user.userAvatar = result.user[@"avatarSid"];
+//                                                     [QSYKUserManager shardManager].user = _user;
                                                      
                                                      // 刷新当前页的头像
-                                                     [self.headerView.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:120 height:120 extension:@"png"]];
+                                                     self.headerView.avatarImageView.image = [[UIImage imageWithData:avatarData] roundImage];
+//                                                     [self.headerView.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:300 height:300 extension:@"png"]];
                                                      [self.tableView reloadData];
                                                      
                                                      // 通知myPageViewController 刷新的头像
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:kAvatarDidChangedNotification
-                                                                                                         object:@{@"avatar": _user.userAvatar}];
+                                                                                                         object:@{@"avatar": @"avatar"}];
                                                  } else {
                                                      [SVProgressHUD showErrorWithStatus:result.message];
                                                  }
@@ -239,6 +226,8 @@
     cell.titleLabel.text = [[self.cellTitlesArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
     if (indexPath.section == 0) {
+        cell.infoLabel.hidden = YES;
+        
         if (indexPath.row == 0) {   //昵称
             cell.valueLabel.text = _user.userName;
             
@@ -246,7 +235,7 @@
         if (indexPath.row == 1) {   //简介
             
             if (_user.userBrief.length == 0) {
-                cell.valueLabel.text = @"这家伙很懒";
+                cell.valueLabel.text = @"未填写";
             } else {
                 cell.valueLabel.text = _user.userBrief;
             }
@@ -267,37 +256,44 @@
             }
         }
     } else if (indexPath.section == 1) {
-        cell.valueLabel.text = @"未绑定";
+        cell.infoLabel.hidden = NO;
+        
+        cell.infoLabel.text = @"未绑定";
+        cell.userInteractionEnabled = NO;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         
         switch (indexPath.row) {
             case 0:
-                if ([_user.userMobile isEqualToString:@"0"]) {
-                    cell.valueLabel.text = @"未绑定";
-                } else {
+                if (_user.userMobile.length > 0) {
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     cell.userInteractionEnabled = NO;
-                    cell.valueLabel.text = _user.userMobile;
+                    
+                    NSString *secureMobileNumber = [_user.userMobile stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                    cell.infoLabel.text = secureMobileNumber;
+                } else {
+                    cell.infoLabel.hidden = YES;
+                    
+                    cell.valueLabel.text = @"未绑定";
+                    cell.userInteractionEnabled = YES;
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 }
                 break;
                 
             case 1:
                 if (_user.isBindWeixin) {
-                    cell.valueLabel.text = @"已绑定";
-                    cell.userInteractionEnabled = NO;
+                    cell.infoLabel.text = @"已绑定";
                 }
                 break;
                 
             case 2:
                 if (_user.isBindQq) {
-                    cell.valueLabel.text = @"已绑定";
-                    cell.userInteractionEnabled = NO;
+                    cell.infoLabel.text = @"已绑定";
                 }
                 break;
                 
             case 3:
                 if (_user.isBindWeibo) {
-                    cell.valueLabel.text = @"已绑定";
-                    cell.userInteractionEnabled = NO;
+                    cell.infoLabel.text = @"已绑定";
                 }
                 break;
                 
@@ -322,23 +318,19 @@
     
     if (indexPath.section == 0) {    //修改昵称（或简介）
         
-        QZEditProfileViewController *editProfileViewController = [[QZEditProfileViewController alloc] initWithNibName:@"QZEditProfileViewController" bundle:nil];
-        
         if (indexPath.row == 0) {
+            QZEditProfileViewController *editProfileViewController = [[QZEditProfileViewController alloc] initWithNibName:@"QZEditProfileViewController" bundle:nil];
             
-            editProfileViewController.navigationItem.title = @"修改昵称";
-            editProfileViewController.toBeEditedPropertyName = @"nick_name";
             editProfileViewController.propertyOldValue = _user.userName;
             
             [self.navigationController pushViewController:editProfileViewController animated:YES];
             
         } else if (indexPath.row == 1) {
+            QSYKEditSignViewController *editSignVC = [[QSYKEditSignViewController alloc] initWithNibName:@"QSYKEditSignViewController" bundle:nil];
             
-            editProfileViewController.navigationItem.title = @"修改简介";
-            editProfileViewController.toBeEditedPropertyName = @"personal_sign";
-            editProfileViewController.propertyOldValue = _user.userBrief;
+            editSignVC.propertyOldValue = _user.userBrief;
             
-            [self.navigationController pushViewController:editProfileViewController animated:YES];
+            [self.navigationController pushViewController:editSignVC animated:YES];
             
         } else if (indexPath.row == 2) {    //修改性别
             
@@ -383,31 +375,25 @@
 
 - (void)updateProfileWithKey:(NSString *)key value:(NSString *)value {
     
-    NSDictionary *params = @{key: value};
-    NSLog(@"%@", params);
+    NSLog(@"key=%@, value=%@", key, value);
     
     [SVProgressHUD show];
     @weakify(self);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
                                              URLString:@"/v2/user/edit"
-                                            parameters:params
+                                            parameters:@{key: value}
                                              success:^(NSURLSessionDataTask *task, id responseObject) {
                                                  
                                                  @strongify(self);
                                                  
                                                  QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
                                                  if (result && !result.status) {
-                                                     if ([key isEqualToString:@"sex"]) {
                                                          _user.userSex = [value intValue];
                                                          
-                                                         // tableView reload the specific cell
-                                                         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                     } else {
-                                                         _user.userBirthday = value;
-                                                         
-                                                         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                     }
-                                                     [QSYKUserManager shardManager].user = _user;
+                                                     // tableView reload the specific cell
+                                                     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                                                     
+                                                     [QSYKUserManager sharedManager].user = _user;
                                                      
                                                      [SVProgressHUD showSuccessWithStatus:@"修改成功"];
                                                  } else {
@@ -479,7 +465,7 @@
                                                                    } else if ([thirdTypeName isEqualToString:@"sina"]) {
                                                                        _user.isBindWeibo = YES;
                                                                    }
-                                                                   [QSYKUserManager shardManager].user = _user;
+                                                                   [QSYKUserManager sharedManager].user = _user;
                                                                    
                                                                    [self.tableView reloadData];
                                                                    

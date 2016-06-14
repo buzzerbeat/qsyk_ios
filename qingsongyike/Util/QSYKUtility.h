@@ -24,7 +24,7 @@
 
 + (UIAlertController * _Nonnull)alertControllerWithTitle:(NSString * _Nullable)title
                                                  message:(NSString * _Nullable)message
-                                       cancleActionTitle:(NSString * _Nonnull)cancleActionTitle
+                                       cancleActionTitle:(NSString * _Nullable)cancleActionTitle
                                            goActionTitle:(NSString * _Nonnull)goActionTitle
                                                  preferredStyle:(UIAlertControllerStyle)preferredStyle
                                                  handler:(void (^ __nullable)(UIAlertAction * _Nonnull action))handler;
@@ -33,14 +33,46 @@
 
 + (NSString * _Nonnull)UAString;
 
-+ (void)startApp;
-
-+ (void)rateResourceWithSid:(NSString * _Nonnull)sid type:(NSInteger)type;
+//+ (void)startApp;
+//
+//+ (void)rateResourceWithSid:(NSString * _Nonnull)sid type:(NSInteger)type;
+//
+//+ (void)ratePostWithSid:(NSString * _Nonnull)sid;
 
 + (void)loadSplash;
 
 + (void)hideTopWindow;
 
 + (void)showTopWindow;
+
++ (NSString * _Nonnull)formateTimeInterval:(NSString * _Nonnull)timeInterval;
+
+/**
+ * 数据库路径
+ */
++ (NSString * _Nonnull)dbPath;
+
+
+/**
+ * 数据库路径
+ */
++ (void)saveResourceSidIntoDBWithSid:(NSString * _Nonnull)sid;
+
+/**
+ * 刷新数据库
+ */
++ (void)updateReadHistory;
+
++ (NSArray * _Nonnull)removeRedundantData:(NSArray * _Nonnull)original;
+
+/**
+ * 校验是否为合法的手机号
+ */
++ (BOOL)isMobileNum:(NSString * _Nonnull)mobileNum;
+
+/**
+ * 格式化日期格式为“yyyy-MM-dd”
+ */
++ (NSString * _Nonnull)formateBirthdayWithTimeInterval:(NSString * _Nonnull)timeInterval;
 
 @end

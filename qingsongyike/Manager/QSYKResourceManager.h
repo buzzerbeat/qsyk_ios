@@ -14,7 +14,7 @@
 + (QSYKResourceManager *)sharedManager;
 
 - (NSURLSessionDataTask *)getResourceWithParameters:(NSDictionary *)parameters
-                                            success:(void (^)(NSArray<QSYKResourceModel *> *resourceList))success
+                                            success:(void (^)(NSArray<QSYKResourceModel *> *resourceList, NSURLSessionDataTask *task))success
                                             failure:(void (^)(NSError *error))failure;
 
 - (NSURLSessionDataTask *)getResourceDetailWithParameters:(NSDictionary *)parameters

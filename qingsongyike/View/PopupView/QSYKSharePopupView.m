@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorViewHeightCon;
 
 @property (copy, nonatomic) NSString *platformType;
+@property (nonatomic, copy) NSString *platformBrief;
 
 @end
 
@@ -40,18 +41,27 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
     switch (button.tag) {
         case 101:
             _platformType = UMShareToWechatTimeline;
+            _platformBrief = @"group";
             break;
+            
         case 102:
             _platformType = UMShareToWechatSession;
+            _platformBrief = @"weixin";
             break;
+            
         case 103:
             _platformType = UMShareToQQ;
+            _platformBrief = @"qq";
             break;
+            
         case 104:
             _platformType = UMShareToQzone;
+            _platformBrief = @"qzone";
             break;
+            
         case 105:
             _platformType = UMShareToSina;
+            _platformBrief = @"weibo";
             break;
             
         default:
@@ -78,6 +88,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 
 - (void)beginSharing {
     
+    // 分享到微博
     if ([_platformType isEqualToString:UMShareToSina]) {
         /*
         // sina 分享字数限制小于140，需要截取文字（"轻松一刻："前缀占5个字符，还需要把URL长度算进去）
@@ -95,7 +106,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
         //设置分享内容和回调对象
         [[UMSocialControllerService defaultControllerService]
                              setShareText:_shareContent
-                               shareImage:[UIImage imageNamed:@"AppIcon_512"]
+                               shareImage:self.shareImage//[UIImage imageNamed:@"AppIcon_512"]
                          socialUIDelegate:self];
         
         [UMSocialSnsPlatformManager getSocialPlatformWithName:
@@ -144,16 +155,18 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
 
 - (void)shareSuccess {
     // 完成分享任务（请求分享任务接口）
-    [[QSYKDataManager sharedManager]
-     requestWithMethod:QSYKHTTPMethodPOST
-     URLString:[NSString stringWithFormat:@"%@/user/share-task", kAuthBaseURL]
-     parameters:nil
-     success:^(NSURLSessionDataTask *task, id responseObject) {
-         [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
-     }
-     failure:^(NSError *error) {
-         
-     }];
+    [[QSYKDataManager sharedManager]requestWithMethod:QSYKHTTPMethodPOST
+                                            URLString:@"user/share-task"
+                                           parameters:nil
+                                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                  [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
+                                              }
+                                              failure:^(NSError *error) {
+                                                  
+                                              }];
+    
+    // 发送分享日志
+    [[QSYKDataManager sharedManager] sendLogWithURLString:[NSString stringWithFormat:@"%@/logdomain/share/r/%@/p/%@", kLogBaseURL, _resourceSid, _platformBrief]];
 }
 
 - (IBAction)copyResourceAction:(id)sender {
@@ -166,7 +179,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
     self.dismissPopupBlock();
     
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:[NSString stringWithFormat:@"%@/resource/fav", kAuthBaseURL]
+                                             URLString:@"resource/fav"
                                             parameters:@{@"sid": _resourceSid}
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    NSError *error = nil;
@@ -236,7 +249,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
     // 0广告，1辱骂，2色情
     NSLog(@"sid=%@,type=%ld", _resourceSid, (long)type);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:[NSString stringWithFormat:@"%@/resource/report", kAuthBaseURL]
+                                             URLString:@"resource/report"
                                             parameters:@{
                                                          @"sid": _resourceSid,
                                                          @"type": @(type)

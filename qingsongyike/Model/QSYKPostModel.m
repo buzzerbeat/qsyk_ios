@@ -10,6 +10,14 @@
 
 @implementation QSYKPostModel
 
-
++ (BOOL)propertyIsOptional:(NSString *)propertyName {
+    if ([propertyName isEqualToString:@"hasDigged"] ||
+        [propertyName isEqualToString:@"reply"]) {
+        return YES;
+    }
+    
+    return NO;
+}
 
 @end
+

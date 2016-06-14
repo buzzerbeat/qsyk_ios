@@ -48,7 +48,7 @@
     
     [SVProgressHUD show];
     @weakify(self);
-    [[QSYKUserManager shardManager] resetPasswordWithPhoneNumber:self.pno newPassword:self.pwdTextField.text success:^{
+    [[QSYKUserManager sharedManager] resetPasswordWithPhoneNumber:self.pno newPassword:self.pwdTextField.text success:^{
         @strongify(self);
         [SVProgressHUD showSuccessWithStatus:@"修改成功"];
         

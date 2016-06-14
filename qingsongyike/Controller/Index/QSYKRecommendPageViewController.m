@@ -12,12 +12,16 @@
 #import "QSYKVideoTableViewCell.h"
 #import "QSYKResourceDetailViewController.h"
 #import "QSYKFavoriteResourceModel.h"
+#import "QSYKGodPostView.h"
 @import MediaPlayer;
 
 @interface QSYKRecommendPageViewController () <QSYKCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *resourceList;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, assign) int pageCount;    // 资源总页数
+@property (nonatomic, assign) int currentPage;  // 当前页码
+@property (nonatomic, assign) int type;         // 资源类型
 
 @end
 
@@ -39,6 +43,7 @@
         [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
         tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             self.isRefresh = YES;
+            self.currentPage = 1;
             [self loadData];
         }];
         tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
@@ -63,8 +68,11 @@
     [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
     self.view.backgroundColor = self.tableView.backgroundColor;
     
+    self.type = _isBeautyTag ? 6 : 0;
+    self.currentPage = 1;
     self.resourceList = [NSMutableArray new];
     [self.tableView.mj_header beginRefreshing];
+    
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -135,44 +143,33 @@
 }
 
 - (void)scrollToTopAndRefresh {
-    [self.tableView.mj_header beginRefreshing];
+    if ([self isVisible]) {
+        [self.tableView.mj_header beginRefreshing];
+    }
 }
 
 - (void)showRemoteNotiResource:(NSNotification *)noti {
-    NSLog(@"noti = %@", noti.userInfo);
-    
-    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
-    resourceDetailVC.sid = noti.userInfo[@"resourceSid"];
-    resourceDetailVC.hidesBottomBarWhenPushed = YES;
-    
-    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+    [super showRemoteNotiResource:noti];
 }
 
 - (void)loadData {
-    NSDictionary *parameters = nil;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:@40, @"per-page", @"godPosts", @"expand", nil];
     NSString *URLString = nil;
     if (_isBeautyTag) {
-        URLString = @"resource/tagListJson/";
+        URLString = @"resource-tags";
+        NSString *beautyTag = @"uMwg4g0Mwg0";
+        
+        [parameters setValue:beautyTag forKey:@"tag"];
         if (!self.isRefresh) {
-            QSYKResourceModel *lastResource = _resourceList.lastObject;
-            parameters = @{
-                           @"tag" : @"uMwg4g0Mwg0",
-                           @"start" : lastResource.start,
-                           };
-        } else {
-            parameters = @{@"tag" : @"uMwg4g0Mwg0"};
-            
+            [parameters setValue:@(++self.currentPage) forKey:@"page"];
         }
+        
     } else {
-        URLString = @"resource/listJson/";
+        URLString = @"resources";
+        
+        [parameters setValue:@(_type) forKey:@"type"];
         if (!self.isRefresh) {
-            QSYKResourceModel *lastResource = _resourceList.lastObject;
-            parameters = @{
-                           @"type" : @0,
-                           @"start" : lastResource.start,
-                           };
-        } else {
-            parameters = @{@"type" : @0};
+            [parameters setValue:@(++self.currentPage) forKey:@"page"];
         }
     }
     
@@ -185,6 +182,13 @@
                                             parameters:parameters
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    
+                                                   // 首次加载（或刷新）时记录资源总页数
+                                                   if (self.isRefresh) {
+                                                       NSHTTPURLResponse *response = (NSHTTPURLResponse *)task.response;
+                                                       NSLog(@"pageCount = %@", [response allHeaderFields][@"X-Pagination-Page-Count"]);
+                                                       self.pageCount = [[response allHeaderFields][@"X-Pagination-Page-Count"] intValue];
+                                                   }
+                                                   
                                                    QSYKResourceList *resourceList = [[QSYKResourceList alloc]
                                                                                      initWithArray:responseObject];
                                                    @strongify(self);
@@ -192,13 +196,15 @@
                                                    [self.tableView.mj_footer endRefreshing];
 //                                                   [SVProgressHUD dismiss];
                                                    
-                                                   if (resourceList.list.count) {
+                                                   if (resourceList.list.count && self.currentPage <= self.pageCount) {
                                                        if (self.isRefresh) {
                                                            self.isRefresh = NO;
                                                            self.resourceList = [NSMutableArray new];
                                                        }
-                                                       [self.resourceList addObjectsFromArray:resourceList.list];
-                                                       [self.tableView reloadData];
+                                                       
+                                                       [self removeRedundantResource:resourceList.list];
+//                                                       [self.resourceList addObjectsFromArray:resourceList.list];
+//                                                       [self.tableView reloadData];
                                                    } else {
                                                        [self.tableView.mj_footer endRefreshingWithNoMoreData];
                                                    }
@@ -211,6 +217,28 @@
                                                    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
                                                    NSLog(@"error = %@", error);
                                                }];
+}
+
+// 去重处理
+- (void)removeRedundantResource:(NSArray *)resources {
+    NSArray *finalResources = [QSYKUtility removeRedundantData:resources];
+    
+    // 发送去重日志
+    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/listCombine/t/%d/p/%d/a/%lu", kLogBaseURL, _type, _currentPage, resources.count - finalResources.count];
+    NSLog(@"log URL = %@", urlStr);
+    [[QSYKDataManager sharedManager] sendLogWithURLString:urlStr];
+    
+    
+    // 判断本次请求到的资源去重之后是否还有剩余
+    // 如果都重复则重新请求一次
+    if (finalResources.count) {
+        [self.resourceList addObjectsFromArray:finalResources];
+        [self.tableView reloadData];
+        
+    } else {
+        _currentPage++;
+        [self loadData];
+    }
 }
 
 #pragma mark tableView delegate & dataSource \
@@ -226,28 +254,39 @@
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
     CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
     
-    CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.content
+    CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
                                                           font:16.f
                                                          width:width];
+    
+    // 神评论
+    NSUInteger postCount = resource.godPosts.count;
+    if (postCount) {
+        CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
+        for (int i = 0; i < postCount; i++) {
+            QSYKPostModel *post = resource.godPosts[i];
+            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:15 width:[QSYKGodPostView contentWidth]];
+        }
+        extraHeight += postHeight;
+    }
     
     if (cellType == 1) {
         return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
         
     } else if (cellType == 2) {
         // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-        if (resource.img.height > 2 * resource.img.width && !resource.img.dynamic) {
+        if (resource.relImage.height > 2 * resource.relImage.width && !resource.relImage.dynamic) {
             extraHeight += width * 1.5;
         } else {
-            extraHeight += width * resource.img.height / resource.img.width;
+            extraHeight += width * resource.relImage.height / resource.relImage.width;
         }
         
         return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
     } else {
         // video类型同图片
-        if (resource.video.height > resource.video.width) {
+        if (resource.relVideo.height > resource.relVideo.width) {
             extraHeight += width;
         } else {
-            extraHeight += width * resource.video.height / resource.video.width;
+            extraHeight += width * resource.relVideo.height / resource.relVideo.width;
         }
         
         return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
@@ -264,10 +303,6 @@
             cell.indexPath = indexPath;
             cell.delegate = self;
             
-//            cell.contentView.dk_backgroundColorPicker = DKColorPickerWithKey(BG);
-//            for (UIView *subView in cell.contentView.subviews) {
-//                subView.dk_backgroundColorPicker = DKColorPickerWithKey(BG);
-//            }
             return cell;
         }
             break;
@@ -323,9 +358,14 @@
             QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
             [curCell reset];
         }
+        
+        // 在不是快速滑动的情况下cell滑出手机界面，进行记录
+//        if (!tableView.isDecelerating) {
+//            NSLog(@"***********");
+//        }
+        [QSYKUtility saveResourceSidIntoDBWithSid:resource.sid];
     }
 }
-
 
 #pragma mark CellDelegate
 
@@ -334,13 +374,15 @@
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
-    [QSYKUtility rateResourceWithSid:sid type:type];
+    [[QSYKDataManager sharedManager] rateResourceWithSid:sid type:type];
     
     QSYKResourceModel *resource = self.resourceList[indexPath.row];
     if (type == 1) {
-        resource.dig++;  
+        resource.dig++;
+        resource.hasDigged = YES;
     } else {
         resource.bury++;
+        resource.hasBuried = YES;
     }
     [self.resourceList replaceObjectAtIndex:indexPath.row withObject:resource];
     
@@ -367,9 +409,23 @@
      */
 }
 
+// 神评论点赞
+- (void)ratePostWithSid:(NSString *)sid indexPath:(NSIndexPath *)indexPath {
+    [[QSYKDataManager sharedManager] ratePostWithSid:sid];
+    
+    // 这里的indexPath，section代表神评论所属的资源，row代表第几个评论
+    QSYKResourceModel *resource = self.resourceList[indexPath.section];
+    QSYKPostModel *post = resource.godPosts[indexPath.row];
+    post.dig++;
+    post.hasDigged = YES;
+    [resource.hotPosts replaceObjectAtIndex:indexPath.row withObject:post];
+    
+}
+
 - (void)commentResourceWithSid:(NSString *)sid {
     
 }
+
 
 /*
 #pragma mark - Navigation

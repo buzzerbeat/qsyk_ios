@@ -28,6 +28,12 @@
 #import "QSYKShareManager.h"
 #import "QSYKResultModel.h"
 #import <DKNightVersion/DKNightVersion.h>
+#import "UIViewController+IsVisible.h"
+#import "QSYKUserModel.h"
+#import "QSYKUserManager.h"
+#import "QSYKResultModel.h"
+#import "QSYKError.h"
+#import <Colours.h>
 
 #define SCREEN_WIDTH  [[UIScreen mainScreen] bounds].size.width
 #define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
@@ -35,31 +41,45 @@
 #define SYSTEM_VERSION [UIDevice currentDevice].systemVersion.floatValue
 #define UUID [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 #define kIsIphone UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
+#define TIMESTEMP ((NSInteger)[[NSDate date] timeIntervalSince1970])
 
 #define kIsNetworkViaWiFi ([[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus] == AFNetworkReachabilityStatusReachableViaWiFi)
 #define kIsAutoLoadImgOnlyInWifi [[NSUserDefaults standardUserDefaults] boolForKey:kIsAutoLoadImgOnlyInWifiKey]
 #define kCurrentAppVersion [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-#define kToken [[NSUserDefaults standardUserDefaults] valueForKey:@"token"]
+#define kToken [[NSUserDefaults standardUserDefaults] objectForKey:@"token"]
+#define kAccessToken [[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"]
+#define kThirdToken [[NSUserDefaults standardUserDefaults] objectForKey:@"third_token"]
 #define kLotteryEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"lotteryEnable"]
 #define kBeautyEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"beautyEnable"]
+#define kDBPath [QSYKUtility dbPath]
+#define kUserReadHistory ([[NSUserDefaults standardUserDefaults] objectForKey:kReadHistoryDicKey] ?: [NSDictionary new])
 
 
 #define TEXT_LING_SPACING 10.f
 
 #define kCoreColor [UIColor colorWithRed:220.f / 255 green:83.f / 255 blue:74.f / 255 alpha:1.0f]
+#define kSeparatorLightGrayColor [UIColor colorFromHexString:@"#e4e0e1"]
+
+static NSString * const CLIENT_ID = @"test_android_client";
+static NSString * const CLIENT_SECRET = @"JtdtMvlqAlc6";
 
 //static NSString * const kBaseURL = @"http://qy1.appcq.cn:8895/";
-static NSString * const kBaseURL = @"http://c.appcq.cn/";
-static NSString * const kAuthBaseURL = @"http://c2.appcq.cn";
+static NSString * const kBaseURL = @"http://c2.appcq.cn/";
 static NSString * const kPictureBaseURL = @"http://ic.appcq.cn/";
 static NSString * const kShareBaseURL = @"http://www.kanqu.com";
+static NSString * const kLogBaseURL = @"http://log.appcq.cn";
 
 
 static NSString * const kIsAutoLoadImgOnlyInWifiKey     = @"IsAutoLoadImgOnlyInWifiKey";
 static NSString * const kRemotePushedResourceSid        = @"RemotePushedResourceSid";
+static NSString * const kReadHistoryDicKey              = @"ReadHistoryDic";
 static NSString * const kUserInfoChangedNotification    = @"UserInfoChangedNotification";
 static NSString * const kVideoViewShrinkedNotification  = @"VideoViewShrinkedNotification";
 static NSString * const kRefreshIndexPageNotification   = @"RefreshIndexPageNotification";
 static NSString * const kLoadFromRemotePushNotification = @"LoadFromRemotePushNotification";
+static NSString * const kLoginSuccessNotification       = @"LoginSuccessNotification";
+static NSString * const kLogoutNotification             = @"LogoutNotification";
+static NSString * const kAvatarDidChangedNotification   = @"AvatarDidChangedNotification";
+static NSString * const kEditProfileNotification        = @"EditProfileNotification";
 
 #endif /* PrefixHeader_pch */

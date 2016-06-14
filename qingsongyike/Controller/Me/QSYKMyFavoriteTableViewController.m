@@ -86,10 +86,11 @@
 }
 
 - (void)loadResource {
+    
     [SVProgressHUD show];
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                                             URLString:[NSString stringWithFormat:@"%@/%@", kAuthBaseURL, _URLStr]
-                                            parameters:nil
+                                             URLString:_URLStr
+                                            parameters:@{@"expand":@"godPosts"}
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    [SVProgressHUD dismiss];
                                                    
@@ -118,7 +119,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKFavoriteResourceModel *resource = aModel.resource;
+    QSYKResourceModel *resource = aModel.resource;
     NSInteger cellType = resource.type;
     
     // width = content标签左右边距离屏幕左右边的距离的和
@@ -152,7 +153,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKFavoriteResourceModel *resource = aModel.resource;
+    QSYKResourceModel *resource = aModel.resource;
     NSInteger cellType = resource.type;
     
     switch (cellType) {
@@ -195,7 +196,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKFavoriteResourceModel *resource = aModel.resource;
+    QSYKResourceModel *resource = aModel.resource;
     
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
@@ -217,7 +218,7 @@
         // This indeed is an indexPath no longer visible
         // Do something to this non-visible cell...
         QSYKFavoriteModel *aModel = _models[indexPath.row];
-        QSYKFavoriteResourceModel *resource = aModel.resource;
+        QSYKResourceModel *resource = aModel.resource;
         if (resource.type == 3) {
             QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
             [curCell reset];
@@ -232,10 +233,10 @@
 }
 
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
-    [QSYKUtility rateResourceWithSid:sid type:type];
+    [[QSYKDataManager sharedManager] rateResourceWithSid:sid type:type];
     
     QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKFavoriteResourceModel *resource = aModel.resource;
+    QSYKResourceModel *resource = aModel.resource;
     if (type == 1) {
         resource.dig++;
     } else {

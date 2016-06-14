@@ -7,6 +7,7 @@
 //
 
 #import "QSYKBaseViewController.h"
+#import "QSYKResourceDetailViewController.h"
 
 @interface QSYKBaseViewController ()
 
@@ -24,6 +25,14 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+}
+
+- (void)showRemoteNotiResource:(NSNotification *)noti {
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = noti.userInfo[@"resourceSid"];
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

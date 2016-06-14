@@ -10,6 +10,7 @@
 #import "QSYKResourceModel.h"
 #import "QSYKDetailPicutreViewController.h"
 #import <DALabeledCircularProgressView.h>
+#import "QSYKGodPostView.h"
 
 @interface QSYKPictureTableViewCell()
 @property (nonatomic, strong) NSURL *URL;
@@ -49,10 +50,6 @@
     self.avatarImageView.image = nil;
     self.progressView.hidden = YES;
     self.showBigPicBtn.hidden = YES;
-    [self.digBtn setSelected:NO];
-    [self.buryBtn setSelected:NO];
-    self.digCountLabel.textColor = [UIColor lightGrayColor];
-    self.buryCountLabel.textColor = [UIColor lightGrayColor];
     self.buryBtn.userInteractionEnabled = YES;
     self.digBtn.userInteractionEnabled = YES;
 }
@@ -63,37 +60,35 @@
         return;
     }
     
-    if ([_resource isKindOfClass:[QSYKResourceModel class]]) {
-        QSYKResourceModel *res = (QSYKResourceModel *)_resource;
-        
-        self.userName = res.username;
-        self.userAvatar = res.userAvatar;
-        self.content = res.content;
-        self.sid = res.sid;
-        self.img = res.img;
-        self.pubTime = res.pubTime;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+    self.sid     = _resource.sid;
+    self.dig     = _resource.dig;
+    self.bury    = _resource.bury;
+    self.img     = _resource.relImage;
+    self.content = _resource.desc;
+    self.isTopic = (_resource.type == 1);
+    
+    if (_resource.hasDigged) {
+        self.digBtn.selected = YES;
+        self.digCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
     } else {
-        QSYKFavoriteResourceModel *res = (QSYKFavoriteResourceModel *)_resource;
-        
-        self.userName = res.userName;
-        self.userAvatar = res.userAvatar;
-        self.content = res.desc;
-        self.sid = res.sid;
-        self.img = res.relImage;
-        self.pubTime = res.pubTimeElapsed;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+        self.digBtn.selected = NO;
+        self.digCountLabel.textColor = [UIColor lightGrayColor];
+    }
+    if (_resource.hasBuried) {
+        self.buryBtn.selected = YES;
+        self.buryCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
+    } else {
+        self.buryBtn.selected = NO;
+        self.buryCountLabel.textColor = [UIColor lightGrayColor];
     }
     
     self.progressView.hidden = YES;
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
-    self.usernameLabel.text = self.userName;
-    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
-    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabel.text = _resource.userName;
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:self.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -102,6 +97,53 @@
                        value:style
                        range:NSMakeRange(0, attrString.length)];
     self.contentLabel.attributedText = attrString;
+    
+    // 神评论相关
+    for (UIView *view in self.containerView.subviews) {
+        [view removeFromSuperview];
+        self.firstGodPostHeight = self.secondGodPostHeight = self.thirdGodPostHeight = 0;
+    }
+    
+    if (_resource.godPosts.count && !self.isInnerPage) {
+        for (int i = 0; i < _resource.godPosts.count; i++) {
+            QSYKGodPostView *postView = [[NSBundle mainBundle] loadNibNamed:@"QSYKGodPostView" owner:nil options:nil][0];
+            QSYKPostModel *post = (QSYKPostModel *)_resource.godPosts[i];
+            postView.post = post;
+            postView.delegate = _delegate;
+            postView.indexPath = _indexPath;
+            postView.index = i;
+            
+            CGFloat height = 0;
+            if (i == 0) {
+                self.firstGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+            } else if (i == 1) {
+                self.secondGodPostHeight = [QSYKGodPostView baseHeight] +  [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                height = self.firstGodPostHeight;
+                
+            } else if (i == 2) {
+                self.thirdGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                
+                height = self.firstGodPostHeight + self.secondGodPostHeight;
+            }
+            
+            [self.containerView addSubview:postView];
+            [postView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.containerView.mas_left);
+                make.right.equalTo(self.containerView.mas_right);
+                make.top.equalTo(self.containerView).offset(height);
+                make.height.offset([QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]]);
+            }];
+        }
+        
+        self.containerView.hidden = NO;
+        self.imageViewBottomCon.constant = 63 + self.firstGodPostHeight + self.secondGodPostHeight + self.thirdGodPostHeight;
+        
+    } else {
+        self.containerView.hidden = YES;
+        self.imageViewBottomCon.constant = 63;
+    }
+    
+//    [self layoutIfNeeded];
     
     self.URL = [NSURL URLWithString:[QSYKUtility imgUrl:self.img.sid
                                                   width:self.img.width
@@ -137,7 +179,7 @@
                                     self.progressView.hidden = YES;
                                     if (!error) {
                                         //判断是不是大图（暂时定为高 > 宽 * 2 时为大图）
-                                        if (self.img.height > self.img.width * 2 && !self.img.dynamic && !_isInnerPage) {
+                                        if (self.img.height > self.img.width * 2 && !self.img.dynamic && !self.isInnerPage) {
                                             //如果是的话，则截出图片的最上方铺满imageView
                                             // 开启图形上下文
                                             //                                            UIGraphicsBeginImageContextWithOptions(self.myImageView.size, YES, 0.0);

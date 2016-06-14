@@ -29,12 +29,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *showBigPicBtn;
 @property (weak, nonatomic) IBOutlet DALabeledCircularProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UILabel *tapToDownloadIndicatorLabel;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewBottomCon;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
-@property (nonatomic, strong) id resource;
+@property (nonatomic, strong) QSYKResourceModel *resource;
 @property (nonatomic) BOOL flag;
 @property (nonatomic, strong) NSIndexPath *indexPath;
-@property (nonatomic) BOOL isInnerPage;
 
 + (CGFloat)cellBaseHeight;
 

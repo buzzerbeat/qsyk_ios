@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Colours.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>DACircularProgress.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -25,6 +30,11 @@
 			<false/>
 		</dict>
 		<key>FDFullscreenPopGesture.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FMDB.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,7 +54,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>NJKWebViewProgress.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-qingsongyike.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RSKImageCropper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,7 +92,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1EC16031903D0C1900A947B214ED082D</key>
+		<key>0A3696B244FA74F6826F3FBE44E4FE72</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>14D2008578FFE471DE50AE7147D301A4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2027A4985EA9EE6B37125EA89EB3D3C6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,17 +117,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4849C81866B0F786B2D02E1C5331BE7E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>53480ED0BE09FF49E34B1702D485CAAB</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>557119B4AB3DC72ED568ACA7A69251E4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -118,6 +138,26 @@
 			<true/>
 		</dict>
 		<key>9775596B3CA16905FC8F66DA8E2A3C67</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9F12FB4A63E20F601CFB2E64A65B57C1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B4A3E08D49931371F7247521A50EAF79</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C2A7B3837C1FF5CFA4E953C1F4724E58</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CB22B394633B4D454BF3B325B61B2E90</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -18,12 +18,13 @@ static NSString *const kUsername = @"userName";
 static NSString *const kUserid = @"userId";
 static NSString *const kAvatarSid = @"avatarSid";
 static NSString *const kUserIsLogin = @"userIsLogin";
+#define kIsLogin [[NSUserDefaults standardUserDefaults] boolForKey:kUserIsLogin]
 
 
 
 @implementation QSYKUserManager
 
-+ (QSYKUserManager *)shardManager
++ (QSYKUserManager *)sharedManager
 {
     static QSYKUserManager *instance = nil;
     static dispatch_once_t onceToken;
@@ -37,8 +38,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
 {
     self = [super init];
     if (self) {
-        BOOL isLogin = [[[NSUserDefaults standardUserDefaults] objectForKey:kUserIsLogin] boolValue];
-        if (isLogin) {
+        if (kIsLogin) {
             QSYKUserModel *user = [[QSYKUserModel alloc] init];
             user.login = YES;
             user.userId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserid];
@@ -54,20 +54,25 @@ static NSString *const kUserIsLogin = @"userIsLogin";
     _user = user;
     if (user) {
         self.user.login = YES;
+        if (!kIsLogin) {
+            [[NSUserDefaults standardUserDefaults] setObject:user.accessToken forKey:@"accessToken"];
+            [[NSUserDefaults standardUserDefaults] setObject:user.refreshToken forKey:@"refreshToken"];
+        }
         [[NSUserDefaults standardUserDefaults] setObject:user.userName forKey:kUsername];
         [[NSUserDefaults standardUserDefaults] setObject:user.userAvatar forKey:kAvatarSid];
-        [[NSUserDefaults standardUserDefaults] setObject:user.auth_key forKey:@"auth_key"];
-        [[NSUserDefaults standardUserDefaults] setObject:user.accessToken forKey:@"accessToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:user.refreshToken forKey:@"refreshToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kUserIsLogin];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserIsLogin];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else {
+        self.user.login = NO;
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUsername];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAvatarSid];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"auth_key"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"accessToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"refreshToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserIsLogin];
+        
+        // 登出后重新请求临时用的token
+//        [[QSYKDataManager sharedManager] registerAction];
+        
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
@@ -210,6 +215,8 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                         @"nickname": name,
                                         @"client": CLIENT_ID,
                                         @"client_secret": CLIENT_SECRET,
+                                        @"token": kToken,
+                                        @"third_token": kThirdToken,
                                         } mutableCopy];
     
     if ([avatar isKindOfClass:[NSData class]]) {
@@ -302,7 +309,8 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                  @"from": type,
                                  @"client": CLIENT_ID,
                                  @"client_secret": CLIENT_SECRET,
-                                 
+                                 @"token": kToken,
+                                 @"third_token": kThirdToken,
                                  };
     
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
@@ -554,6 +562,29 @@ static NSString *const kUserIsLogin = @"userIsLogin";
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
                                                     URLString:@"/v2/user/mobile-valid"
                                                    parameters:@{@"mobile": pno}
+                                                      success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                          QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                          if (result && !result.status) {
+                                                              success();
+                                                          } else {
+                                                              NSError *error = [[NSError alloc] initWithDomain:DOMAIN_NAME code:QSYKErrorTypeValidateRegisterFailure userInfo:@{
+                                                                                                                                                                                @"QSYKError":result.message
+                                                                                                                                                                                }];
+                                                              failure(error);
+                                                          }
+                                                      } failure:^(NSError *error) {
+                                                          failure(error);
+                                                      }];
+}
+
+- (NSURLSessionDataTask *)validateThirdWithOid:(NSString *)oid
+                                          from:(NSString *)from
+                                       success:(void (^)(void))success
+                                       failure:(void (^)(NSError *error))failure {
+    
+    return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                                    URLString:@"/v2/user/third-valid"
+                                                   parameters:@{@"oid": oid, @"from": from}
                                                       success:^(NSURLSessionDataTask *task, id responseObject) {
                                                           QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
                                                           if (result && !result.status) {

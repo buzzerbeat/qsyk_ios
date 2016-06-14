@@ -11,8 +11,9 @@
 #import "QSYKMyPageViewController.h"
 #import "QSYKIndexViewController.h"
 #import "WebViewController.h"
+#import "QSYKTabBar.h"
 
-@interface QSYKRootTabBarController ()
+@interface QSYKRootTabBarController () <QSYKTabBarDelegate>
 @property (nonatomic, strong) NSArray *tabBarItemTitles;
 @property (nonatomic, strong) NSArray *tabBarItemImages;
 @property (nonatomic, assign) NSInteger selectedItemIndex;
@@ -25,13 +26,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    if (kLotteryEnable) {
-        self.tabBarItemTitles = @[@"首页", @"抽奖", @"我的"];
-        self.tabBarItemImages = @[@"ic_home", @"ic_lottery", @"ic_profile"];
-    } else {
-        self.tabBarItemTitles = @[@"首页", @"我的"];
-        self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
-    }
+//    if (kLotteryEnable) {
+//        self.tabBarItemTitles = @[@"首页", @"抽奖", @"我的"];
+//        self.tabBarItemImages = @[@"ic_home", @"ic_lottery", @"ic_profile"];
+//    } else {
+//        self.tabBarItemTitles = @[@"首页", @"我的"];
+//        self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
+//    }
+    self.tabBarItemTitles = @[@"首页", @"我的"];
+    self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
     
     self.selectedItemIndex = 0;
     [self setupViewControllers];
@@ -55,19 +58,25 @@
     NSInteger index = 0;
     [indexVC setTabBarItem:[self configureItemAtIndex:index++]];
     
-    if (kLotteryEnable) {
+//    if (kLotteryEnable) {
 //        [webView setTabBarItem:[self configureItemAtIndex:index++]];
-        index++;
-    }
+//    }
     
     [myPageVC setTabBarItem:[self configureItemAtIndex:index++]];
+
+//    if (kLotteryEnable) {
+//        [self setViewControllers:@[indexNav, webViewNav, myPageNav]];
+//    } else {
+//        [self setViewControllers:@[indexNav, myPageNav]];
+//    }
+    [self setViewControllers:@[indexNav, myPageNav]];
     
     if (kLotteryEnable) {
-        [self setViewControllers:@[indexNav, webViewNav, myPageNav]];
-    } else {
-        [self setViewControllers:@[indexNav, myPageNav]];
+        // 使用KVC的方式，更换系统自带的UITabBar
+        QSYKTabBar *tabBar = [[QSYKTabBar alloc] init];
+        tabBar.tabBarDelegate = self;
+        [self setValue:tabBar forKeyPath:@"tabBar"];
     }
-    
 }
 
 - (UITabBarItem *)configureItemAtIndex:(NSInteger)index {
@@ -97,6 +106,12 @@
     image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     return image;
+}
+
+#pragma mark - HWTabBarDelegate代理方法
+- (void)tabBarDidClickMiddleButton:(QSYKTabBar *)tabBar
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"test" object:nil];
 }
 
 /*

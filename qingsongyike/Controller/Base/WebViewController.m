@@ -7,10 +7,11 @@
 //
 
 #import "WebViewController.h"
+#import "QSYKWebViewController.h"
 
 @interface WebViewController () <UIWebViewDelegate>
-
 @property (strong, nonatomic) UIWebView *webView;
+@property (nonatomic, assign) BOOL isFirstRequest;
 
 @end
 
@@ -29,7 +30,7 @@
         if ([url hasPrefix:@"http://"]) {
             _url = url;
         } else {
-            _url = [NSString stringWithFormat:@"%@/site/login?redirect_uri=lottery&uuid=%@", kAuthBaseURL, UUID];
+            _url = [NSString stringWithFormat:@"%@/site/login?redirect_uri=lottery&uuid=%@", kBaseURL, UUID];
         }
         _navTitle = title;
     }
@@ -40,6 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = _navTitle;
+    self.isFirstRequest = YES;
     
     self.webView = [[UIWebView alloc] init];
     self.webView.delegate = self;
@@ -69,6 +71,15 @@
 //    [cookieStorage setCookies:[NSArray arrayWithObjects:cookie, nil] forURL:url mainDocumentURL:nil];
     
     [self.webView loadRequest:request];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+//    QSYKWebViewController *aPage = [[QSYKWebViewController alloc] init];
+//    aPage.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:aPage animated:YES];
+    
+    return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView

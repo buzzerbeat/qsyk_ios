@@ -7,7 +7,6 @@
 //
 
 #import "QSYKTaskTableViewController.h"
-#import "QSYKUserInfoModel.h"
 
 static CGFloat CELL_TEXTLABEL_FONT = 16;
 static CGFloat POINTS_LABEL_FONT = 14;
@@ -48,7 +47,7 @@ static CGFloat POINTS_LABEL_FONT = 14;
 - (void)loadData {
     [SVProgressHUD show];
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                                             URLString:[NSString stringWithFormat:@"%@/user/info?expand=taskList", kAuthBaseURL]
+                                             URLString:@"user/info?expand=taskList"
                                             parameters:nil
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    [SVProgressHUD dismiss];

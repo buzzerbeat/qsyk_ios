@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface QZEditProfileViewController : UIViewController
-
-@property (copy, nonatomic) NSString *toBeEditedPropertyName;
 @property (copy, nonatomic) NSString *propertyOldValue;
 
 @end

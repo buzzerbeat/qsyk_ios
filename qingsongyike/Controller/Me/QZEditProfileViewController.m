@@ -25,6 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.title = @"昵称";
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     self.textField.text = self.propertyOldValue;
@@ -32,6 +33,20 @@
     
     for (NSLayoutConstraint *con in self.separatorHeightCon) {
         con.constant = 1.0 / [UIScreen mainScreen].scale;
+    }
+    
+    // 显示名字是否可以修改的提示
+    QSYKUserModel *user = [QSYKUserManager sharedManager].user;
+    if (user.nameEditable.editable) {
+        self.descLabel.text = @"当前可以修改";
+    } else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        NSTimeZone *timeZone = [[NSTimeZone alloc] initWithName:@"Asia/Shanghai"];
+        [dateFormatter setTimeZone:timeZone];
+        NSString *timeStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[user.nameEditable.editableTime doubleValue]]];
+        
+        self.descLabel.text = [NSString stringWithFormat:@"需至%@后修改", timeStr];
     }
     
     UIButton *completeBtn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -58,17 +73,10 @@
     // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
     if (!position) {
         
-        if ([self.toBeEditedPropertyName isEqualToString:@"name"]) {
-            if (toBeString.length < 3) {
-                self.navigationItem.rightBarButtonItem.enabled = NO;
-            }
-            if (toBeString.length > 10) {
-                textField.text = [toBeString substringToIndex:10];
-            }
-        } else {
-            if (toBeString.length > 25) {
-                textField.text = [toBeString substringToIndex:25];
-            }
+        if (toBeString.length < 3) {
+            self.navigationItem.rightBarButtonItem.enabled = NO;
+        } else if (toBeString.length > 10) {
+            textField.text = [toBeString substringToIndex:10];
         }
     }
     // 有高亮选择的字符串，则暂不对文字进行统计和限制
@@ -96,9 +104,7 @@
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
 
-    if ([self.toBeEditedPropertyName isEqualToString:@"name"]) {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-    }
+    self.navigationItem.rightBarButtonItem.enabled = NO;
     
     return YES;
 }
@@ -114,7 +120,7 @@
         @weakify(self);
         [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
                                                URLString:@"/v2/user/edit"
-                                              parameters:@{self.toBeEditedPropertyName: self.textField.text}
+                                              parameters:@{@"nick_name": self.textField.text}
                                                  success:^(NSURLSessionDataTask *task, id responseObject) {
                                                      @strongify(self);
                                                      
@@ -122,17 +128,11 @@
                                                      if (result && !result.status) {
                                                          [SVProgressHUD showSuccessWithStatus:@"修改成功"];
                                                          
-                                                         QSYKUserModel *tempModel = [QSYKUserManager shardManager].user;
+                                                         QSYKUserModel *tempModel = [QSYKUserManager sharedManager].user;
                                                          
-                                                         if ([self.toBeEditedPropertyName isEqualToString:@"nick_name"]) {
-                                                             tempModel.userName = self.textField.text;
-                                                             [QSYKUserManager shardManager].user = tempModel;
-                                                             [[NSNotificationCenter defaultCenter] postNotificationName:kEditProfileNotification object:@{@"key": @"name"}];
-                                                         } else {
-                                                             tempModel.userBrief = self.textField.text;
-                                                             [QSYKUserManager shardManager].user = tempModel;
-                                                             [[NSNotificationCenter defaultCenter] postNotificationName:kEditProfileNotification object:@{@"key": @"sign"}];
-                                                         }
+                                                         tempModel.userName = self.textField.text;
+                                                         [QSYKUserManager sharedManager].user = tempModel;
+                                                         [[NSNotificationCenter defaultCenter] postNotificationName:kEditProfileNotification object:@{@"key": @"name"}];
                                                          
                                                          [self.navigationController popViewControllerAnimated:YES];
                                                          

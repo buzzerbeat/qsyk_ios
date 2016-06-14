@@ -7,6 +7,7 @@
 //
 
 #import "QSYKBaseTableViewCell.h"
+@class QSYKResourceModel;
 
 #define kCellIdentifier_videoCell @"QSYKVideoTableViewCell"
 
@@ -25,10 +26,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *buryBtn;
 @property (weak, nonatomic) IBOutlet UILabel *buryCountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *videoThumbBottomCon;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
-//@property (nonatomic, strong) QSYKResourceModel *resource;
-@property (nonatomic, strong) id resource;
+@property (nonatomic, strong) QSYKResourceModel *resource;
 @property (nonatomic, assign) BOOL flag;    // 标识是否显示在收藏、赞 页面
 @property (nonatomic, strong) NSIndexPath *indexPath;
 

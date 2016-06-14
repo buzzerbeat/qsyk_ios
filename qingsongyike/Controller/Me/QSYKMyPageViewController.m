@@ -10,8 +10,13 @@
 #import "QSYKSettingsTableViewController.h"
 #import "QSYKMyFavoriteTableViewController.h"
 #import <DKNightVersion/DKNightVersion.h>
-#import "QSYKUserInfoModel.h"
 #import "QSYKTaskTableViewController.h"
+#import "QSYKWebViewController.h"
+#import "QSYKBaseNavigationController.h"
+#import "QZLoginViewController.h"
+#import "QZRegisterViewController.h"
+#import "QZProfileViewController.h"
+#import "QSYKUserBriefInfoCell.h"
 
 static CGFloat POINTS_LABEL_FONT = 14;
 static CGFloat CELL_TEXTLABEL_FONT = 16;
@@ -19,44 +24,33 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
 @interface QSYKMyPageViewController ()
 @property (nonatomic, strong) NSArray *cellTitles;
 @property (nonatomic, strong) NSArray *cellImageViews;
-@property (nonatomic, strong) QSYKUserInfoModel *userInfo;
+@property (nonatomic, strong) QSYKUserModel *user;
 
 @end
 
 @implementation QSYKMyPageViewController
+
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"我的";
     
-    self.tableView.tableFooterView = [UIView new];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 8)];
-    headerView.backgroundColor = [UIColor clearColor];
-    self.tableView.tableHeaderView = headerView;
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    self.tableView.rowHeight = 50.f;
-    
-    self.cellTitles = @[
-                        @"我的收藏",
-                        @"我赞过的",
-                        @"我的任务",
-                        @"我的积分",
-                        @"设置",
-                        ];
-    self.cellImageViews = @[
-                            @"ic_fav",
-                            @"ic_like",
-                            @"ic_task",
-                            @"ic_points",
-                            @"ic_settings",
-                            ];
-    
     [self loadUserInfo];
     
-    NSLog(@"UUID = %@", UUID);
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.tableView registerNib:[UINib nibWithNibName:@"QSYKUserBriefInfoCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_userBrief];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh:) name:kUserInfoChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadLotteryPage) name:@"test" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:kLogoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccess:) name:kLoginSuccessNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,131 +58,234 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)refresh:(NSNotification *)noti {
-    [self loadUserInfo];
+- (void)loadLotteryPage {
+    if ([self isVisible]) {
+        QSYKWebViewController *aPage = [[QSYKWebViewController alloc] init];
+        aPage.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:aPage animated:YES];
+    }
 }
+
+- (void)updateCellTitlesAndImages {
+    if (_user && _user.isLogin) {
+        self.cellTitles = @[
+                            @[@"me"],
+                            @[@"我的收藏",@"我赞过的",],
+                            @[@"我的积分", @"我的任务"],
+                            @[@"夜间模式", @"设置", @"意见反馈"],
+                            ];
+        
+        self.cellImageViews = @[
+                                @[@"ic_fav"],
+                                @[@"ic_fav",@"ic_like",],
+                                @[@"ic_points", @"ic_task"],
+                                @[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                ];
+    } else {
+        self.cellTitles = @[
+                            @[@"me"],
+                            @[@"我的收藏",@"我赞过的",],
+                            @[@"夜间模式", @"设置", @"意见反馈"],
+                            ];
+        
+        self.cellImageViews = @[
+                                @[@"ic_fav"],
+                                @[@"ic_fav",@"ic_like",],
+                                @[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                ];
+    }
+}
+
+- (void)refresh:(NSNotification *)noti {
+    _user = [QSYKUserManager sharedManager].user;
+    [self.tableView reloadData];
+}
+
+- (void)loginSuccess:(NSNotification *)noti {
+    _user = [QSYKUserManager sharedManager].user;
+    
+    [self updateCellTitlesAndImages];
+    [self.tableView reloadData];
+}
+
+- (void)logout:(NSNotification *)noti {
+    _user = nil;
+    [QSYKUserManager sharedManager].user = nil;
+    
+    [self updateCellTitlesAndImages];
+    [self.tableView reloadData];
+}
+
 
 - (void)loadUserInfo {
     [SVProgressHUD show];
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                                             URLString:[NSString stringWithFormat:@"%@/user/info?expand=taskList", kAuthBaseURL]
-                                            parameters:nil
+                                             URLString:@"user/info?expand=taskList"
+                                            parameters:@{@"client": CLIENT_ID}
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    [SVProgressHUD dismiss];
                                                    
                                                    NSError *error = nil;
-                                                   self.userInfo = [[QSYKUserInfoModel alloc] initWithDictionary:responseObject error:&error];
+                                                   QSYKUserModel *user = [[QSYKUserModel alloc] initWithDictionary:responseObject error:&error];
                                                    if (!error) {
-                                                       if (_userInfo) {
-                                                           [self.tableView reloadData];
-                                                       }
+                                                       [QSYKUserManager sharedManager].user = user;
+                                                       self.user = [QSYKUserManager sharedManager].user;
+                                                       
+                                                       [self updateCellTitlesAndImages];
+                                                       [self.tableView reloadData];
+                                                       
                                                    } else {
                                                        NSLog(@"model 生成失败：%@", error);
                                                    }
                                                }
                                                failure:^(NSError *error) {
-                                                   [SVProgressHUD dismiss];
+                                                   [SVProgressHUD showErrorWithStatus:@"服务器开小差了"];
                                                    NSLog(@"error = %@", error);
                                                }];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return _cellTitles.count;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_cellTitles[section] count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return 80;
+    }
+    return 50;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
     
-    cell.textLabel.text = _cellTitles[indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:_cellImageViews[indexPath.row]];
-    cell.textLabel.font = [UIFont systemFontOfSize:CELL_TEXTLABEL_FONT];
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-   
-    if (indexPath.row == 2) {
-        UILabel *taskLabel = [[UILabel alloc] init];
-        taskLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-        taskLabel.textColor = [UIColor lightGrayColor];
-        taskLabel.textAlignment = NSTextAlignmentRight;
-        [cell.contentView addSubview:taskLabel];
+    if (indexPath.section == 0) {
+        QSYKUserBriefInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_userBrief forIndexPath:indexPath];
         
-        // 显示当前任务情况
-        if (_userInfo.taskList) {
-            int finishedTasks = 0, totalTasks = 0;
-            for (QSYKTaskModel *aTask in _userInfo.taskList) {
-                finishedTasks += aTask.current;
-                totalTasks    += aTask.total;
-            }
-            
-            taskLabel.text = [NSString stringWithFormat:@"%d/%d", finishedTasks, totalTasks];
-        } else {
-            taskLabel.text = @"";
+        cell.user = _user;
+        [cell.loginBtn addTarget:self action:@selector(loginAction) forControlEvents:UIControlEventTouchUpInside];
+        
+        return cell;
+        
+    } else {
+        static NSString *cellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
-        [taskLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView.mas_centerY);
-            make.right.equalTo(cell.contentView.mas_right);
-        }];
-    } else if (indexPath.row == 3) {
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = _cellTitles[indexPath.section][indexPath.row];
+        cell.imageView.image = [UIImage imageNamed:_cellImageViews[indexPath.section][indexPath.row]];
+        cell.textLabel.font = [UIFont systemFontOfSize:CELL_TEXTLABEL_FONT];
+        for (UIView *view in cell.contentView.subviews) {
+            [view removeFromSuperview];
+        }
         
-        UILabel *pointsLabel = [[UILabel alloc] init];
-        pointsLabel.text = _userInfo ? [NSString stringWithFormat:@"%d积分", _userInfo.points] : @"";
-        pointsLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-        pointsLabel.textColor = [UIColor lightGrayColor];
-        pointsLabel.textAlignment = NSTextAlignmentRight;
-        [cell.contentView addSubview:pointsLabel];
-        [pointsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(cell.contentView.mas_centerY);
-            make.right.equalTo(cell.contentView.mas_right);
-        }];
+        if (indexPath.section == 0 && _user) {
+            cell.textLabel.text = _user.userName;
+        }
+        
+        /*
+         if (indexPath.row == 2) {
+         UILabel *taskLabel = [[UILabel alloc] init];
+         taskLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
+         taskLabel.textColor = [UIColor lightGrayColor];
+         taskLabel.textAlignment = NSTextAlignmentRight;
+         [cell.contentView addSubview:taskLabel];
+         
+         // 显示当前任务情况
+         if (_userInfo.taskList) {
+         int finishedTasks = 0, totalTasks = 0;
+         for (QSYKTaskModel *aTask in _userInfo.taskList) {
+         finishedTasks += aTask.current;
+         totalTasks    += aTask.total;
+         }
+         
+         taskLabel.text = [NSString stringWithFormat:@"%d/%d", finishedTasks, totalTasks];
+         } else {
+         taskLabel.text = @"";
+         }
+         
+         [taskLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+         make.centerY.equalTo(cell.contentView.mas_centerY);
+         make.right.equalTo(cell.contentView.mas_right);
+         }];
+         } else if (indexPath.row == 3) {
+         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+         
+         UILabel *pointsLabel = [[UILabel alloc] init];
+         pointsLabel.text = _userInfo ? [NSString stringWithFormat:@"%d积分", _userInfo.points] : @"";
+         pointsLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
+         pointsLabel.textColor = [UIColor lightGrayColor];
+         pointsLabel.textAlignment = NSTextAlignmentRight;
+         [cell.contentView addSubview:pointsLabel];
+         [pointsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+         make.centerY.equalTo(cell.contentView.mas_centerY);
+         make.right.equalTo(cell.contentView.mas_right);
+         }];
+         }
+         */
+        
+        return cell;
     }
-    
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    switch (indexPath.row) {
-        case 0:
-        case 1: {
-            QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
-            myFavoritesVC.URLStr = indexPath.row == 0 ? @"/favorite" : @"/like";
-            myFavoritesVC.title = indexPath.row == 0 ? @"我的收藏" : @"我赞过的";
-            myFavoritesVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:myFavoritesVC animated:YES];
-        }
-            break;
-        case 2: {
-            QSYKTaskTableViewController *taskListVC = [[QSYKTaskTableViewController alloc] initWithTaskList:_userInfo.taskList];
+    if (indexPath.section == 1) {
+        QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+        myFavoritesVC.URLStr = indexPath.row == 0 ? @"/favorite" : @"/like";
+        myFavoritesVC.title = indexPath.row == 0 ? @"我的收藏" : @"我赞过的";
+        myFavoritesVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:myFavoritesVC animated:YES];
+    } else if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            
+        } else if (indexPath.row == 1) {
+            QSYKTaskTableViewController *taskListVC = [[QSYKTaskTableViewController alloc] initWithTaskList:_user.taskList];
             taskListVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:taskListVC animated:YES];
         }
-            break;
-        case 3: {
-            
-        }
-            break;
-        case 4: {
+    } else if (indexPath.section == 3){
+        if (indexPath.row == 0) {
+
+        } else if (indexPath.row == 1) {
             QSYKSettingsTableViewController *settingsVC = [[QSYKSettingsTableViewController alloc] init];
             settingsVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:settingsVC animated:YES];
         }
-            break;
-            
-        default:
-            break;
+    } else {
+        if (_user) {
+            QZProfileViewController *profilePage = [[QZProfileViewController alloc] initWithNibName:@"QZProfileViewController" bundle:nil];
+            profilePage.hidesBottomBarWhenPushed = YES;
+             [self.navigationController pushViewController:profilePage animated:YES];
+        }
     }
     
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark  loginAction
+
+- (void)loginAction {
+    QZRegisterViewController *registerView = [[QZRegisterViewController alloc] initWithNibName:@"QZRegisterViewController" bundle:nil];
+    QSYKBaseNavigationController *nav = [[QSYKBaseNavigationController alloc] initWithRootViewController:registerView];
+    
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 

@@ -11,4 +11,6 @@
 @interface QSYKBaseViewController : UIViewController
 @property (nonatomic) BOOL isRefresh;   // 标识页面是否正在进行下拉刷新操作
 
+- (void)showRemoteNotiResource:(NSNotification *)noti;
+
 @end

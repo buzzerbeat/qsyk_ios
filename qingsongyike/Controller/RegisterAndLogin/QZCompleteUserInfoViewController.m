@@ -53,7 +53,7 @@
     [_sexView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectSexAction:)]];
     [_birthdayView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectBirthdayAction:)]];
     
-    self.user = [QSYKUserManager shardManager].user;
+    self.user = [QSYKUserManager sharedManager].user;
     self.genderTypesArray = @[@"保密", @"男", @"女"];
     self.selectedTimeInterval = -1;
     self.selectedSex = -1;
@@ -119,7 +119,7 @@
 // 判断当前昵称是否可用
 - (void)checkUserNameExist:(id)sender {
     
-    [[QSYKUserManager shardManager] checkUserNameExistenceWithUserName:_nickNameTextField.text
+    [[QSYKUserManager sharedManager] checkUserNameExistenceWithUserName:_nickNameTextField.text
                                                            success:^{
                                                                [SVProgressHUD showSuccessWithStatus:@"昵称可用"];
                                                            }
@@ -167,24 +167,32 @@
     
     @weakify(self);
     if (self.isThirdLogin) {
+        // check third validation
+        [[QSYKUserManager sharedManager] validateThirdWithOid:_oid from:_type success:^{
+            [[QSYKUserManager sharedManager] registerWithThirdPartyOid:_oid
+                                                                  type:_type
+                                                                  name:self.nickNameTextField.text
+                                                            avatarData:self.avatarData
+                                                               success:^(QSYKUserModel *userModel) {
+                                                                   
+                                                                   [QSYKUserManager sharedManager].user = nil;
+                                                                   [QSYKUserManager sharedManager].user = userModel;
+                                                                   
+                                                                   [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccessNotification object:nil];
+                                                                   
+                                                                   [self dismissViewControllerAnimated:YES completion:nil];
+                                                                   
+                                                                   [SVProgressHUD showSuccessWithStatus:@"注册成功"];
+                                                                   
+                                                               } failure:^(NSError *error) {
+                                                                   NSLog(@"error %@", error);
+                                                                   [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
+                                                               }];
+        } failure:^(NSError *error) {
+            NSLog(@"error = %@", error);
+            [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
+        }];
         
-        [[QSYKUserManager shardManager] registerWithThirdPartyOid:self.oid
-                                                         type:self.type
-                                                         name:self.nickNameTextField.text
-                                                   avatarData:self.avatarData
-                                                      success:^(QSYKUserModel *userModel) {
-                                                          @strongify(self);
-                                                          
-                                                          [QSYKUserManager shardManager].user = userModel;
-                                                          
-                                                          [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccessNotification object:nil];
-                                                          
-                                                          [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(gotoMainViewControllerAction) userInfo:nil repeats:NO];
-                                                          
-                                                      } failure:^(NSError *error) {
-                                                          NSLog(@"error %@", error);
-                                                          [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
-                                                      }];
     } else {
         NSMutableDictionary *parameters = [NSMutableDictionary new];
         if (_selectedTimeInterval != -1) {
@@ -204,7 +212,7 @@
                                                          _user.userBirthday = [NSString stringWithFormat:@"%f", _selectedTimeInterval];
                                                          _user.userSex = @(_selectedSex).intValue;
                                                          
-                                                         [QSYKUserManager shardManager].user = _user;
+                                                         [QSYKUserManager sharedManager].user = _user;
                                                          
                                                          [SVProgressHUD showSuccessWithStatus:@"设置成功"];
                                                          [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(gotoMainViewControllerAction) userInfo:nil repeats:NO];
@@ -245,11 +253,12 @@
 {
     NSLog(@"%@", filePath);
     self.avatarData = [NSData dataWithContentsOfFile:filePath];
+    self.avatarImageView.image = [[UIImage imageWithData:_avatarData] roundImage];
     
     [self deleteLocalAvatar:filePath];
     
+    /*
     [SVProgressHUD show];
-    
     @weakify(self);
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
                                            URLString:@"user/mobileAvatarUpload"
@@ -267,8 +276,8 @@
                                                      [QSYKUserManager shardManager].user = _user;
                                                      
                                                      // 刷新当前页的头像
-//                                                     [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:[QSYKUtility imgUrl:_user.userAvatar width:120 height:120 extension:@"png"]] placeholderImage:[UIImage imageNamed:@"icon_avatar"]];
-                                                     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:120 height:120 extension:@"png"]];
+                                                     self.avatarImageView.image = [[UIImage imageWithData:_avatarData] roundImage];
+//                                                     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_user.userAvatar width:120 height:120 extension:@"png"]];
                                                      
                                                      // 通知myPageViewController 刷新的头像
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:kAvatarDidChangedNotification
@@ -281,7 +290,7 @@
                                              } failure:^(NSError *error) {
                                                  NSLog(@"error = %@", error);
                                                  [SVProgressHUD showErrorWithStatus:@"上传头像失败"];
-                                             }];
+                                             }];*/
 }
 
 
@@ -360,7 +369,7 @@
                                                          
                                                          _birthdayTextField.text = [QSYKUtility formateBirthdayWithTimeInterval:_user.userBirthday];
                                                      }
-                                                     [QSYKUserManager shardManager].user = _user;
+                                                     [QSYKUserManager sharedManager].user = _user;
                                                      
                                                      [SVProgressHUD showSuccessWithStatus:@"设置成功"];
                                                      

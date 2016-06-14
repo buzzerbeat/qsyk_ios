@@ -28,12 +28,6 @@ static int remainSeconds = 60;
     // Do any additional setup after loading the view from its nib.
     self.title = @"绑定手机";
     
-//    UIButton *bindBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-//    bindBtn.frame = CGRectMake(0, 0, 30, 30);
-//    [bindBtn setTitle:@"绑定" forState:UIControlStateNormal];
-//    [bindBtn setTitleColor:[UIColor black75PercentColor] forState:UIControlStateDisabled];
-//    [bindBtn setTitleColor:[UIColor black50PercentColor] forState:UIControlStateNormal];
-//    [bindBtn addTarget:self action:@selector(bindMobile:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"绑定" style:UIBarButtonItemStylePlain target:self action:@selector(bindMobile:)];
     
     _backView.layer.cornerRadius = 5.f;
@@ -42,6 +36,7 @@ static int remainSeconds = 60;
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(getVerifyCodeAction:)];
     [self.getVerifyCodeLabel addGestureRecognizer:tapGesture];
+    [self disableGetVerifyCodeLabelUserInteraction];
     
     [_mobileNumTextField addTarget:self action:@selector(limitMobileNumLength:) forControlEvents:UIControlEventEditingChanged];
 }
@@ -56,6 +51,12 @@ static int remainSeconds = 60;
         NSString *text = _mobileNumTextField.text;
         if (text.length > 11) {
             _mobileNumTextField.text = [text substringToIndex:11];
+        }
+        
+        if ([QSYKUtility isMobileNum:_mobileNumTextField.text]) {
+            [self validateMobile];
+        } else {
+            [self disableGetVerifyCodeLabelUserInteraction];
         }
     }
 }
@@ -104,20 +105,30 @@ static int remainSeconds = 60;
     self.getVerifyCodeLabel.textColor = kCoreColor;
 }
 
+// 验证手机号
+- (void)validateMobile {
+    [[QSYKUserManager sharedManager] validatePhoneNumber:_mobileNumTextField.text
+                                                success:^{
+                                                    NSLog(@"手机号验证成功，可以请求验证码");
+                                                    [self enableGetVerifyCodeLabelUserInteraction];
+                                                } failure:^(NSError *error) {
+                                                    NSLog(@"手机号验证失败");
+                                                    [self disableGetVerifyCodeLabelUserInteraction];
+                                                    
+                                                    if (error.userInfo[@"QSYKError"]) {
+                                                        [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
+                                                    } else {
+                                                        [SVProgressHUD showErrorWithStatus:@"服务器开小差了！"];
+                                                    }
+                                                }];
+}
+
 - (void)getVerifyCodeAction:(id)sender
 {
-    if (![QSYKUtility isMobileNum:_mobileNumTextField.text]) {
-        [_mobileNumTextField becomeFirstResponder];
-        UIAlertController *alert = [QSYKUtility alertControllerWithTitle:@"请检查输入内容" message:@"请输入正确的手机号" cancleActionTitle:nil goActionTitle:@"确认" preferredStyle:UIAlertControllerStyleAlert handler:nil];
-        [self presentViewController:alert animated:YES completion:nil];
-        
-        return;
-    }
-    
     @weakify(self);
     [SVProgressHUD show];
     
-    [[QSYKUserManager shardManager] requestVerifyCodeWithPhoneNumber:self.mobileNumTextField.text
+    [[QSYKUserManager sharedManager] requestVerifyCodeWithPhoneNumber:self.mobileNumTextField.text
                                                          success:^{
                                                              @strongify(self);
                                                              
@@ -128,8 +139,6 @@ static int remainSeconds = 60;
                                                              
                                                          }
                                                          failure:^(NSError *error) {
-                                                             @strongify(self);
-                                                             
                                                              if (error.code == QSYKErrorTypeRegisterFailure) {
                                                                  [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
                                                              } else {
@@ -159,50 +168,59 @@ static int remainSeconds = 60;
 
 - (void)bindMobile:(id)sender {
     [self.view endEditing:YES];
-    if (![self isInputInfoValid]) {
-        return;
-    }
     
     NSDictionary *parameters = @{
-                                 @"vco": self.verifyCodeTextField.text,
-                                 @"pno": self.mobileNumTextField.text,
-                                 @"pwd": self.passwordTextField.text
+                                 @"mobile": self.mobileNumTextField.text,
+                                 @"password": self.passwordTextField.text
                                  };
     
     [SVProgressHUD show];
     @weakify(self);
-    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                           URLString:@"user/mobileBind"
-                                          parameters:parameters
-                                             success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                 @strongify(self);
-                                                 
-                                                 QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-                                                 if (result) {
-                                                     if (result.status == 0) {
-                                                         [SVProgressHUD showSuccessWithStatus:@"绑定成功"];
-                                                         
-                                                         QSYKUserModel *tempUser = [QSYKUserManager shardManager].user;
-                                                         NSString *secureMobileNumber = [self.mobileNumTextField.text
-                                                                                         stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                                                         tempUser.userMobile = secureMobileNumber;
-                                                         [QSYKUserManager shardManager].user = tempUser;
-                                                         
-                                                         [[NSNotificationCenter defaultCenter] postNotificationName:kEditProfileNotification
-                                                                                                             object:@{
-                                                                                                                      @"key": @"mobile"
-                                                                                                                      }];
-                                                         [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(popViewController) userInfo:nil repeats:NO];
-                                                         
-                                                     } else if(result.status == 1) {
-                                                         [SVProgressHUD showErrorWithStatus:@"已存在绑定的手机号码"];
-                                                     }
-                                                     
-                                                 }
-                                                 
-                                             } failure:^(NSError *error) {
-                                                 [SVProgressHUD showErrorWithStatus:@"绑定失败"];
-                                             }];
+    
+    // 先验证验证码
+    [[QSYKUserManager sharedManager] verifyCodeCorrectWithPhoneNumber:self.mobileNumTextField.text
+                                      verifyCode:self.verifyCodeTextField.text
+                                         success:^{
+                                             
+                                             // 验证码通过后提交绑定
+                                             [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                                              URLString:@"/v2/user/bind"
+                                                             parameters:parameters
+                                                                success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                                    @strongify(self);
+                                                                    
+                                                                    QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                                    if (result) {
+                                                                        if (result.status == 0) {
+                                                                            [SVProgressHUD showSuccessWithStatus:@"绑定成功"];
+                                                                            
+                                                                            QSYKUserModel *tempUser = [QSYKUserManager sharedManager].user;
+                                                                            tempUser.userMobile = self.mobileNumTextField.text;
+                                                                            [QSYKUserManager sharedManager].user = tempUser;
+                                                                            
+                                                                            [[NSNotificationCenter defaultCenter] postNotificationName:kEditProfileNotification
+                                                                                                                                object:@{
+                                                                                                                                         @"key": @"mobile"
+                                                                                                                                         }];
+                                                                            [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(popViewController) userInfo:nil repeats:NO];
+                                                                            
+                                                                        } else if(result.status == 1) {
+                                                                            [SVProgressHUD showErrorWithStatus:@"已存在绑定的手机号码"];
+                                                                        }
+                                                                        
+                                                                    }
+                                                                    
+                                                                } failure:^(NSError *error) {
+                                                                    NSLog(@"error = %@", error);
+                                                                    [SVProgressHUD showErrorWithStatus:@"绑定失败"];
+                                                                }];
+                                             
+                                         } failure:^(NSError *error) {
+                                             [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
+                                             NSLog(@"error = %@", error);
+                                         }];
+    
+    
 }
 
 - (void)popViewController {

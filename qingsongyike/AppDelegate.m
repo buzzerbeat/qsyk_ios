@@ -65,11 +65,15 @@
     // 设置APP最大缓存为 100M
     [[SDImageCache sharedImageCache] setMaxCacheSize:100 * 1024 * 1024];
     
-    // 首次启动app是进行注册
-    if (!kToken) {
+    // 启动app时如果本地没有token，通过注册获得
+    NSString *token = kToken;
+    if (!token.length) {
         [[QSYKDataManager sharedManager] registerAction];
     }
-    [QSYKUtility startApp];
+    [[QSYKDataManager sharedManager] startApp];
+    
+    // 检查token是否可用
+    [[QSYKDataManager sharedManager] checkToken];
     
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -189,19 +193,15 @@
     [JPUSHService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
     
-    NSLog(@"%@", userInfo);
-    
-    // 参数resourceSid，打开本sid的资源，左上角返回后，返回首页
-    // 当resourceSid为空，或者不存在本参数时，直接打开客户端首页即可
-    NSString *resourceSid = userInfo[@"resourceSid"];
-    if (resourceSid && resourceSid.length) {
-//        QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
-//        QSYKBaseNavigationController *nav = [[QSYKBaseNavigationController alloc] initWithRootViewController:resourceDetailVC];
-//        resourceDetailVC.sid = resourceSid;
-//        
-//        [self.window.rootViewController presentViewController:nav animated:YES completion:nil];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kLoadFromRemotePushNotification object:nil userInfo:@{@"resourceSid": resourceSid}];
+
+    if (application.applicationState == UIApplicationStateInactive) {
+        // 参数resourceSid，打开本sid的资源，左上角返回后，返回首页
+        // 当resourceSid为空，或者不存在本参数时，直接打开客户端首页即可
+        NSString *resourceSid = userInfo[@"resourceSid"];
+        if (resourceSid && resourceSid.length) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kLoadFromRemotePushNotification object:nil userInfo:@{@"resourceSid": resourceSid}];
+        }
     }
 }
 

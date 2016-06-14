@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QSYKEditSignViewController">
+            <connections>
+                <outlet property="charCountLabel" destination="P75-Ur-ETg" id="4uG-eF-aR0"/>
+                <outlet property="signTextView" destination="KPu-Fa-wXa" id="Rz6-qY-uxm"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outletCollection property="separatorHeightCons" destination="l8H-vU-vre" id="kHO-xa-ZUI"/>
+                <outletCollection property="separatorHeightCons" destination="89d-P0-FVF" id="6Xc-bm-YJM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IpF-zw-JWP">
+                    <rect key="frame" x="0.0" y="92" width="320" height="1"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="l8H-vU-vre"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IlT-hA-qAd">
+                    <rect key="frame" x="0.0" y="15" width="320" height="1"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="89d-P0-FVF"/>
+                    </constraints>
+                </view>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="我的个性签名我的个性签名我的个性签名我的个性签名我的个性签名" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KPu-Fa-wXa">
+                    <rect key="frame" x="12" y="16" width="296" height="50"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="hUK-CU-jf4"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="lVm-nW-xrw"/>
+                    </connections>
+                </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P75-Ur-ETg">
+                    <rect key="frame" x="289" y="68" width="18.5" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="74l-2M-q0A"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="P75-Ur-ETg" firstAttribute="top" secondItem="KPu-Fa-wXa" secondAttribute="bottom" constant="2" id="7XT-TA-UJN"/>
+                <constraint firstItem="IpF-zw-JWP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="BbK-nr-cBe"/>
+                <constraint firstItem="IpF-zw-JWP" firstAttribute="top" secondItem="P75-Ur-ETg" secondAttribute="bottom" constant="3" id="D8m-OX-jq9"/>
+                <constraint firstAttribute="trailing" secondItem="KPu-Fa-wXa" secondAttribute="trailing" constant="12" id="KDF-9d-gjc"/>
+                <constraint firstAttribute="trailing" secondItem="IlT-hA-qAd" secondAttribute="trailing" id="LEA-Fl-5jb"/>
+                <constraint firstItem="KPu-Fa-wXa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="12" id="kCE-Oz-OQV"/>
+                <constraint firstAttribute="trailing" secondItem="P75-Ur-ETg" secondAttribute="trailing" constant="12" id="kRL-6W-fv4"/>
+                <constraint firstItem="KPu-Fa-wXa" firstAttribute="top" secondItem="IlT-hA-qAd" secondAttribute="bottom" id="lO9-0D-Wgn"/>
+                <constraint firstItem="IlT-hA-qAd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lXv-WC-YDl"/>
+                <constraint firstItem="IlT-hA-qAd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="15" id="om8-wo-rlN"/>
+                <constraint firstAttribute="trailing" secondItem="IpF-zw-JWP" secondAttribute="trailing" id="rTS-Uk-mki"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+</document>

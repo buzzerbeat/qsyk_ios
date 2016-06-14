@@ -9,6 +9,7 @@
 #import "QSYKVideoTableViewCell.h"
 #import <AVFoundation/AVFoundation.h>
 #import "KRVideoPlayerController.h"
+#import "QSYKGodPostView.h"
 
 @interface QSYKVideoTableViewCell() <UIAlertViewDelegate>
 @property (nonatomic, strong) KRVideoPlayerController *videoController;
@@ -52,42 +53,40 @@
         return;
     }
     
-    if ([_resource isKindOfClass:[QSYKResourceModel class]]) {
-        QSYKResourceModel *res = (QSYKResourceModel *)_resource;
-        
-        self.userName = res.username;
-        self.userAvatar = res.userAvatar;
-        self.content = res.content;
-        self.sid = res.sid;
-        self.video = res.video;
-        self.pubTime = res.pubTime;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+    self.sid     = _resource.sid;
+    self.dig     = _resource.dig;
+    self.bury    = _resource.bury;
+    self.video   = _resource.relVideo;
+    self.content = _resource.desc;
+    self.isTopic = (_resource.type == 1);
+    
+    if (_resource.hasDigged) {
+        self.digBtn.selected = YES;
+        self.digCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
     } else {
-        QSYKFavoriteResourceModel *res = (QSYKFavoriteResourceModel *)_resource;
-        
-        self.userName = res.userName;
-        self.userAvatar = res.userAvatar;
-        self.content = res.desc;
-        self.sid = res.sid;
-        self.video = res.relVideo;
-        self.pubTime = res.pubTimeElapsed;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+        self.digBtn.selected = NO;
+        self.digCountLabel.textColor = [UIColor lightGrayColor];
+    }
+    if (_resource.hasBuried) {
+        self.buryBtn.selected = YES;
+        self.buryCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
+    } else {
+        self.buryBtn.selected = NO;
+        self.buryCountLabel.textColor = [UIColor lightGrayColor];
     }
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
-    self.usernameLabel.text    = self.userName;
-    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabel.text  = _resource.userName;
+    self.digCountLabel.text  = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
 
-//    double videoLength = [self.video.length doubleValue];
-//    double minutes = floor(videoLength / 60.0);;
-//    double seconds = floor(fmod(videoLength, 60.0));;
-//    NSString *time = [NSString stringWithFormat:@"%02.0f:%02.0f", minutes, seconds];
-    self.videoLengthLabel.text = [NSString stringWithFormat:@" %@ ", self.video.length];
+    double videoLength = [self.video.length doubleValue];
+    double minutes = floor(videoLength / 60.0);;
+    double seconds = floor(fmod(videoLength, 60.0));;
+    NSString *time = [NSString stringWithFormat:@"%02.0f:%02.0f", minutes, seconds];
+    self.videoLengthLabel.text = [NSString stringWithFormat:@" %@ ", time];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:self.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -113,7 +112,50 @@
                                                   }];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVideoViewFrame:) name:kVideoViewShrinkedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVideoViewFrame:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
+    for (UIView *view in self.containerView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    if (_resource.godPosts.count && !self.isInnerPage) {
+        for (int i = 0; i < _resource.godPosts.count; i++) {
+            QSYKGodPostView *postView = [[NSBundle mainBundle] loadNibNamed:@"QSYKGodPostView" owner:nil options:nil][0];
+            QSYKPostModel *post = (QSYKPostModel *)_resource.godPosts[i];
+            postView.post = post;
+            postView.delegate = _delegate;
+            postView.indexPath = _indexPath;
+            postView.index = i;
+            
+            CGFloat height = 0;
+            if (i == 0) {
+                self.firstGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+            } else if (i == 1) {
+                self.secondGodPostHeight = [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                height = self.firstGodPostHeight;
+                
+            } else if (i == 2) {
+                self.thirdGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                
+                height = self.firstGodPostHeight + self.secondGodPostHeight;
+            }
+            
+            [self.containerView addSubview:postView];
+            [postView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.containerView.mas_left);
+                make.right.equalTo(self.containerView.mas_right);
+                make.top.equalTo(self.containerView).offset(height);
+                make.height.offset([QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]]);
+            }];
+        }
+        
+        self.containerView.hidden = NO;
+        self.videoThumbBottomCon.constant = 63 + self.firstGodPostHeight + self.secondGodPostHeight + self.thirdGodPostHeight;
+        
+    } else {
+        self.containerView.hidden = YES;
+        self.videoThumbBottomCon.constant = 63;
+    }
+
 }
 
 - (IBAction)playVideoBtnClicked:(id)sender {

@@ -25,11 +25,16 @@
 @property (nonatomic, copy) NSString *pubTimeElapsed;
 @property (nonatomic, strong) QSYKImageModel *relImage;
 @property (nonatomic, strong) QSYKVideoModel *relVideo;
+@property (nonatomic, strong) NSMutableArray<QSYKPostModel> *hotPosts;
+@property (nonatomic, strong) NSMutableArray<QSYKPostModel> *posts;
+@property (nonatomic, strong) NSMutableArray<QSYKPostModel> *godPosts;
+@property (nonatomic, assign) BOOL hasDigged;
+@property (nonatomic, assign) BOOL hasBuried;
 
 @end
 
 @interface QSYKFavoriteModel : JSONModel
-@property (nonatomic, strong) QSYKFavoriteResourceModel *resource;
+@property (nonatomic, strong) QSYKResourceModel *resource;
 @property (nonatomic, copy) NSString *timeElapsed;
 
 @end

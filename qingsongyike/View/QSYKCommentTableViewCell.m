@@ -7,13 +7,20 @@
 //
 
 #import "QSYKCommentTableViewCell.h"
+#import "QSYKPostModel.h"
+
+@interface QSYKCommentTableViewCell()
+@property (nonatomic, assign) int dig;
+@property (nonatomic, copy) NSString *sid;
+
+@end
 
 @implementation QSYKCommentTableViewCell
 
 - (void)awakeFromNib {
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.avatarImageView.layer.cornerRadius = self.avatarImageView.height / 2;
+    self.bottomSeparaotrHeiCon.constant = 1.0 / [UIScreen mainScreen].scale;
     [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButton"] forState:UIControlStateNormal];
     [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButtonClick"] forState:UIControlStateSelected];
 }
@@ -24,7 +31,7 @@
     // Configure the view for the selected state
 }
 
-//使cell一定成为第一响应者
+//使cell一定成为第一响应者（menuController 配置）
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
@@ -34,20 +41,49 @@
     return NO;
 }
 
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    [self.digBtn setSelected:NO];
-}
-
 - (void)layoutSubviews {
+    if (!_post) {
+        return;
+    }
     
+    self.dig = _post.dig;
+    self.sid = _post.sid;
+    
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_post.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabel.text = _post.userName;
+    self.digCountLabel.text = [NSString stringWithFormat:@"%d", _post.dig];
+    self.pubTimeLabel.text = [QSYKUtility formateTimeInterval:_post.createTime];
+    
+    if (_post.hasDigged) {
+        self.digBtn.selected = YES;
+    } else {
+        self.digBtn.selected = NO;
+    }
+    
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_post.content];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:TEXT_LING_SPACING];
+    [attrString addAttribute:NSParagraphStyleAttributeName
+                       value:style
+                       range:NSMakeRange(0, attrString.length)];
+    self.commentContentLabel.attributedText = attrString;
 }
 
 - (IBAction)digBtnClicked:(id)sender {
+    if (self.digBtn.selected) {
+        return;
+    }
+    
     [self.digBtn setSelected:!self.digBtn.selected];
     if (self.digBtn.selected) {
-        
+        self.dig++;
     }
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(ratePostWithSid:indexPath:)]) {
+        [_delegate ratePostWithSid:self.sid indexPath:_indexPath];
+    }
+    
+    self.digCountLabel.text = [NSString stringWithFormat:@"%d", self.dig];
 }
 
 + (CGFloat)cellBaseHeight {

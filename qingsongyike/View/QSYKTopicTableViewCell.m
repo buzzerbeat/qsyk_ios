@@ -7,6 +7,7 @@
 //
 
 #import "QSYKTopicTableViewCell.h"
+#import "QSYKGodPostView.h"
 
 @implementation QSYKTopicTableViewCell
 
@@ -44,40 +45,51 @@
         return;
     }
     
-    if ([_resource isKindOfClass:[QSYKResourceModel class]]) {
-        QSYKResourceModel *res = (QSYKResourceModel *)_resource;
-        
-        self.userName = res.username;
-        self.userAvatar = res.userAvatar;
-        self.content = res.content;
-        self.sid = res.sid;
-        self.pubTime = res.pubTime;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+    self.sid     = _resource.sid;
+    self.dig     = _resource.dig;
+    self.bury    = _resource.bury;
+    self.content = _resource.desc;
+    self.isTopic = (_resource.type == 1);
+    
+    if (_resource.hasDigged) {
+        self.digBtn.selected = YES;
+        self.digCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
     } else {
-        QSYKFavoriteResourceModel *res = (QSYKFavoriteResourceModel *)_resource;
-        
-        self.userName = res.userName;
-        self.userAvatar = res.userAvatar;
-        self.content = res.desc;
-        self.sid = res.sid;
-        self.pubTime = res.pubTimeElapsed;
-        self.dig = res.dig;
-        self.bury = res.bury;
-        self.isTopic = (res.type == 1);
+        self.digBtn.selected = NO;
+        self.digCountLabel.textColor = [UIColor lightGrayColor];
+    }
+    if (_resource.hasBuried) {
+        self.buryBtn.selected = YES;
+        self.buryCountLabel.textColor = kCoreColor;
+        [self disableRateBtn];
+    } else {
+        self.buryBtn.selected = NO;
+        self.buryCountLabel.textColor = [UIColor lightGrayColor];
     }
     
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
     CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
     
     // 解决cell的contentView不随着cell高度的变化而变化（原因未找到）
-    self.contentView.height = [QSYKUtility heightForMutilLineLabel:self.content
+    CGFloat contentViewHeight = [QSYKUtility heightForMutilLineLabel:self.content
                                                               font:16.f
                                                              width:width] + 140 ;
+    if (_resource.godPosts.count && !self.isInnerPage) {
+        NSUInteger postCount = _resource.godPosts.count;
+        CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
+        if (postCount) {
+            for (int i = 0; i < postCount; i++) {
+                QSYKPostModel *post = _resource.godPosts[i];
+                postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+            }
+        }
+        contentViewHeight += postHeight;
+    }
+    self.contentView.height = contentViewHeight;
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:self.userAvatar width:200 height:200 extension:@"png"]];
-    self.usernameLabe.text = self.userName;
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
+    self.usernameLabe.text = _resource.userName;
     self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];
     
@@ -88,6 +100,48 @@
                        value:style
                        range:NSMakeRange(0, attrString.length)];
     self.contentLabel.attributedText = attrString;
+    
+    for (UIView *view in self.containerView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    if (_resource.godPosts.count && !self.isInnerPage) {
+        for (int i = 0; i < _resource.godPosts.count; i++) {
+            QSYKGodPostView *postView = [[NSBundle mainBundle] loadNibNamed:@"QSYKGodPostView" owner:nil options:nil][0];
+            QSYKPostModel *post = (QSYKPostModel *)_resource.godPosts[i];
+            postView.post = post;
+            postView.delegate = _delegate;
+            postView.indexPath = _indexPath;
+            postView.index = i;
+            
+            CGFloat height = 0;
+            if (i == 0) {
+                self.firstGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+            } else if (i == 1) {
+                self.secondGodPostHeight = [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                height = self.firstGodPostHeight;
+                
+            } else if (i == 2) {
+                self.thirdGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                
+                height = self.firstGodPostHeight + self.secondGodPostHeight;
+            }
+            
+            [self.containerView addSubview:postView];
+            [postView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.containerView.mas_left);
+                make.right.equalTo(self.containerView.mas_right);
+                make.top.equalTo(self.containerView).offset(height);
+                make.height.offset([QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]]);
+            }];
+        }
+        
+        self.containerView.hidden = NO;
+        
+    } else {
+        self.containerView.hidden = YES;
+    }
+
 }
 
 - (IBAction)digBtnClicked:(id)sender {

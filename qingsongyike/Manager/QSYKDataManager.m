@@ -8,6 +8,7 @@
 
 #import "QSYKDataManager.h"
 #import "QSYKResultModel.h"
+#import "QSYKError.h"
 
 @interface QSYKDataManager()
 
@@ -22,9 +23,9 @@
     if (self) {
         self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
         self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         self.manager.responseSerializer = [AFJSONResponseSerializer serializer];
-//        [self.manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"text/raw", @"application/json", @"text/json", @"text/javascript", nil]];
+        
+        self.manager.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
         [self.manager.requestSerializer setValue:[QSYKUtility UAString] forHTTPHeaderField:@"User-Agent"];
     }
     return self;
@@ -47,15 +48,19 @@
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    if ([URLString hasPrefix:@"http://c2"]) {
-        NSString *token = [self.manager.requestSerializer valueForHTTPHeaderField:@"Authorization"];
-        if (token.length < 14) {
-            [self.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", kToken] forHTTPHeaderField:@"Authorization"];
-            NSLog(@"token = %@", kToken);
-        }
-    }
-    
     NSURLSessionDataTask *task = nil;
+    
+    // reset token
+    NSString *token = kAccessToken;//@"qOGaqaWIMS8BLvkWOAr3f4MR5WwfJskV";
+    NSString *finalToken = (token.length ? token : kToken);
+    [self.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", finalToken] forHTTPHeaderField:@"Authorization"];
+    NSLog(@"token = %@", finalToken);
+    
+    NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    [tempDic setObject:timestemp forKey:@"zzz"];
+    parameters = [tempDic copy];
+    NSLog(@"****** parameters = %@", parameters);
     
     if (method == QSYKHTTPMethodGET) {
          NSLog(@"***** urlRequest Url = %@ Method = %@ param = %@ *****", URLString, @"GET", parameters);
@@ -92,7 +97,7 @@
     
     NSLog(@"UUID = %@", UUID);
     [self requestWithMethod:QSYKHTTPMethodPOST
-                  URLString:[NSString stringWithFormat:@"%@/user/register", kAuthBaseURL]
+                  URLString:@"user/register"
                  parameters:@{@"uuid": UUID}
                     success:^(NSURLSessionDataTask *task, id responseObject) {
                         
@@ -101,14 +106,173 @@
                         if (result && !result.status) {
                             // 注册成功后把返回的token保存到本地
                             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                            [userDefaults setValue:result.user[@"auth_key"] forKey:@"token"];
+                            [userDefaults setObject:result.user[@"auth_key"] forKey:@"token"];
                             [userDefaults synchronize];
                             
-                            [QSYKUtility startApp];
+                            [[QSYKDataManager sharedManager] startApp];
                         }
                     } failure:^(NSError *error) {
                         NSLog(@"error = %@", error);
                     }];
+}
+
+- (void)checkToken {
+    NSString *token = kAccessToken;
+    NSString *finalToken = (token.length ? token : kToken);
+    NSDictionary *parameters = @{
+                                 @"client": CLIENT_ID,
+                                 @"token": finalToken
+                                 };
+    
+    [self requestWithMethod:QSYKHTTPMethodPOST
+                  URLString:@"/v2/user/token-check"
+                 parameters:parameters
+                    success:^(NSURLSessionDataTask *task, id responseObject) {
+                        
+                        NSError *error = nil;
+                        QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:&error];
+                        if (result && result.status == 1) {
+                            //token已过期，重新请求
+                            [self registerAction];
+                        }
+                    } failure:^(NSError *error) {
+                        NSLog(@"error = %@", error);
+                    }];
+}
+
+- (void)sendLogWithURLString:(NSString *)URLString {
+    [self requestWithMethod:QSYKHTTPMethodPOST URLString:URLString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {} failure:^(NSError *error) {}];
+}
+
+
+- (NSURLSessionDataTask *)mobileInitWithURLString:(NSString *)URLString
+                                       parameters:(NSDictionary *)parameters
+                                          success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                          failure:(void (^)(NSError *error))failure {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    [tempDic setObject:timestemp forKey:@"zzz"];
+    parameters = [tempDic copy];
+    NSLog(@"parameters = %@", parameters);
+    
+    NSURLSessionDataTask *task = [self.manager GET:URLString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        success(task, responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        failure(error);
+    }];
+    
+    return task;
+}
+
+- (NSURLSessionDataTask *)requestWithMethod:(QSYKHTTPMethod)method
+                                  URLString:(NSString *)URLString
+                                 uploadData:(NSData *)uploadData
+                                 parameters:(NSDictionary *)parameters
+                                    success:(void (^)(NSURLSessionDataTask * task, id responseObject))success
+                                    failure:(void (^)(NSError *error))failure {
+    // stateBar
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    void (^responseSuccessHandleBlock)(NSURLSessionDataTask *task, id responseObject) = ^(NSURLSessionDataTask *task, id responseObject) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        success(task, responseObject);
+        
+    };
+    
+    void (^responseFailureHandleBlock)(NSError * _Nonnull error) = ^(NSError * _Nonnull error) {
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+        failure(error);
+        
+    };
+    
+    // Create HTTPSession
+    NSURLSessionDataTask *uploadTask = nil;
+
+    // reset token
+    NSString *token = kAccessToken;
+    [self.manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", (token.length ? token : kToken)] forHTTPHeaderField:@"Authorization"];
+    NSLog(@"token = %@", kToken);
+    
+    NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    [tempDic setObject:timestemp forKey:@"zzz"];
+    parameters = [tempDic copy];
+    NSLog(@"parameters = %@", parameters);
+    
+    uploadTask = [self.manager POST:URLString parameters:parameters
+          constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+              //                  [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"avatar" fileName:@"avatar.png" mimeType:@"image/jpeg" error:nil];
+              [formData appendPartWithFileData:uploadData name:@"avatarFile" fileName:@"avatar.png" mimeType:@"image/png"];
+          }
+                           progress:nil
+                            success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                responseSuccessHandleBlock(task, responseObject);
+                            }
+                            failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                responseFailureHandleBlock(error);
+                            }];
+    
+    [uploadTask resume];
+    
+    return uploadTask;
+}
+
+- (void)ratePostWithSid:(NSString *)sid {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                             URLString:[NSString stringWithFormat:@"/post/like?sid=%@", sid]
+                                            parameters:nil
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                   
+                                                   if (result && !result.status) {
+                                                       NSLog(@"评价成功");
+                                                   }
+                                                   
+                                               } failure:^(NSError *error) {
+                                                   NSLog(@"评价失败  %@", error);
+                                               }];
+}
+
+- (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type {
+    NSString *URLStr = type == 1 ? @"/resource/like" : @"/resource/hate";
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
+                                             URLString:URLStr
+                                            parameters:@{
+                                                         @"sid" : sid,
+                                                         }
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
+                                                   
+                                                   if (result && !result.status) {
+                                                       NSLog(@"评价成功");
+                                                   }
+                                                   
+                                               } failure:^(NSError *error) {
+                                                   NSLog(@"评价失败  %@", error);
+                                               }];
+}
+
+- (void)startApp {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
+                                             URLString:@"user/sign-task"
+                                            parameters:nil
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   [[NSNotificationCenter defaultCenter] postNotificationName:kUserInfoChangedNotification object:nil];
+                                               }
+                                               failure:^(NSError *error) {
+                                                   
+                                               }];
 }
 
 @end

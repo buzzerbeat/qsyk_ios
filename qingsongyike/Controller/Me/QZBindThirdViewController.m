@@ -24,7 +24,7 @@
     [super viewDidLoad];
     self.title = @"绑定";
     
-    _user = [QSYKUserManager shardManager].user;
+    _user = [QSYKUserManager sharedManager].user;
     self.thirdTypes = @[@"微信帐户", @"QQ账户", @"微博账户"];
     
     _tableView = ({
@@ -156,7 +156,7 @@
                                                                  } else if ([thirdTypeName isEqualToString:@"sina"]) {
                                                                      _user.isBindWeibo = YES;
                                                                  }
-                                                                 [QSYKUserManager shardManager].user = _user;
+                                                                 [QSYKUserManager sharedManager].user = _user;
                                                                  
                                                                  [self.tableView reloadData];
                                                                  

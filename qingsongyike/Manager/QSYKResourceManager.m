@@ -29,17 +29,21 @@
 }
 
 - (NSURLSessionDataTask *)getResourceWithParameters:(NSDictionary *)parameters
-                                            success:(void (^)(NSArray<QSYKResourceModel *> *resourceList))success
-                                            failure:(void (^)(NSError *error))failure {
+                        success:(void (^)(NSArray<QSYKResourceModel *> *resourceList, NSURLSessionDataTask *task))success
+                        failure:(void (^)(NSError *error))failure {
+    
+    NSMutableDictionary *mDic = [parameters mutableCopy];
+    [mDic setObject:@"godPosts" forKey:@"expand"];
+    [mDic setObject:@40 forKey:@"per-page"];
     
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                                                    URLString:@"resource/listJson/"
-                                                   parameters:parameters
+                                                    URLString:@"resources"
+                                                   parameters:mDic
                                                       success:^(NSURLSessionDataTask *task, id responseObject) {
                                                           
                                                           QSYKResourceList *resourceList = [[QSYKResourceList alloc]
                                                                                          initWithArray:responseObject];
-                                                          success(resourceList.list);
+                                                          success(resourceList.list, task);
                                                       }
                                                       failure:^(NSError *error) {
                                                           failure(error);
@@ -50,11 +54,16 @@
                                             success:(void (^)(QSYKResourceModel *resource))success
                                             failure:(void (^)(NSError *error))failure {
     
+    NSString *sid = parameters[@"sid"];
+    NSString *expand = @"expand=hotPosts,posts,godPosts";
+    NSString *urlStr = [NSString stringWithFormat:@"resources/%@?%@", sid, expand];
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
-                                                    URLString:@"resource/detailJson/"
-                                                   parameters:parameters
+                                                    URLString:urlStr
+                                                   parameters:nil
                                                       success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                          QSYKResourceModel *resource = [[QSYKResourceModel alloc] initWithDictionary:responseObject error:nil];
+                                                          
+                                                          NSError *error = nil;
+                                                          QSYKResourceModel *resource = [[QSYKResourceModel alloc] initWithDictionary:responseObject error:&error];
                                                           
                                                           success(resource);
                                                       }

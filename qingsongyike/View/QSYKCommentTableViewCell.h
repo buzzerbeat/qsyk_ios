@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QSYKCellDelegate.h"
+@class QSYKPostModel;
 
 #define kCellIdentifier_commentCell @"QSYKCommentTableViewCell"
 
@@ -16,7 +18,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *commentContentLabel;
 @property (weak, nonatomic) IBOutlet UIButton *digBtn;
 @property (weak, nonatomic) IBOutlet UILabel *digCountLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomSeparaotrHeiCon;
+@property (weak, nonatomic) IBOutlet UIButton *operationBtn;
+@property (weak, nonatomic) IBOutlet UILabel *pubTimeLabel;
 
+@property (nonatomic, weak) id<QSYKCellDelegate> delegate;
+@property (nonatomic, strong) QSYKPostModel *post;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 + (CGFloat)cellBaseHeight;
 

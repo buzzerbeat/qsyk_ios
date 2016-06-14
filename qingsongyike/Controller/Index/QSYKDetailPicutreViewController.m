@@ -39,10 +39,10 @@
 //加载图片
 -(void)loadImgae {
     
-    NSURL *URL = [NSURL URLWithString:[QSYKUtility imgUrl:_resource.img.sid
-                                                    width:_resource.img.width
-                                                   height:_resource.img.height
-                                                extension:_resource.img.extension]];
+    NSURL *URL = [NSURL URLWithString:[QSYKUtility imgUrl:_resource.relImage.sid
+                                                    width:_resource.relImage.width
+                                                   height:_resource.relImage.height
+                                                extension:_resource.relImage.extension]];
     [self.imageView sd_setImageWithPreviousCachedImageWithURL:URL placeholderImage:nil options:SDWebImageProgressiveDownload progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         
         CGFloat progress = 1.0 * receivedSize / expectedSize;
@@ -189,7 +189,7 @@
         [_imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back)]];
         
         CGFloat picW = SCREEN_WIDTH;
-        CGFloat picH = picW * _resource.img.height / _resource.img.width;
+        CGFloat picH = picW * _resource.relImage.height / _resource.relImage.width;
         if (picH > SCREEN_HEIGHT) { // 图片显示高度超过一个屏幕, 需要滚动查看
             _imageView.frame = CGRectMake(0, 0, picW, picH);
             self.scrollView.contentSize = CGSizeMake(0, picH);

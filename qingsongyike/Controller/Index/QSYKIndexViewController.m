@@ -13,6 +13,7 @@
 #import "QSYKPicturePageViewController.h"
 #import "QSYKTopicPageViewController.h"
 #import "QSYKSettingsTableViewController.h"
+#import "QSYKWebViewController.h"
 
 @interface QSYKIndexViewController () <CarbonTabSwipeNavigationDelegate>
 @property (nonatomic, strong) CarbonTabSwipeNavigation *carbonTabSwipeNavigation;
@@ -53,11 +54,20 @@
     [_carbonTabSwipeNavigation insertIntoRootViewController:self];
     [self configCarbonTabNav];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadLotteryPage) name:@"test" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)loadLotteryPage {
+    if ([self isVisible]) {
+        QSYKWebViewController *aPage = [[QSYKWebViewController alloc] init];
+        aPage.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:aPage animated:YES];
+    }
 }
 
 - (void)configCarbonTabNav {
