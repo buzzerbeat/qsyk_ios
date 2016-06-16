@@ -84,6 +84,11 @@
         self.buryCountLabel.textColor = [UIColor lightGrayColor];
     }
     
+    if (_flag) {
+        self.readTimeLabel.hidden = NO;
+        self.readTimeLabel.text = [QSYKUtility formateTimeInterval:_readTime];
+    }
+    
     self.progressView.hidden = YES;
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text = _resource.userName;

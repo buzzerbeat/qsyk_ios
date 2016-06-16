@@ -8,7 +8,7 @@
 
 #import "QSYKWebViewController.h"
 #import "WebViewController.h"
-#import <UINavigationController+FDFullscreenPopGesture.h>
+//#import <UINavigationController+FDFullscreenPopGesture.h>
 #import <NJKWebViewProgressView.h>
 #import <NJKWebViewProgress.h>
 
@@ -47,9 +47,6 @@
     
     self.navigationItem.title = _navTitle;
     self.isFirstRequest = YES;
-    
-    // 关闭右滑返回功能
-    self.fd_interactivePopDisabled = YES;
     
     _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _backButton.frame = CGRectMake(0, 0, 45, 30);

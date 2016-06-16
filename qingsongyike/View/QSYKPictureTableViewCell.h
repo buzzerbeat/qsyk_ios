@@ -31,11 +31,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *tapToDownloadIndicatorLabel;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewBottomCon;
+@property (weak, nonatomic) IBOutlet UILabel *readTimeLabel;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
 @property (nonatomic, strong) QSYKResourceModel *resource;
-@property (nonatomic) BOOL flag;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic) BOOL flag;    // 标识是否显示在最近浏览页面
+@property (nonatomic, copy) NSString *readTime;
 
 + (CGFloat)cellBaseHeight;
 

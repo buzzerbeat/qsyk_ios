@@ -69,11 +69,12 @@
     NSString *token = kToken;
     if (!token.length) {
         [[QSYKDataManager sharedManager] registerAction];
+    } else {
+        [[QSYKDataManager sharedManager] startApp];
+        
+        // 检查token是否可用
+        [[QSYKDataManager sharedManager] checkToken];
     }
-    [[QSYKDataManager sharedManager] startApp];
-    
-    // 检查token是否可用
-    [[QSYKDataManager sharedManager] checkToken];
     
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -82,6 +83,11 @@
 //    self.window.rootViewController = [[QSYKBaseNavigationController alloc]
 //                                      initWithRootViewController:[[QSYKIndexViewController alloc] init]]
     
+    // 安装并启动app时先设置配置信息的默认值
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isReStart"]) {
+        [QSYKUtility setDefaultConfig];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isReStart"];
+    }
     [QSYKUtility loadSplash];
     
     // 展示SplashView

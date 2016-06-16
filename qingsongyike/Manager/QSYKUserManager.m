@@ -144,6 +144,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                  @"password": password,
                                  @"client": CLIENT_ID,
                                  @"client_secret": CLIENT_SECRET,
+                                 @"token": kToken ?: @"",
                                  };
     
     if (avatar) {
@@ -215,7 +216,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                         @"nickname": name,
                                         @"client": CLIENT_ID,
                                         @"client_secret": CLIENT_SECRET,
-                                        @"token": kToken,
+                                        @"token": kToken ?: @"",
                                         @"third_token": kThirdToken,
                                         } mutableCopy];
     
@@ -309,7 +310,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                  @"from": type,
                                  @"client": CLIENT_ID,
                                  @"client_secret": CLIENT_SECRET,
-                                 @"token": kToken,
+                                 @"token": kToken ?: @"",
                                  @"third_token": kThirdToken,
                                  };
     
@@ -579,7 +580,7 @@ static NSString *const kUserIsLogin = @"userIsLogin";
 
 - (NSURLSessionDataTask *)validateThirdWithOid:(NSString *)oid
                                           from:(NSString *)from
-                                       success:(void (^)(void))success
+                                       success:(void (^)(int status))success
                                        failure:(void (^)(NSError *error))failure {
     
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
@@ -587,8 +588,8 @@ static NSString *const kUserIsLogin = @"userIsLogin";
                                                    parameters:@{@"oid": oid, @"from": from}
                                                       success:^(NSURLSessionDataTask *task, id responseObject) {
                                                           QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-                                                          if (result && !result.status) {
-                                                              success();
+                                                          if (result) {
+                                                              success(result.status);
                                                           } else {
                                                               NSError *error = [[NSError alloc] initWithDomain:DOMAIN_NAME code:QSYKErrorTypeValidateRegisterFailure userInfo:@{
                                                                                                                                                                                 @"QSYKError":result.message

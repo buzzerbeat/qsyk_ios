@@ -40,7 +40,11 @@
     
     self.user = [QSYKUserManager sharedManager].user;
     
-    self.cellTitlesArray = [NSMutableArray arrayWithArray:@[@[@"昵称", @"个性签名", @"性别"], @[@"手机", @"微信", @"QQ", @"微博"], @[@"退出登录"]]];
+    if (kThirdLoginEnable) {
+        self.cellTitlesArray = [NSMutableArray arrayWithArray:@[@[@"昵称", @"个性签名", @"性别"], @[@"手机", @"微信", @"QQ", @"微博"], @[@"退出登录"]]];
+    } else {
+        self.cellTitlesArray = [NSMutableArray arrayWithArray:@[@[@"昵称", @"个性签名", @"性别"], @[@"手机"], @[@"退出登录"]]];
+    }
     
     [self layoutTableHeaderView];
     

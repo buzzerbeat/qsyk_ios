@@ -29,11 +29,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FDFullscreenPopGesture.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>FMDB.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -92,22 +87,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0A3696B244FA74F6826F3FBE44E4FE72</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>14D2008578FFE471DE50AE7147D301A4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>2027A4985EA9EE6B37125EA89EB3D3C6</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>2C71DE0FB8A6E5BB6EAF9FB037D799CC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -117,17 +97,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>4B7E643FD2B008F82232D9B33CF5F02F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>52C18FC4DEAB5150C4086B726DD9C53D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>53480ED0BE09FF49E34B1702D485CAAB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E41CA2ECB40C640963734378302229C</key>
+		<key>70BC44266C6FFE30D2C57129458E070B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F74D9EA91F4C43190670066BAC37D44</key>
+		<key>7E41CA2ECB40C640963734378302229C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,22 +137,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>AE50E6FBF65EF337166A0396B6BE1D62</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>B4A3E08D49931371F7247521A50EAF79</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C2A7B3837C1FF5CFA4E953C1F4724E58</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>CB22B394633B4D454BF3B325B61B2E90</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>E96531D2698B334C4DEC89A22248E32D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F81A3F223F32E78566E1BE87027C24A4</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -10,5 +10,6 @@
 
 @interface QSYKMyFavoriteTableViewController : QSYKBaseViewController
 @property (nonatomic, copy) NSString *URLStr;
+@property (nonatomic, assign) BOOL isReadHistory;   // 标识是否显示最近浏览内容
 
 @end

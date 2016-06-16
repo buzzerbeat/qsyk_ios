@@ -18,6 +18,9 @@
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *models;
 @property (nonatomic, strong) UILabel *noDataIndicatorLabel;
+@property (nonatomic, strong) NSArray *readHistory;
+@property (nonatomic, copy) NSString *sids;     // 当前显示的资源sid串
+@property (nonatomic, assign) NSInteger remainingSidCount;
 
 @end
 
@@ -50,6 +53,14 @@
             }
         }];
         
+        if (_isReadHistory) {
+            tableView.mj_footer = [QSYKRefreshFooter footerWithRefreshingBlock:^{
+                [self updateSids];
+                self.URLStr = [@"/resources?sid=" stringByAppendingString:_sids];
+                [self loadResource];
+            }];
+        }
+        
         tableView;
     });
     
@@ -70,6 +81,27 @@
         label;
     });
     
+    // 如果是展示浏览历史，需要先获取本地存储浏览的记录
+    if (_isReadHistory) {
+        self.readHistory = [NSArray arrayWithArray:[QSYKUtility readHistoryArray]];
+
+//        for (NSDictionary *dic in _readHistory) {
+//            NSLog(@"createTime = %@", [dic allValues][0]);
+//        }
+        
+        self.sids = @"";
+        self.remainingSidCount = _readHistory.count - 1;
+        for (int i = 0; i < 15 && _remainingSidCount >= 0; i++, _remainingSidCount--) {
+            NSDictionary *dic = _readHistory[_remainingSidCount];
+            NSLog(@"createTime = %@", [dic allValues][0]);
+            self.sids = [self.sids stringByAppendingString:[NSString stringWithFormat:@"%@,", [dic allKeys][0]]];
+        }
+        
+        self.URLStr = [@"/resources?sid=" stringByAppendingString:_sids];
+        self.models = [NSMutableArray new];
+        NSLog(@"sids = %@", _sids);
+    }
+    
     [self loadResource];
 }
 
@@ -85,8 +117,23 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
-- (void)loadResource {
+- (void)updateSids {
     
+    if (_remainingSidCount > 0) {
+        _remainingSidCount++;
+        
+        self.sids = @"";
+        for (int i = 0; i < 15 && _remainingSidCount >= 0; i++, _remainingSidCount--) {
+            NSDictionary *dic = _readHistory[_remainingSidCount];
+            self.sids = [self.sids stringByAppendingString:[NSString stringWithFormat:@"%@,", [dic allKeys][0]]];
+        }
+    } else {
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+    }
+}
+
+- (void)loadResource {
+    NSLog(@"urlStr = %@", _URLStr);
     [SVProgressHUD show];
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
                                              URLString:_URLStr
@@ -94,13 +141,32 @@
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    [SVProgressHUD dismiss];
                                                    
-                                                   QSYKFavoriteResourceList *model = [[QSYKFavoriteResourceList alloc] initWithArray:responseObject];
-                                                   if (model.list.count) {
-                                                       self.noDataIndicatorLabel.hidden = YES;
-                                                       self.models = [NSMutableArray arrayWithArray:model.list];
-                                                       [self.tableView reloadData];
+                                                   if (!_isReadHistory) {
+                                                       QSYKFavoriteResourceList *models = [[QSYKFavoriteResourceList alloc] initWithArray:responseObject];
+                                                       if (models.list.count) {
+                                                           self.noDataIndicatorLabel.hidden = YES;
+//                                                           self.models = [NSMutableArray arrayWithArray:models.list];
+                                                           self.models = [NSMutableArray new];
+                                                           for (QSYKFavoriteModel *model in models.list) {
+                                                               [self.models addObject:model.resource];
+                                                           }
+                                                           [self.tableView reloadData];
+                                                       } else {
+                                                           self.noDataIndicatorLabel.hidden = NO;
+                                                       }
                                                    } else {
-                                                       self.noDataIndicatorLabel.hidden = NO;
+                                                       [self.tableView.mj_footer endRefreshing];
+                                                       
+                                                       QSYKResourceList *models = [[QSYKResourceList alloc] initWithArray:responseObject];
+                                                       if (models.list.count) {
+                                                           self.noDataIndicatorLabel.hidden = YES;
+                                                           
+                                                           [self.models addObjectsFromArray:models.list];
+                                                           [self.tableView reloadData];
+                                                       } else {
+                                                           self.noDataIndicatorLabel.hidden = NO;
+                                                       }
+                                                       
                                                    }
                                                    
                                                } failure:^(NSError *error) {
@@ -118,8 +184,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = aModel.resource;
+//    QSYKFavoriteModel *aModel = _models[indexPath.row];
+    QSYKResourceModel *resource = _models[indexPath.row];
     NSInteger cellType = resource.type;
     
     // width = content标签左右边距离屏幕左右边的距离的和
@@ -152,17 +218,21 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = aModel.resource;
+//    QSYKFavoriteModel *aModel = _models[indexPath.row];
+    QSYKResourceModel *resource = _models[indexPath.row];
     NSInteger cellType = resource.type;
     
     switch (cellType) {
         case 1: {
             QSYKTopicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_topicCell forIndexPath:indexPath];
             cell.resource = resource;
-            cell.flag = YES;
             cell.indexPath = indexPath;
             cell.delegate = self;
+            
+            if (_isReadHistory) {
+                cell.flag = YES;
+                cell.readTime = [self getReadTimeBySid:resource.sid];
+            }
             
             return cell;
         }
@@ -170,9 +240,13 @@
         case 2: {
             QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
             cell.resource = resource;
-            cell.flag = YES;
             cell.indexPath = indexPath;
             cell.delegate = self;
+            
+            if (_isReadHistory) {
+                cell.flag = YES;
+                cell.readTime = [self getReadTimeBySid:resource.sid];
+            }
             
             return cell;
         }
@@ -180,9 +254,13 @@
         case 3: {
             QSYKVideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_videoCell forIndexPath:indexPath];
             cell.resource = resource;
-            cell.flag = YES;
             cell.indexPath = indexPath;
             cell.delegate = self;
+            
+            if (_isReadHistory) {
+                cell.flag = YES;
+                cell.readTime = [self getReadTimeBySid:resource.sid];
+            }
             
             return cell;
         }
@@ -195,8 +273,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = aModel.resource;
+//    QSYKFavoriteModel *aModel = _models[indexPath.row];
+    QSYKResourceModel *resource = _models[indexPath.row];
     
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
@@ -217,13 +295,23 @@
     {
         // This indeed is an indexPath no longer visible
         // Do something to this non-visible cell...
-        QSYKFavoriteModel *aModel = _models[indexPath.row];
-        QSYKResourceModel *resource = aModel.resource;
+//        QSYKFavoriteModel *aModel = _models[indexPath.row];
+        QSYKResourceModel *resource = _models[indexPath.row];
         if (resource.type == 3) {
             QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
             [curCell reset];
         }
     }
+}
+
+- (NSString *)getReadTimeBySid:(NSString *)sid {
+    for (NSDictionary *dic in _readHistory) {
+        NSString *readTime = [dic objectForKey:sid];
+        if (readTime && readTime.length) {
+            return readTime;
+        }
+    }
+    return nil;
 }
 
 #pragma mark CellDelegate
@@ -235,8 +323,8 @@
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
     [[QSYKDataManager sharedManager] rateResourceWithSid:sid type:type];
     
-    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = aModel.resource;
+//    QSYKFavoriteModel *aModel = _models[indexPath.row];
+    QSYKResourceModel *resource = _models[indexPath.row];
     if (type == 1) {
         resource.dig++;
     } else {

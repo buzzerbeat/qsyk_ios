@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "qingsongyike/AppDelegate.m"
-            timestampString = "487566577.646109"
+            timestampString = "487735304.925467"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "-application:didFinishLaunchingWithOptions:"
             landmarkType = "5">
          </BreakpointContent>
@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "qingsongyike/Controller/RegisterAndLogin/QZRegisterViewController.m"
-            timestampString = "486978214.480232"
+            timestampString = "487734483.964974"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
             landmarkName = "-getVerifyCode:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "qingsongyike/Controller/RegisterAndLogin/QZRegisterViewController.m"
-            timestampString = "486978216.572124"
+            timestampString = "487734483.964974"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "341"
-            endingLineNumber = "341"
+            startingLineNumber = "339"
+            endingLineNumber = "339"
             landmarkName = "-getVerifyCode:"
             landmarkType = "5">
          </BreakpointContent>
@@ -64,16 +64,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "qingsongyike/Manager/QSYKDataManager.m"
-            timestampString = "487566561.530047"
+            filePath = "qingsongyike/Controller/Me/QSYKMyFavoriteTableViewController.m"
+            timestampString = "487756936.098247"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "-checkToken"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "-loadResource"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

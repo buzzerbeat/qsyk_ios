@@ -141,9 +141,15 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y00-CX-jzY">
-                                <rect key="frame" x="8" y="286.5" width="324" height="50"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <rect key="frame" x="8" y="286" width="324" height="50"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="06-15 09:21" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsX-dI-U61">
+                                <rect key="frame" x="268" y="21" width="64" height="13.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -166,6 +172,7 @@
                             <constraint firstItem="Zl4-Mx-vLm" firstAttribute="leading" secondItem="7aJ-B8-UKw" secondAttribute="leading" constant="10" id="VBa-s5-vVg"/>
                             <constraint firstItem="hrc-le-2i6" firstAttribute="leading" secondItem="Zl4-Mx-vLm" secondAttribute="trailing" constant="35" id="WTq-BR-mlC"/>
                             <constraint firstItem="IJF-NY-dZG" firstAttribute="leading" secondItem="hrc-le-2i6" secondAttribute="trailing" constant="35" id="X4d-8Y-CF0"/>
+                            <constraint firstAttribute="trailing" secondItem="DsX-dI-U61" secondAttribute="trailing" constant="8" id="aIE-ep-heB"/>
                             <constraint firstItem="yzH-MQ-c4h" firstAttribute="leading" secondItem="hrc-le-2i6" secondAttribute="trailing" id="aJx-aC-uD7"/>
                             <constraint firstItem="GI4-Ju-rxt" firstAttribute="bottom" secondItem="Df4-sD-Wch" secondAttribute="bottom" id="bQk-Rm-pbl"/>
                             <constraint firstItem="MHa-2W-G2g" firstAttribute="leading" secondItem="Zl4-Mx-vLm" secondAttribute="trailing" id="cD7-Dm-xtb"/>
@@ -177,6 +184,7 @@
                             <constraint firstItem="wCT-tc-Dva" firstAttribute="leading" secondItem="8Am-5z-igE" secondAttribute="trailing" constant="8" id="lfc-oV-9FS"/>
                             <constraint firstAttribute="trailing" secondItem="Df4-sD-Wch" secondAttribute="trailing" constant="8" id="lkc-U6-Na6"/>
                             <constraint firstItem="wCT-tc-Dva" firstAttribute="centerY" secondItem="8Am-5z-igE" secondAttribute="centerY" id="n53-fD-Xpb"/>
+                            <constraint firstItem="DsX-dI-U61" firstAttribute="centerY" secondItem="8Am-5z-igE" secondAttribute="centerY" id="qIu-Qd-6NG"/>
                             <constraint firstAttribute="bottom" secondItem="Zl4-Mx-vLm" secondAttribute="bottom" constant="5" id="rq5-AH-LpV"/>
                             <constraint firstItem="GI4-Ju-rxt" firstAttribute="top" secondItem="Df4-sD-Wch" secondAttribute="top" id="sif-7q-uIm"/>
                             <constraint firstItem="8Am-5z-igE" firstAttribute="top" secondItem="7aJ-B8-UKw" secondAttribute="top" constant="10" id="t1m-gB-WDI"/>
@@ -205,6 +213,7 @@
                 <outlet property="digBtn" destination="Zl4-Mx-vLm" id="vGH-44-JR8"/>
                 <outlet property="digCountLabel" destination="MHa-2W-G2g" id="gtg-aS-yVX"/>
                 <outlet property="playVideoBtn" destination="GI4-Ju-rxt" id="8H2-nA-NkV"/>
+                <outlet property="readTimeLabel" destination="DsX-dI-U61" id="LHY-Qb-qJQ"/>
                 <outlet property="separatorHeightCon" destination="CUr-Go-xc5" id="LBK-tf-hqd"/>
                 <outlet property="shareBtn" destination="dQv-sk-kgf" id="poO-o7-0qb"/>
                 <outlet property="usernameLabel" destination="wCT-tc-Dva" id="hej-7R-9LQ"/>

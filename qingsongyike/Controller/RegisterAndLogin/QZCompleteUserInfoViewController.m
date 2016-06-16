@@ -10,7 +10,7 @@
 #import "CustomPickerView.h"
 #import "CustomDatePickView.h"
 #import "MyHeadImageViewController.h"
-#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
+//#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 #import "QSYKRootTabBarController.h"
 
 @interface QZCompleteUserInfoViewController () <CustomDatePickViewDelegate, CustomPickerViewDelegate, MyHeadImageDelegate>
@@ -41,8 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.fd_prefersNavigationBarHidden = YES;
-    self.fd_interactivePopDisabled = YES;
+    [self.navigationController setNavigationBarHidden:YES];
 
     _completeBtn.layer.cornerRadius = _completeBtn.height / 2;
     _avatarImageView.layer.cornerRadius = _avatarImageView.height / 2;
@@ -168,7 +167,8 @@
     @weakify(self);
     if (self.isThirdLogin) {
         // check third validation
-        [[QSYKUserManager sharedManager] validateThirdWithOid:_oid from:_type success:^{
+        [[QSYKUserManager sharedManager] validateThirdWithOid:_oid from:_type success:^(int status){
+            
             [[QSYKUserManager sharedManager] registerWithThirdPartyOid:_oid
                                                                   type:_type
                                                                   name:self.nickNameTextField.text
