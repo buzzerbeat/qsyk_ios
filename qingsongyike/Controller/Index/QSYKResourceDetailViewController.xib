@@ -74,6 +74,7 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="Rtj-bp-Unc" secondAttribute="bottom" id="8A9-TI-TsI"/>
                 <constraint firstItem="Rtj-bp-Unc" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="BhR-Zk-n1v"/>
@@ -89,7 +90,13 @@
                     <exclude reference="8A9-TI-TsI"/>
                 </mask>
             </variation>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="vic-nV-8hM" appends="YES" id="5Xa-mA-RRd"/>
+            </connections>
         </view>
+        <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="vic-nV-8hM">
+            <rectEdge key="edges" left="YES"/>
+        </screenEdgePanGestureRecognizer>
     </objects>
     <resources>
         <image name="comment-bar-bg" width="320" height="49"/>

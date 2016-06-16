@@ -9,6 +9,8 @@
 #import "QSYKDataManager.h"
 #import "QSYKResultModel.h"
 #import "QSYKError.h"
+#import "QZRegisterViewController.h"
+#import "QSYKBaseNavigationController.h"
 
 @interface QSYKDataManager()
 
@@ -57,7 +59,7 @@
     NSLog(@"token = %@", finalToken);
     
     NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
-    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", (long)TIMESTEMP];
     [tempDic setObject:timestemp forKey:@"zzz"];
     parameters = [tempDic copy];
     NSLog(@"****** parameters = %@", parameters);
@@ -121,10 +123,10 @@
     NSString *finalToken = (token.length ? token : kToken);
     NSDictionary *parameters = @{
                                  @"client": CLIENT_ID,
-                                 @"token": finalToken
+                                 @"token": finalToken ?: @"",
                                  };
     
-    [self requestWithMethod:QSYKHTTPMethodPOST
+    [self requestWithMethod:QSYKHTTPMethodGET
                   URLString:@"/v2/user/token-check"
                  parameters:parameters
                     success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -132,8 +134,20 @@
                         NSError *error = nil;
                         QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:&error];
                         if (result && result.status == 1) {
-                            //token已过期，重新请求
-                            [self registerAction];
+                            //token已过期
+                            QSYKUserModel *user = [QSYKUserManager sharedManager].user;
+                            
+                            // 如果是已登录用户，则清空登录信息并弹出登录界面
+                            if (user.isLogin) {
+                                [QSYKUserManager sharedManager].user = nil;
+                                
+                                QZRegisterViewController *registerView = [[QZRegisterViewController alloc] initWithNibName:@"QZRegisterViewController" bundle:nil];
+                                QSYKBaseNavigationController *nav = [[QSYKBaseNavigationController alloc] initWithRootViewController:registerView];
+                                
+                                [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:nav animated:YES completion:nil];
+                            } else {
+                                [self registerAction];
+                            }
                         }
                     } failure:^(NSError *error) {
                         NSLog(@"error = %@", error);
@@ -153,7 +167,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
-    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", (long)TIMESTEMP];
     [tempDic setObject:timestemp forKey:@"zzz"];
     parameters = [tempDic copy];
     NSLog(@"parameters = %@", parameters);
@@ -205,7 +219,7 @@
     NSLog(@"token = %@", kToken);
     
     NSMutableDictionary *tempDic = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
-    NSString *timestemp = [NSString stringWithFormat:@"%ld", TIMESTEMP];
+    NSString *timestemp = [NSString stringWithFormat:@"%ld", (long)TIMESTEMP];
     [tempDic setObject:timestemp forKey:@"zzz"];
     parameters = [tempDic copy];
     NSLog(@"parameters = %@", parameters);

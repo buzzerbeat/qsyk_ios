@@ -41,10 +41,15 @@
 
 + (void)loadSplash;
 
++ (void)setDefaultConfig;
+
 + (void)hideTopWindow;
 
 + (void)showTopWindow;
 
+/**
+ * 格式：MM-dd hh:mm
+ */
 + (NSString * _Nonnull)formateTimeInterval:(NSString * _Nonnull)timeInterval;
 
 /**
@@ -62,6 +67,11 @@
  * 刷新数据库
  */
 + (void)updateReadHistory;
+
+/**
+ * 读取数据库记录到数组
+ */
++ (NSArray * _Nonnull)readHistoryArray;
 
 + (NSArray * _Nonnull)removeRedundantData:(NSArray * _Nonnull)original;
 

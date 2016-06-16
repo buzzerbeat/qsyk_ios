@@ -19,6 +19,12 @@
                 <outlet property="view" destination="2rQ-f4-EvU" id="SvM-ol-RMF"/>
                 <outlet property="weiboBtn" destination="3kg-cB-gaJ" id="vA2-dM-KdN"/>
                 <outlet property="weixinBtn" destination="uZC-Hm-Dd5" id="pUN-lR-WjT"/>
+                <outletCollection property="thirdTypeViews" destination="dsS-5Q-1T2" id="iwc-Db-ddC"/>
+                <outletCollection property="thirdTypeViews" destination="IVY-Ql-X1J" id="E2b-Aj-vaA"/>
+                <outletCollection property="thirdTypeViews" destination="iu9-zV-r6V" id="SCi-Rn-D4x"/>
+                <outletCollection property="thirdTypeViews" destination="uZC-Hm-Dd5" id="Z6U-Bf-811"/>
+                <outletCollection property="thirdTypeViews" destination="3kg-cB-gaJ" id="NuS-WM-Ubc"/>
+                <outletCollection property="thirdTypeViews" destination="zVw-6B-01D" id="hfQ-8M-OKJ"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

@@ -13,7 +13,7 @@
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
 #import <Masonry.h>
-#import <SVProgressHUD.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 #import "QSYKDataManager.h"
 #import "QSYKResourceManager.h"
 #import <extobjc.h>
@@ -51,6 +51,7 @@
 #define kThirdToken [[NSUserDefaults standardUserDefaults] objectForKey:@"third_token"]
 #define kLotteryEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"lotteryEnable"]
 #define kBeautyEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"beautyEnable"]
+#define kThirdLoginEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"thirdLoginEnable"]
 #define kDBPath [QSYKUtility dbPath]
 #define kUserReadHistory ([[NSUserDefaults standardUserDefaults] objectForKey:kReadHistoryDicKey] ?: [NSDictionary new])
 
@@ -72,7 +73,7 @@ static NSString * const kLogBaseURL = @"http://log.appcq.cn";
 
 static NSString * const kIsAutoLoadImgOnlyInWifiKey     = @"IsAutoLoadImgOnlyInWifiKey";
 static NSString * const kRemotePushedResourceSid        = @"RemotePushedResourceSid";
-static NSString * const kReadHistoryDicKey              = @"ReadHistoryDic";
+static NSString * const kReadHistoryDicKey              = @"ReadHistoryDicKey";
 static NSString * const kUserInfoChangedNotification    = @"UserInfoChangedNotification";
 static NSString * const kVideoViewShrinkedNotification  = @"VideoViewShrinkedNotification";
 static NSString * const kRefreshIndexPageNotification   = @"RefreshIndexPageNotification";

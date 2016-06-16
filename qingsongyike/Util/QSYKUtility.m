@@ -172,7 +172,7 @@ static int MAX_READHISTORY_COUNT = 1000;
     
     NSString *device = [UIDevice currentDevice].model;
     NSString *sysver = [UIDevice currentDevice].systemVersion;
-    NSString *urlStr = [NSString stringWithFormat:@"%@/splash?device=%@&sysver=%@&%@&%ld", kBaseURL, device, sysver, readHistoryStr, TIMESTEMP];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/splash?device=%@&sysver=%@&%@&%ld", kBaseURL, device, sysver, readHistoryStr, (long)TIMESTEMP];
     NSURL *url = [NSURL URLWithString:urlStr];
     NSLog(@"splash URL = %@", url);
     
@@ -207,6 +207,9 @@ static int MAX_READHISTORY_COUNT = 1000;
         
         // 2.解码数据
         NSData *decodedData = [[NSData alloc] initWithBase64EncodedData:encodedData options:0];
+        if (!decodedData) {
+            return;
+        }
         
         // 3.把解密后的数据转换为字典类型
         NSError *parseError = nil;
@@ -216,13 +219,24 @@ static int MAX_READHISTORY_COUNT = 1000;
         // 提取开关设置
         BOOL lotteryEnable = [dic[@"config"][@"lotteryEnable"] boolValue];
         BOOL beautyEnable  = [dic[@"config"][@"beautyEnable"] boolValue];
+        BOOL thirdLoginEnable  = [dic[@"config"][@"thirdLoginEnable"] boolValue];
         
         // 存到本地
         [[NSUserDefaults standardUserDefaults] setBool:lotteryEnable forKey:@"lotteryEnable"];
         [[NSUserDefaults standardUserDefaults] setBool:beautyEnable forKey:@"beautyEnable"];
+        [[NSUserDefaults standardUserDefaults] setBool:thirdLoginEnable forKey:@"thirdLoginEnable"];
         BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
-        NSLog(@"saveSuccess = %d", saveSuccess);
+        NSLog(@"设置配置成功 = %d", saveSuccess);
     });
+}
+
++ (void)setDefaultConfig {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"lotteryEnable"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"beautyEnable"];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"thirdLoginEnable"];
+    
+    BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
+    NSLog(@"设置默认配置成功 = %d", saveSuccess);
 }
 
 // 隐藏topWindow
@@ -344,6 +358,30 @@ static int MAX_READHISTORY_COUNT = 1000;
             
         }];
     }
+}
+
++ (NSArray *)readHistoryArray {
+    // 先更新阅读历史记录
+    [QSYKUtility updateReadHistory];
+    
+    FMDatabase *db = [FMDatabase databaseWithPath:kDBPath];
+    
+    NSMutableArray *readHistory = [NSMutableArray new];
+    if ([db open]) {
+        FMResultSet *r = [db executeQuery:@"select * from readhistory"];
+        while ([r next]) {
+            if (![readHistory containsObject:[r stringForColumn:@"sid"]]) {
+                NSDictionary *dic = @{[r stringForColumn:@"sid"] : [r stringForColumn:@"createtime"]};
+                [readHistory addObject:dic];
+                
+//                NSLog(@"createTime = %@", [r stringForColumn:@"createtime"]);
+            }
+        }
+    }
+    
+    [db close];
+    
+    return [readHistory copy];
 }
 
 + (NSArray *)removeRedundantData:(NSArray *)original {

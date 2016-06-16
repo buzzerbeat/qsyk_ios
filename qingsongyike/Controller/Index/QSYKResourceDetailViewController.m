@@ -15,6 +15,7 @@
 #import "QSYKGodPostView.h"
 #import "QZRegisterViewController.h"
 #import "QSYKBaseNavigationController.h"
+//#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 @import MediaPlayer;
 
 static int POST_CONTENT_SIDE_WIDTH = 100;
@@ -40,32 +41,8 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     // Do any additional setup after loading the view.
     self.user = [QSYKUserManager sharedManager].user;
     
-//    self.tableView = ({
-//        UITableView *tableView = [[UITableView alloc] init];
-//        tableView.delegate = self;
-//        tableView.dataSource = self;
-//        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//        tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-//        tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-//        [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
-//        [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
-//        [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
-//        [tableView registerNib:[UINib nibWithNibName:@"QSYKCommentTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_commentCell];
-//        
-//        [self.view addSubview:tableView];
-//        [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            if (kIsIphone) {
-//                make.edges.equalTo(self.view);
-//            } else {
-//                make.top.equalTo(self.view);
-//                make.bottom.equalTo(self.view);
-//                make.left.equalTo(self.view.mas_left).offset(SCREEN_WIDTH / 6);
-//                make.right.equalTo(self.view.mas_right).offset(-SCREEN_WIDTH / 6);
-//            }
-//        }];
-//        
-//        tableView;
-//    });
+//    [self.navigationController.interactivePopGestureRecognizer setValue:@(20) forKeyPath:@"_recognizer._settings._edgeSettings._edgeRegionSize"];
+    
     
     [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
     self.view.backgroundColor = self.tableView.backgroundColor;
@@ -108,10 +85,6 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if (_resource.type == 3) {
@@ -135,16 +108,17 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
 }
 
 - (void)keyboardWillChangeFrame:(NSNotification *)noti {
+    CGRect frame = [noti.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     // 先判断用户是否登录
-
     if (!_user.isLogin) {
+        [self.textField endEditing:YES];
         [self loginAction];
     } else {
         //弹出时间
         CGFloat animaDuration = [noti.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
         //拿到键盘弹出的frame
-        CGRect frame = [noti.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+//        CGRect frame = [noti.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
         self.bottomConstraint.constant = SCREEN_HEIGHT - frame.origin.y;
         [UIView animateWithDuration:animaDuration animations:^{
             [self.view layoutIfNeeded];

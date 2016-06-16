@@ -41,6 +41,7 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
     // Do any additional setup after loading the view.
     self.title = @"我的";
     
+    self.user = [QSYKUserManager sharedManager].user;
     [self loadUserInfo];
     
     self.tableView.tableFooterView = [UIView new];
@@ -70,28 +71,28 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
     if (_user && _user.isLogin) {
         self.cellTitles = @[
                             @[@"me"],
-                            @[@"我的收藏",@"我赞过的",],
+                            @[@"我的收藏", @"我赞过的",],// @"我最近浏览的"],
                             @[@"我的积分", @"我的任务"],
-                            @[@"夜间模式", @"设置", @"意见反馈"],
+                            @[@"设置"]//@[@"夜间模式", @"设置", @"意见反馈"],
                             ];
         
         self.cellImageViews = @[
                                 @[@"ic_fav"],
-                                @[@"ic_fav",@"ic_like",],
+                                @[@"ic_fav", @"ic_like",],// @"ic_like"],
                                 @[@"ic_points", @"ic_task"],
-                                @[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                @[@"ic_settings"]//@[@"ic_fav", @"ic_settings", @"ic_settings"],
                                 ];
     } else {
         self.cellTitles = @[
                             @[@"me"],
-                            @[@"我的收藏",@"我赞过的",],
-                            @[@"夜间模式", @"设置", @"意见反馈"],
+                            @[@"我的收藏", @"我赞过的",],// @"我最近浏览的"],
+                            @[@"设置"]//@[@"夜间模式", @"设置", @"意见反馈"],
                             ];
         
         self.cellImageViews = @[
                                 @[@"ic_fav"],
-                                @[@"ic_fav",@"ic_like",],
-                                @[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                @[@"ic_fav", @"ic_like",],// @"ic_like"],
+                                @[@"ic_settings"]//@[@"ic_fav", @"ic_settings", @"ic_settings"],
                                 ];
     }
 }
@@ -103,6 +104,7 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
 
 - (void)loginSuccess:(NSNotification *)noti {
     _user = [QSYKUserManager sharedManager].user;
+    [self loadUserInfo];
     
     [self updateCellTitlesAndImages];
     [self.tableView reloadData];
@@ -128,8 +130,10 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
                                                    NSError *error = nil;
                                                    QSYKUserModel *user = [[QSYKUserModel alloc] initWithDictionary:responseObject error:&error];
                                                    if (!error) {
-                                                       [QSYKUserManager sharedManager].user = user;
-                                                       self.user = [QSYKUserManager sharedManager].user;
+                                                       if (_user.isLogin) {
+                                                           [QSYKUserManager sharedManager].user = user;
+                                                           self.user = [QSYKUserManager sharedManager].user;
+                                                       }
                                                        
                                                        [self updateCellTitlesAndImages];
                                                        [self.tableView reloadData];
@@ -194,50 +198,50 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
             [view removeFromSuperview];
         }
         
-        if (indexPath.section == 0 && _user) {
-            cell.textLabel.text = _user.userName;
+        if (_user.isLogin) {
+            if (indexPath.section == 2) {
+                if (indexPath.row == 0) {
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
+                    UILabel *pointsLabel = [[UILabel alloc] init];
+                    pointsLabel.text = _user ? [NSString stringWithFormat:@"%d积分", _user.points] : @"";
+                    pointsLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
+                    pointsLabel.textColor = [UIColor lightGrayColor];
+                    pointsLabel.textAlignment = NSTextAlignmentRight;
+                    [cell.contentView addSubview:pointsLabel];
+                    [pointsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.centerY.equalTo(cell.contentView.mas_centerY);
+                        make.right.equalTo(cell.contentView.mas_right);
+                    }];
+                } else if (indexPath.row == 1) {
+                    UILabel *taskLabel = [[UILabel alloc] init];
+                    taskLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
+                    taskLabel.textColor = [UIColor lightGrayColor];
+                    taskLabel.textAlignment = NSTextAlignmentRight;
+                    [cell.contentView addSubview:taskLabel];
+                    
+                    // 显示当前任务情况
+                    if (_user.taskList) {
+                        int finishedTasks = 0, totalTasks = 0;
+                        for (QSYKTaskModel *aTask in _user.taskList) {
+                            finishedTasks += aTask.current;
+                            totalTasks    += aTask.total;
+                        }
+                        
+                        taskLabel.text = [NSString stringWithFormat:@"%d/%d", finishedTasks, totalTasks];
+                    } else {
+                        taskLabel.text = @"";
+                    }
+                    
+                    [taskLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.centerY.equalTo(cell.contentView.mas_centerY);
+                        make.right.equalTo(cell.contentView.mas_right);
+                    }];
+                }
+            }
+        } else {
+            
         }
-        
-        /*
-         if (indexPath.row == 2) {
-         UILabel *taskLabel = [[UILabel alloc] init];
-         taskLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-         taskLabel.textColor = [UIColor lightGrayColor];
-         taskLabel.textAlignment = NSTextAlignmentRight;
-         [cell.contentView addSubview:taskLabel];
-         
-         // 显示当前任务情况
-         if (_userInfo.taskList) {
-         int finishedTasks = 0, totalTasks = 0;
-         for (QSYKTaskModel *aTask in _userInfo.taskList) {
-         finishedTasks += aTask.current;
-         totalTasks    += aTask.total;
-         }
-         
-         taskLabel.text = [NSString stringWithFormat:@"%d/%d", finishedTasks, totalTasks];
-         } else {
-         taskLabel.text = @"";
-         }
-         
-         [taskLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-         make.centerY.equalTo(cell.contentView.mas_centerY);
-         make.right.equalTo(cell.contentView.mas_right);
-         }];
-         } else if (indexPath.row == 3) {
-         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-         
-         UILabel *pointsLabel = [[UILabel alloc] init];
-         pointsLabel.text = _userInfo ? [NSString stringWithFormat:@"%d积分", _userInfo.points] : @"";
-         pointsLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-         pointsLabel.textColor = [UIColor lightGrayColor];
-         pointsLabel.textAlignment = NSTextAlignmentRight;
-         [cell.contentView addSubview:pointsLabel];
-         [pointsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-         make.centerY.equalTo(cell.contentView.mas_centerY);
-         make.right.equalTo(cell.contentView.mas_right);
-         }];
-         }
-         */
         
         return cell;
     }
@@ -245,37 +249,62 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 1) {
-        QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
-        myFavoritesVC.URLStr = indexPath.row == 0 ? @"/favorite" : @"/like";
-        myFavoritesVC.title = indexPath.row == 0 ? @"我的收藏" : @"我赞过的";
-        myFavoritesVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:myFavoritesVC animated:YES];
-    } else if (indexPath.section == 2) {
-        if (indexPath.row == 0) {
-            
-        } else if (indexPath.row == 1) {
-            QSYKTaskTableViewController *taskListVC = [[QSYKTaskTableViewController alloc] initWithTaskList:_user.taskList];
-            taskListVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:taskListVC animated:YES];
-        }
-    } else if (indexPath.section == 3){
-        if (indexPath.row == 0) {
-
-        } else if (indexPath.row == 1) {
-            QSYKSettingsTableViewController *settingsVC = [[QSYKSettingsTableViewController alloc] init];
-            settingsVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:settingsVC animated:YES];
-        }
-    } else {
+    if (indexPath.section == 0) {
         if (_user) {
             QZProfileViewController *profilePage = [[QZProfileViewController alloc] initWithNibName:@"QZProfileViewController" bundle:nil];
             profilePage.hidesBottomBarWhenPushed = YES;
-             [self.navigationController pushViewController:profilePage animated:YES];
+            [self.navigationController pushViewController:profilePage animated:YES];
+        }
+    } else if (indexPath.section == 1) {
+        NSString *urlStr = nil;
+        NSString *title = nil;
+        
+        if (indexPath.row == 0) {
+            urlStr = @"/favorite";
+            title = @"我的收藏";
+        } else if (indexPath.row == 1) {
+            urlStr = @"/like";
+            title = @"我的收藏";
+        } else {
+            title = @"最近浏览";
+            urlStr = @"/resources?sid=";
+            
+        }
+        
+        QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+        myFavoritesVC.URLStr = urlStr;
+        myFavoritesVC.title = title;
+        myFavoritesVC.isReadHistory = (indexPath.row == 2);
+        myFavoritesVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:myFavoritesVC animated:YES];
+        
+    } else {
+        if (_user.isLogin) {
+            if (indexPath.section == 2) {
+                if (indexPath.row == 0) {
+                    
+                } else if (indexPath.row == 1) {
+                    QSYKTaskTableViewController *taskListVC = [[QSYKTaskTableViewController alloc] initWithTaskList:_user.taskList];
+                    taskListVC.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:taskListVC animated:YES];
+                }
+            } else if (indexPath.section == 3){
+                if (indexPath.row == 0) {
+                    QSYKSettingsTableViewController *settingsVC = [[QSYKSettingsTableViewController alloc] init];
+                    settingsVC.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:settingsVC animated:YES];
+                }
+            }
+        } else {
+            if (indexPath.section == 2){
+                if (indexPath.row == 0) {
+                    QSYKSettingsTableViewController *settingsVC = [[QSYKSettingsTableViewController alloc] init];
+                    settingsVC.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:settingsVC animated:YES];
+                }
+            }
         }
     }
-    
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

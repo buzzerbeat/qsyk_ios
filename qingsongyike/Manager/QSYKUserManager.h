@@ -93,7 +93,7 @@
 
 - (NSURLSessionDataTask *)validateThirdWithOid:(NSString *)oid
                                           from:(NSString *)from
-                                       success:(void (^)(void))success
+                                       success:(void (^)(int status))success
                                        failure:(void (^)(NSError *error))failure;
 
 @end

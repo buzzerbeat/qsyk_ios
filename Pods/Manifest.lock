@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - CarbonKit (2.1.6)
+  - CarbonKit (2.1.8)
   - Colours (5.13.0):
     - Colours/ObjC (= 5.13.0)
   - Colours/ObjC (5.13.0)
@@ -32,11 +32,10 @@ PODS:
     - DKNightVersion/Core
   - DKNightVersion/UIKit (2.3.0):
     - DKNightVersion/Core
-  - FDFullscreenPopGesture (1.1)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
-  - JPush (2.1.6)
+  - JPush (2.1.7)
   - JSONModel (1.2.0)
   - libextobjc (0.4.1):
     - libextobjc/EXTADT (= 0.4.1)
@@ -73,17 +72,17 @@ PODS:
     - libextobjc/RuntimeExtensions
   - libextobjc/RuntimeExtensions (0.4.1)
   - libextobjc/UmbrellaHeader (0.4.1)
-  - Masonry (1.0.0)
-  - MJRefresh (3.1.0)
+  - Masonry (1.0.1)
+  - MJRefresh (3.1.6)
   - NJKWebViewProgress (0.2.3):
     - NJKWebViewProgress/Core (= 0.2.3)
     - NJKWebViewProgress/ProgressView (= 0.2.3)
   - NJKWebViewProgress/Core (0.2.3)
   - NJKWebViewProgress/ProgressView (0.2.3)
   - RSKImageCropper (1.5.1)
-  - SDWebImage (3.7.5):
-    - SDWebImage/Core (= 3.7.5)
-  - SDWebImage/Core (3.7.5)
+  - SDWebImage (3.7.6):
+    - SDWebImage/Core (= 3.7.6)
+  - SDWebImage/Core (3.7.6)
   - SVProgressHUD (2.0.3)
   - UMengAnalytics (3.6.6)
   - UMengSocial (5.0)
@@ -94,7 +93,6 @@ DEPENDENCIES:
   - Colours (~> 5.13.0)
   - DACircularProgress (~> 2.3.1)
   - DKNightVersion (~> 2.3.0)
-  - FDFullscreenPopGesture (~> 1.1)
   - FMDB (~> 2.6.2)
   - JPush (~> 2.1.6)
   - JSONModel (~> 1.2.0)
@@ -110,24 +108,21 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  CarbonKit: 101a21d2c50ab9453fa4fcbf29de7c81008d8b65
+  CarbonKit: 95d78a09889cc05e36537dd08ec5d73dd55edba4
   Colours: f24220c38f13deac88612667e9b4a7fb96b871d4
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DKNightVersion: 459438cbfd14edb9e41a777ff14b18e5661b9269
-  FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
-  JPush: 9732a2a9e6a34729f660d6275704a5803d661e83
+  JPush: d37320eba856bf91f2c73989df4abf1e8846db2c
   JSONModel: 12523685c4b623553ccf844bbbf7007624317b2c
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
-  Masonry: b529bb169217897b6354d4b56b1fada6d475b13d
-  MJRefresh: 743e6404967d1c2c688472ea3ecfde247d872db4
+  Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
+  MJRefresh: 5c69f11e8bde0664e15326d2e61f61e103c6545f
   NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
   RSKImageCropper: edd65fedb3734332818deb139906d6b7f54b8a44
-  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
   UMengAnalytics: 4bf831415146b9c57cb10be65fbd43462ef8cf65
   UMengSocial: 48b67179c492a8cf7803fbb0438b8f55432e2fc1
 
-PODFILE CHECKSUM: b9096d55489d8d60fc85efd6371f1a8995765251
-
-COCOAPODS: 1.0.1
+COCOAPODS: 0.39.0

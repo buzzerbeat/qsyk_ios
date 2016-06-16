@@ -16,7 +16,6 @@
 		8C5ABBD11CFF05A5006A2EA5 /* QSYKTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5ABBD01CFF05A5006A2EA5 /* QSYKTabBar.m */; };
 		8C6707AB1CE203F5002CA1E1 /* LYTopRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707A81CE203F5002CA1E1 /* LYTopRootController.m */; };
 		8C6707AC1CE203F5002CA1E1 /* LYTopWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6707AA1CE203F5002CA1E1 /* LYTopWindow.m */; };
-		8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C94A1AE1CE3433C00D78CDE /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8C95B8D01CCC529D0058B82D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C95B8CF1CCC529D0058B82D /* main.m */; };
 		8C95B8D31CCC529D0058B82D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C95B8D21CCC529D0058B82D /* AppDelegate.m */; };
 		8C95B8D91CCC529D0058B82D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C95B8D71CCC529D0058B82D /* Main.storyboard */; };
@@ -25,7 +24,6 @@
 		8CAF37BB1D0D024200A9A891 /* QSYKEditSignViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF37B91D0D024200A9A891 /* QSYKEditSignViewController.xib */; };
 		8CB299151CCF186C0024E471 /* QSYKSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299141CCF186C0024E471 /* QSYKSettingsTableViewController.m */; };
 		8CB2993A1CD04BB80024E471 /* QSYKUMengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299391CD04BB80024E471 /* QSYKUMengManager.m */; };
-		8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		8CB299431CD051C80024E471 /* QSYKSharePopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299421CD051C80024E471 /* QSYKSharePopupView.m */; };
 		8CB299451CD051D30024E471 /* QSYKSharePopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB299441CD051D30024E471 /* QSYKSharePopupView.xib */; };
 		8CB2994A1CD05C5C0024E471 /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB299491CD05C5C0024E471 /* KLCPopup.m */; };
@@ -97,6 +95,7 @@
 		8CCED02A1D06CA050076B9F7 /* QZBindThirdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CCED0281D06CA050076B9F7 /* QZBindThirdCell.xib */; };
 		8CDB3EA91CDB6A57003B1F55 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */; };
 		8CDB3EAA1CDB6A57003B1F55 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */; };
+		8CDD9A091D12624F00E93EC8 /* libPods-qingsongyike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CDD9A081D12624F00E93EC8 /* libPods-qingsongyike.a */; };
 		8CDFF3231D0E894000E14CDC /* QSYKResourceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDFF3221D0E894000E14CDC /* QSYKResourceDetailViewController.xib */; };
 		8CE30A0B1D07B29E00902493 /* QSYKUserBriefInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE30A0A1D07B29E00902493 /* QSYKUserBriefInfoCell.m */; };
 		8CE30A0D1D07B2B000902493 /* QSYKUserBriefInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE30A0C1D07B2B000902493 /* QSYKUserBriefInfoCell.xib */; };
@@ -120,7 +119,6 @@
 		8CF9C6BE1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF9C6BC1CCDAC1F0008FCA0 /* QSYKVideoTableViewCell.xib */; };
 		8CF9C6C11CCDBCDC0008FCA0 /* QSYKRefreshFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C01CCDBCDC0008FCA0 /* QSYKRefreshFooter.m */; };
 		8CF9C6C41CCDC9730008FCA0 /* QSYKResourceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF9C6C31CCDC9730008FCA0 /* QSYKResourceDetailViewController.m */; };
-		E6C98688E8228383101A0CDD /* libPods-qingsongyike.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E020389BB0FBB42A05CE50F9 /* libPods-qingsongyike.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -275,6 +273,30 @@
 		8CDB3EA61CDB6A57003B1F55 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		8CDB3EA71CDB6A57003B1F55 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
 		8CDB3EA81CDB6A57003B1F55 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
+		8CDD99D21D125BCD00E93EC8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		8CDD99D41D125BD400E93EC8 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		8CDD99D61D125BDB00E93EC8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		8CDD99D81D125BE100E93EC8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8CDD99DA1D125BE600E93EC8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8CDD99DC1D125BED00E93EC8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		8CDD99E01D12614C00E93EC8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8CDD99E81D1261B600E93EC8 /* libJSONModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libJSONModel.a; path = "Pods/../build/Debug-iphoneos/JSONModel/libJSONModel.a"; sourceTree = "<group>"; };
+		8CDD99EA1D1261C300E93EC8 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "Pods/../build/Debug-iphoneos/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
+		8CDD99EC1D1261D800E93EC8 /* libCarbonKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCarbonKit.a; path = "Pods/../build/Debug-iphoneos/CarbonKit/libCarbonKit.a"; sourceTree = "<group>"; };
+		8CDD99ED1D1261D800E93EC8 /* libColours.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libColours.a; path = "Pods/../build/Debug-iphoneos/Colours/libColours.a"; sourceTree = "<group>"; };
+		8CDD99EE1D1261D800E93EC8 /* libDACircularProgress.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDACircularProgress.a; path = "Pods/../build/Debug-iphoneos/DACircularProgress/libDACircularProgress.a"; sourceTree = "<group>"; };
+		8CDD99EF1D1261D800E93EC8 /* libDKNightVersion.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libDKNightVersion.a; path = "Pods/../build/Debug-iphoneos/DKNightVersion/libDKNightVersion.a"; sourceTree = "<group>"; };
+		8CDD99F01D1261D800E93EC8 /* libFDFullscreenPopGesture.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFDFullscreenPopGesture.a; path = "Pods/../build/Debug-iphoneos/FDFullscreenPopGesture/libFDFullscreenPopGesture.a"; sourceTree = "<group>"; };
+		8CDD99F11D1261D800E93EC8 /* libFMDB.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFMDB.a; path = "Pods/../build/Debug-iphoneos/FMDB/libFMDB.a"; sourceTree = "<group>"; };
+		8CDD99F21D1261D800E93EC8 /* liblibextobjc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibextobjc.a; path = "Pods/../build/Debug-iphoneos/libextobjc/liblibextobjc.a"; sourceTree = "<group>"; };
+		8CDD99F31D1261D800E93EC8 /* libMasonry.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMasonry.a; path = "Pods/../build/Debug-iphoneos/Masonry/libMasonry.a"; sourceTree = "<group>"; };
+		8CDD99F41D1261D800E93EC8 /* libMJRefresh.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMJRefresh.a; path = "Pods/../build/Debug-iphoneos/MJRefresh/libMJRefresh.a"; sourceTree = "<group>"; };
+		8CDD99F51D1261D800E93EC8 /* libNJKWebViewProgress.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNJKWebViewProgress.a; path = "Pods/../build/Debug-iphoneos/NJKWebViewProgress/libNJKWebViewProgress.a"; sourceTree = "<group>"; };
+		8CDD99F61D1261D800E93EC8 /* libRSKImageCropper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libRSKImageCropper.a; path = "Pods/../build/Debug-iphoneos/RSKImageCropper/libRSKImageCropper.a"; sourceTree = "<group>"; };
+		8CDD99F71D1261D800E93EC8 /* libSDWebImage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDWebImage.a; path = "Pods/../build/Debug-iphoneos/SDWebImage/libSDWebImage.a"; sourceTree = "<group>"; };
+		8CDD99F81D1261D800E93EC8 /* libSVProgressHUD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSVProgressHUD.a; path = "Pods/../build/Debug-iphoneos/SVProgressHUD/libSVProgressHUD.a"; sourceTree = "<group>"; };
+		8CDD9A061D12620D00E93EC8 /* libafc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libafc.tbd; path = usr/lib/libafc.tbd; sourceTree = SDKROOT; };
+		8CDD9A081D12624F00E93EC8 /* libPods-qingsongyike.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-qingsongyike.a"; path = "Pods/../build/Debug-iphoneos/libPods-qingsongyike.a"; sourceTree = "<group>"; };
 		8CDFF3221D0E894000E14CDC /* QSYKResourceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSYKResourceDetailViewController.xib; sourceTree = "<group>"; };
 		8CE30A091D07B29E00902493 /* QSYKUserBriefInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSYKUserBriefInfoCell.h; sourceTree = "<group>"; };
 		8CE30A0A1D07B29E00902493 /* QSYKUserBriefInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSYKUserBriefInfoCell.m; sourceTree = "<group>"; };
@@ -325,9 +347,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C94A1AF1CE3433C00D78CDE /* UIKit.framework in Frameworks */,
-				8CB2993F1CD04E210024E471 /* CoreLocation.framework in Frameworks */,
-				E6C98688E8228383101A0CDD /* libPods-qingsongyike.a in Frameworks */,
+				8CDD9A091D12624F00E93EC8 /* libPods-qingsongyike.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +366,30 @@
 		584AA0AA95BEF5FF26F0CCFA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CDD9A081D12624F00E93EC8 /* libPods-qingsongyike.a */,
+				8CDD9A061D12620D00E93EC8 /* libafc.tbd */,
+				8CDD99EC1D1261D800E93EC8 /* libCarbonKit.a */,
+				8CDD99ED1D1261D800E93EC8 /* libColours.a */,
+				8CDD99EE1D1261D800E93EC8 /* libDACircularProgress.a */,
+				8CDD99EF1D1261D800E93EC8 /* libDKNightVersion.a */,
+				8CDD99F01D1261D800E93EC8 /* libFDFullscreenPopGesture.a */,
+				8CDD99F11D1261D800E93EC8 /* libFMDB.a */,
+				8CDD99F21D1261D800E93EC8 /* liblibextobjc.a */,
+				8CDD99F31D1261D800E93EC8 /* libMasonry.a */,
+				8CDD99F41D1261D800E93EC8 /* libMJRefresh.a */,
+				8CDD99F51D1261D800E93EC8 /* libNJKWebViewProgress.a */,
+				8CDD99F61D1261D800E93EC8 /* libRSKImageCropper.a */,
+				8CDD99F71D1261D800E93EC8 /* libSDWebImage.a */,
+				8CDD99F81D1261D800E93EC8 /* libSVProgressHUD.a */,
+				8CDD99EA1D1261C300E93EC8 /* libAFNetworking.a */,
+				8CDD99E81D1261B600E93EC8 /* libJSONModel.a */,
+				8CDD99E01D12614C00E93EC8 /* Foundation.framework */,
+				8CDD99DC1D125BED00E93EC8 /* SystemConfiguration.framework */,
+				8CDD99DA1D125BE600E93EC8 /* Security.framework */,
+				8CDD99D81D125BE100E93EC8 /* QuartzCore.framework */,
+				8CDD99D61D125BDB00E93EC8 /* MobileCoreServices.framework */,
+				8CDD99D41D125BD400E93EC8 /* ImageIO.framework */,
+				8CDD99D21D125BCD00E93EC8 /* CoreGraphics.framework */,
 				8C94A1AE1CE3433C00D78CDE /* UIKit.framework */,
 				8CB2993D1CD04DF90024E471 /* MapKit.framework */,
 				8CB2993B1CD04DBE0024E471 /* CoreLocation.framework */,
@@ -763,6 +807,7 @@
 				8C95B8C91CCC529D0058B82D /* Resources */,
 				964D84DDFE5983EF2993B611 /* [CP] Embed Pods Frameworks */,
 				4027526EC11BED71CA7C8E92 /* [CP] Copy Pods Resources */,
+				CF4AE42A9AD7576F1F147ECB /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -898,6 +943,21 @@
 			inputPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-qingsongyike/Pods-qingsongyike-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CF4AE42A9AD7576F1F147ECB /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1087,6 +1147,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1106,13 +1167,34 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PRODUCT_NAME)/System/PrefixHeader.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = qingsongyike/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/JSONModel",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/AFNetworking",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/CarbonKit",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Colours",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/DACircularProgress",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/DKNightVersion",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/FDFullscreenPopGesture",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/FMDB",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/libextobjc",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Masonry",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/MJRefresh",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/NJKWebViewProgress",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/RSKImageCropper",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/SDWebImage",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/SVProgressHUD",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1133,10 +1215,30 @@
 				INFOPLIST_FILE = qingsongyike/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/JSONModel",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/AFNetworking",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/CarbonKit",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Colours",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/DACircularProgress",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/DKNightVersion",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/FDFullscreenPopGesture",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/FMDB",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/libextobjc",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/Masonry",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/MJRefresh",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/NJKWebViewProgress",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/RSKImageCropper",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/SDWebImage",
+					"$(PROJECT_DIR)/build/Debug-iphoneos/SVProgressHUD",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.subo.qingsongyike;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};

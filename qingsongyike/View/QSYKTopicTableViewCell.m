@@ -68,6 +68,11 @@
         self.buryCountLabel.textColor = [UIColor lightGrayColor];
     }
     
+    if (_flag) {
+        self.readTimeLabel.hidden = NO;
+        self.readTimeLabel.text = [QSYKUtility formateTimeInterval:_readTime];
+    }
+    
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
     CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
     

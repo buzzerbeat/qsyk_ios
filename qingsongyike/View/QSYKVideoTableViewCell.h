@@ -28,11 +28,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *commentBtn;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *videoThumbBottomCon;
+@property (weak, nonatomic) IBOutlet UILabel *readTimeLabel;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
 @property (nonatomic, strong) QSYKResourceModel *resource;
-@property (nonatomic, assign) BOOL flag;    // 标识是否显示在收藏、赞 页面
 @property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, assign) BOOL flag;    // 标识是否显示在最近浏览页面
+@property (nonatomic, copy) NSString *readTime;
 
 - (void)reset;
 + (CGFloat)cellBaseHeight;

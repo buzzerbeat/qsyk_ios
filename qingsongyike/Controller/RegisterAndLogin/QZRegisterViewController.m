@@ -110,14 +110,12 @@ static int remainSeconds = 60;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
     
-    self.thirdLoginEnable = [[[NSUserDefaults standardUserDefaults] valueForKey:@"thirdLoginEnable"] boolValue];
-//    if (!_thirdLoginEnable) {
-//        for (UIView *subView in self.thirdTypeViews) {
-//            subView.hidden = YES;
-//        }
-//    }
+    if (!kThirdLoginEnable) {
+        for (UIView *subView in self.thirdTypeViews) {
+            subView.hidden = YES;
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -384,34 +382,40 @@ static int remainSeconds = 60;
 
 // 三方账户请求登录
 - (void)thirdTypeRequestLogin {
-    [[QSYKUserManager sharedManager] validateThirdWithOid:_thirdTypeOid from:_thirdType success:^{
-        @weakify(self);
-        [[QSYKUserManager sharedManager] loginWithThirdPartyOid:_thirdTypeOid
-                                                          type:_thirdType
-                                                       success:^(QSYKUserModel *userModel) {
-                                                           @strongify(self);
-                                                           
-                                                           // 登陆成功，将用户信息存储到本地
-                                                           [QSYKUserManager sharedManager].user = userModel;
-                                                           //                                                   [self startApp];
-                                                           
-                                                           // 通知‘我的’界面更新信息
-                                                           [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccessNotification object:nil];
-                                                           
-                                                           [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-                                                       }
-                                                       failure:^(NSError *error) {
-                                                           @strongify(self);
-                                                           NSLog(@"error = %@", error);
-                                                           
-                                                           if (error.code == QSYKErrorTypeThirdNoRegisterFailure) {
-                                                               // 未绑定三方账号，先检查用户名是否可用再去注册页
-                                                               [self checkThirdTypeUserNameAvailability];
-                                                               
-                                                           } else {
-                                                               [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
-                                                           }
-                                                       }];
+    [[QSYKUserManager sharedManager] validateThirdWithOid:_thirdTypeOid from:_thirdType success:^(int status){
+        
+        if (status == 1) {
+            @weakify(self);
+            [[QSYKUserManager sharedManager] loginWithThirdPartyOid:_thirdTypeOid
+                                                               type:_thirdType
+                                                            success:^(QSYKUserModel *userModel) {
+                                                                @strongify(self);
+                                                                
+                                                                // 登陆成功，将用户信息存储到本地
+                                                                [QSYKUserManager sharedManager].user = userModel;
+                                                                //                                                   [self startApp];
+                                                                
+                                                                // 通知‘我的’界面更新信息
+                                                                [[NSNotificationCenter defaultCenter] postNotificationName:kLoginSuccessNotification object:nil];
+                                                                
+                                                                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                                            }
+                                                            failure:^(NSError *error) {
+//                                                                @strongify(self);
+                                                                NSLog(@"error = %@", error);
+                                                                
+//                                                                if (error.code == QSYKErrorTypeThirdNoRegisterFailure) {
+//                                                                    // 未绑定三方账号，先检查用户名是否可用再去注册页
+//                                                                    [self checkThirdTypeUserNameAvailability];
+//                                                                    
+//                                                                } else {
+//                                                                    [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];
+//                                                                }
+                                                            }];
+        } else {
+            
+            [self checkThirdTypeUserNameAvailability];
+        }
     } failure:^(NSError *error) {
         NSLog(@"error = %@", error);
         [SVProgressHUD showErrorWithStatus:error.userInfo[@"QSYKError"]];

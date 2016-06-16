@@ -13,6 +13,7 @@
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_4.7" translatesAutoresizingMaskIntoConstraints="NO" id="hVK-tT-4Qi">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <gestureRecognizers/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

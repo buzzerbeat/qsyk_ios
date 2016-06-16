@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '7E41CA2ECB40C640963734378302229C'
+               BlueprintIdentifier = '6DFFBE3E88EE51FA17CF8EBF'
                BlueprintName = 'libextobjc'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'liblibextobjc.a'>

@@ -142,6 +142,12 @@
                                 <rect key="frame" x="8" y="356" width="324" height="15"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="06-15 09:21" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uGD-hN-U8C">
+                                <rect key="frame" x="268" y="20.5" width="64" height="13.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -149,6 +155,7 @@
                             <constraint firstItem="tNA-ko-ZDT" firstAttribute="centerY" secondItem="ak1-Mc-E0f" secondAttribute="centerY" id="1CJ-BN-eFp"/>
                             <constraint firstItem="9C6-je-jFM" firstAttribute="leading" secondItem="Nd1-TR-PvW" secondAttribute="leading" constant="10" id="20H-ZH-KS2"/>
                             <constraint firstAttribute="trailing" secondItem="rgp-5i-7f7" secondAttribute="trailing" constant="10" id="2Ne-9K-HET"/>
+                            <constraint firstAttribute="trailing" secondItem="uGD-hN-U8C" secondAttribute="trailing" constant="8" id="6JO-cc-lfR"/>
                             <constraint firstItem="GVR-TJ-YBa" firstAttribute="leading" secondItem="V6x-qc-cRt" secondAttribute="trailing" constant="50" id="6y3-Lp-Grq"/>
                             <constraint firstItem="ngX-xL-Mr1" firstAttribute="top" secondItem="Mag-Oa-Y2g" secondAttribute="top" id="AVT-gq-K5s"/>
                             <constraint firstItem="Edl-iU-qUy" firstAttribute="leading" secondItem="Mag-Oa-Y2g" secondAttribute="leading" id="Apm-gC-CSY"/>
@@ -183,6 +190,7 @@
                             <constraint firstItem="Edl-iU-qUy" firstAttribute="trailing" secondItem="Mag-Oa-Y2g" secondAttribute="trailing" id="tlA-Ql-icq"/>
                             <constraint firstItem="ngX-xL-Mr1" firstAttribute="height" secondItem="Mag-Oa-Y2g" secondAttribute="height" id="vO2-59-Yn9"/>
                             <constraint firstItem="tNA-ko-ZDT" firstAttribute="leading" secondItem="ak1-Mc-E0f" secondAttribute="trailing" constant="8" id="wIj-mb-Uc3"/>
+                            <constraint firstItem="uGD-hN-U8C" firstAttribute="centerY" secondItem="ak1-Mc-E0f" secondAttribute="centerY" id="xeU-Mb-X9X"/>
                             <constraint firstAttribute="trailing" secondItem="4aQ-hg-lrA" secondAttribute="trailing" constant="8" id="yCQ-sA-rU9"/>
                         </constraints>
                     </view>
@@ -208,6 +216,7 @@
                 <outlet property="imageViewBottomCon" destination="eDi-ov-daw" id="ne3-8b-3I4"/>
                 <outlet property="myImageView" destination="Mag-Oa-Y2g" id="dAe-GO-6aG"/>
                 <outlet property="progressView" destination="8d4-5g-QB0" id="iiD-xL-Kt2"/>
+                <outlet property="readTimeLabel" destination="uGD-hN-U8C" id="pih-Jn-qVU"/>
                 <outlet property="separatorHeightCon" destination="Z60-f0-xWt" id="KYa-yv-a7c"/>
                 <outlet property="shareBtn" destination="rgp-5i-7f7" id="00o-2v-UUk"/>
                 <outlet property="showBigPicBtn" destination="Edl-iU-qUy" id="e7l-7P-bFW"/>
