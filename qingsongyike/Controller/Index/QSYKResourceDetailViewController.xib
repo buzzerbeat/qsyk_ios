@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="bottomConstraint" destination="QFU-eq-Edp" id="xQ9-1L-epk"/>
                 <outlet property="sendCommentBtn" destination="3R2-Je-Rf4" id="Pcd-5i-Un1"/>
+                <outlet property="separatorHeightCon" destination="0kM-fW-DNp" id="jLI-Rn-Yfu"/>
                 <outlet property="tableView" destination="Rtj-bp-Unc" id="wYY-Ub-z2h"/>
                 <outlet property="tableViewWidthCon" destination="wyw-ba-4LU" id="WGv-4c-7c6"/>
                 <outlet property="textField" destination="H08-bt-ED7" id="q8b-uB-MxQ"/>
@@ -34,11 +35,16 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7P-ay-hF3">
                     <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="comment-bar-bg" translatesAutoresizingMaskIntoConstraints="NO" id="MUx-Ru-Z6z">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                        </imageView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="写评论..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H08-bt-ED7">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NqM-44-s91">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                            <color key="backgroundColor" red="0.90980392156862744" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="0kM-fW-DNp"/>
+                            </constraints>
+                        </view>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="留下神评" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H08-bt-ED7">
                             <rect key="frame" x="15" y="5" width="507" height="34"/>
+                            <color key="backgroundColor" red="0.90980392156862744" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
@@ -50,7 +56,7 @@
                                 <constraint firstAttribute="height" constant="32" id="edg-Yr-N3C"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <state key="normal" title="发送">
+                            <state key="normal" title="发布">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -58,19 +64,25 @@
                             </connections>
                         </button>
                     </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="3R2-Je-Rf4" firstAttribute="leading" secondItem="NqM-44-s91" secondAttribute="trailing" id="0pH-nn-ZK6"/>
+                        <constraint firstItem="NqM-44-s91" firstAttribute="top" secondItem="U7P-ay-hF3" secondAttribute="top" id="3e3-z7-vRy"/>
                         <constraint firstItem="H08-bt-ED7" firstAttribute="leading" secondItem="U7P-ay-hF3" secondAttribute="leading" constant="15" id="9Ng-o6-s6t"/>
-                        <constraint firstAttribute="trailing" secondItem="MUx-Ru-Z6z" secondAttribute="trailing" id="HCd-qB-jtp"/>
-                        <constraint firstAttribute="bottom" secondItem="MUx-Ru-Z6z" secondAttribute="bottom" id="HiX-tU-cUf"/>
                         <constraint firstAttribute="height" constant="44" id="NLf-EA-Ct5"/>
-                        <constraint firstItem="MUx-Ru-Z6z" firstAttribute="top" secondItem="U7P-ay-hF3" secondAttribute="top" id="XXf-oi-fwD"/>
                         <constraint firstAttribute="bottom" secondItem="H08-bt-ED7" secondAttribute="bottom" constant="5" id="aXN-Nn-Thr"/>
+                        <constraint firstItem="NqM-44-s91" firstAttribute="leading" secondItem="U7P-ay-hF3" secondAttribute="leading" id="daf-wZ-WZQ"/>
                         <constraint firstItem="H08-bt-ED7" firstAttribute="top" secondItem="U7P-ay-hF3" secondAttribute="top" constant="5" id="ioh-IJ-l8u"/>
+                        <constraint firstAttribute="trailing" secondItem="NqM-44-s91" secondAttribute="trailing" id="kuU-DV-5sM"/>
                         <constraint firstItem="3R2-Je-Rf4" firstAttribute="leading" secondItem="H08-bt-ED7" secondAttribute="trailing" constant="8" id="sza-E9-CIr"/>
-                        <constraint firstItem="MUx-Ru-Z6z" firstAttribute="leading" secondItem="U7P-ay-hF3" secondAttribute="leading" id="uFc-ln-BN5"/>
                         <constraint firstAttribute="trailing" secondItem="3R2-Je-Rf4" secondAttribute="trailing" constant="10" id="xJV-2j-hvB"/>
                         <constraint firstItem="3R2-Je-Rf4" firstAttribute="centerY" secondItem="U7P-ay-hF3" secondAttribute="centerY" id="yqe-f0-eun"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="0pH-nn-ZK6"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -98,7 +110,4 @@
             <rectEdge key="edges" left="YES"/>
         </screenEdgePanGestureRecognizer>
     </objects>
-    <resources>
-        <image name="comment-bar-bg" width="320" height="49"/>
-    </resources>
 </document>

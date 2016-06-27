@@ -10,6 +10,7 @@
 #import "QSYKImageModel.h"
 #import "QSYKVideoModel.h"
 #import "QSYKPostModel.h"
+#import "QSYKTagModel.h"
 
 @interface QSYKResourceModel : JSONModel
 @property (nonatomic, assign) int type;
@@ -18,6 +19,7 @@
 @property (nonatomic, assign) int share;
 @property (nonatomic, assign) int post;
 @property (nonatomic, assign) int favorite;
+@property (nonatomic, assign) int indexTag;
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *sid;
 @property (nonatomic, copy) NSString *desc;
@@ -29,6 +31,7 @@
 @property (nonatomic, strong) NSMutableArray<QSYKPostModel> *hotPosts;
 @property (nonatomic, strong) NSMutableArray<QSYKPostModel> *posts;
 @property (nonatomic, strong) NSMutableArray<QSYKPostModel> *godPosts;
+@property (nonatomic, strong) NSArray<QSYKTagModel> *tags;
 @property (nonatomic, assign) BOOL hasDigged;
 @property (nonatomic, assign) BOOL hasBuried;
 

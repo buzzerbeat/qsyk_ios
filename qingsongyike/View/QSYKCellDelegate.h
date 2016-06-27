@@ -8,6 +8,7 @@
 
 #ifndef QSYKCellDelegate_h
 #define QSYKCellDelegate_h
+@class QSYKTagModel;
 
 @protocol QSYKCellDelegate <NSObject>
 
@@ -15,7 +16,9 @@
 - (void)shareResoureWithSid:(NSString *)sid imgSid:(NSString *)imgSid content:(NSString *)content isTopic:(BOOL)isTopic;
 
 @optional
-- (void)commentResourceWithSid:(NSString *)sid;
+- (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath;
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag;
+- (void)locatePostAtIndexPath:(NSIndexPath *)indexPath;
 - (void)ratePostWithSid:(NSString *)sid indexPath:(NSIndexPath *)indexPath;
 - (void)playBtnClicked;
 

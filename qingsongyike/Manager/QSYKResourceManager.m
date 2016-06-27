@@ -33,7 +33,7 @@
                         failure:(void (^)(NSError *error))failure {
     
     NSMutableDictionary *mDic = [parameters mutableCopy];
-    [mDic setObject:@"godPosts" forKey:@"expand"];
+    [mDic setObject:@"godPosts,tags" forKey:@"expand"];
     [mDic setObject:@40 forKey:@"per-page"];
     
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
@@ -55,7 +55,7 @@
                                             failure:(void (^)(NSError *error))failure {
     
     NSString *sid = parameters[@"sid"];
-    NSString *expand = @"expand=hotPosts,posts,godPosts";
+    NSString *expand = @"expand=hotPosts,posts,godPosts,tags";
     NSString *urlStr = [NSString stringWithFormat:@"resources/%@?%@", sid, expand];
     return [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
                                                     URLString:urlStr

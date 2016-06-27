@@ -13,6 +13,7 @@
 #import "QSYKResourceDetailViewController.h"
 #import "QSYKFavoriteResourceModel.h"
 #import "QSYKGodPostView.h"
+#import "QSYKMyFavoriteTableViewController.h"
 @import MediaPlayer;
 
 @interface QSYKRecommendPageViewController () <QSYKCellDelegate>
@@ -153,7 +154,7 @@
 }
 
 - (void)loadData {
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:@40, @"per-page", @"godPosts", @"expand", nil];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithObjectsAndKeys:@40, @"per-page", @"godPosts,tags", @"expand", nil];
     NSString *URLString = nil;
     if (_isBeautyTag) {
         URLString = @"resource-tags";
@@ -252,10 +253,10 @@
     NSInteger cellType = resource.type;
     
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
-    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
     
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
-                                                          font:16.f
+                                                          font:TEXT_FONT
                                                          width:width];
     
     // 神评论
@@ -264,7 +265,7 @@
         CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
         for (int i = 0; i < postCount; i++) {
             QSYKPostModel *post = resource.godPosts[i];
-            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:15 width:[QSYKGodPostView contentWidth]];
+            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
         }
         extraHeight += postHeight;
     }
@@ -336,6 +337,7 @@
     
     QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
     resourceDetailVC.sid = resource.sid;
+//    [resourceDetailVC setValue:resourceDetailVC forKey:@"resource"];
     resourceDetailVC.hidesBottomBarWhenPushed = YES;
     
     [self.navigationController pushViewController:resourceDetailVC animated:YES];
@@ -422,8 +424,67 @@
     
 }
 
-- (void)commentResourceWithSid:(NSString *)sid {
+// 查看某个标签类型资源
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag {
+    QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+    myFavoritesVC.URLStr = [NSString stringWithFormat:@"resource-tag?tag=%@", tag.sid];
+    myFavoritesVC.tag = tag;
+    myFavoritesVC.title = tag.name;
+    myFavoritesVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myFavoritesVC animated:YES];
+}
+
+// 删除某个资源
+- (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    self.deletingResourceSid = resource.sid;
+    self.deletingResourceIndexPath = indexPath;
+    [QSYKUtility showDeleteResourceReasonsWithSid:resource.sid delegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAndReloadAtIndexPath) name:@"deleteComplete" object:nil];
     
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // 1看不懂, 5没意思, 2不喜欢, 3太污了, 4重口味, 0其他
+    
+    NSInteger index = 0;
+    if (buttonIndex == 0) {
+        index = 1;
+    } else if (buttonIndex == 1) {
+        index = 5;
+    } else if (buttonIndex == 5) {
+        index = 0;
+    } else {
+        index = buttonIndex;
+    }
+    
+    [[QSYKDataManager sharedManager] deleteResourceWithSid:self.deletingResourceSid type:index];
+    
+}
+
+- (void) deleteAndReloadAtIndexPath {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleteComplete" object:nil];
+    
+    [_resourceList removeObjectAtIndex:self.deletingResourceIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[self.deletingResourceIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView reloadData];
+}
+
+// 通过点击评论图标进入资源内页，定位到评论位置
+- (void)locatePostAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = resource.sid;
+    resourceDetailVC.needScrollToPost = YES;
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+    
+    if (resource.type == 3) {
+        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [curCell reset];
+    }
 }
 
 

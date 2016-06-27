@@ -12,6 +12,8 @@
 #import "QSYKTopicTableViewCell.h"
 #import "QSYKVideoTableViewCell.h"
 #import "QSYKResourceDetailViewController.h"
+#import "QSYKTagPageHeaderView.h"
+#import "QSYKTagModel.h"
 @import MediaPlayer;
 
 @interface QSYKMyFavoriteTableViewController () <UITableViewDelegate, UITableViewDataSource, QSYKCellDelegate>
@@ -21,6 +23,7 @@
 @property (nonatomic, strong) NSArray *readHistory;
 @property (nonatomic, copy) NSString *sids;     // 当前显示的资源sid串
 @property (nonatomic, assign) NSInteger remainingSidCount;
+@property (nonatomic, strong) QSYKTagPageHeaderView *headerView;
 
 @end
 
@@ -40,6 +43,12 @@
         [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
+        
+        if (_tag) {
+            [self getTagInfo];
+            
+            [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(getTagInfo) name:@"focusDone" object:nil];
+        }
         
         [self.view addSubview:tableView];
         [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -84,10 +93,6 @@
     // 如果是展示浏览历史，需要先获取本地存储浏览的记录
     if (_isReadHistory) {
         self.readHistory = [NSArray arrayWithArray:[QSYKUtility readHistoryArray]];
-
-//        for (NSDictionary *dic in _readHistory) {
-//            NSLog(@"createTime = %@", [dic allValues][0]);
-//        }
         
         self.sids = @"";
         self.remainingSidCount = _readHistory.count - 1;
@@ -98,10 +103,10 @@
         }
         
         self.URLStr = [@"/resources?sid=" stringByAppendingString:_sids];
-        self.models = [NSMutableArray new];
         NSLog(@"sids = %@", _sids);
     }
     
+    self.models = [NSMutableArray new];
     [self loadResource];
 }
 
@@ -115,6 +120,45 @@
     
     // 当页面离开屏幕时关闭视频播放
     [[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
+- (QSYKTagPageHeaderView *)headerView {
+    if (!_headerView) {
+        _headerView = [[NSBundle mainBundle] loadNibNamed:@"QSYKTagPageHeaderView" owner:nil options:nil][0];
+    }
+    return _headerView;
+}
+
+- (void)configTableHeaderView {
+    self.headerView.tagModel = _tag;
+    [_headerView layoutSubviews];
+    
+    UIView *view = [[UIView alloc] init];
+    view.height = _headerView.height;
+    view.width = SCREEN_WIDTH;
+    [view addSubview:_headerView];
+    [_headerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(view);
+    }];
+    
+    self.tableView.tableHeaderView = view;
+    [self.tableView reloadData];
+}
+
+- (void)getTagInfo {
+    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
+                                             URLString:[NSString stringWithFormat:@"/tags/%@?expand=isFocus", _tag.sid]
+                                            parameters:nil
+                                               success:^(NSURLSessionDataTask *task, id responseObject) {
+                                                   QSYKTagModel *tag = [[QSYKTagModel alloc] initWithDictionary:responseObject error:nil];
+                                                   if (tag) {
+                                                       _tag = tag;
+                                                       [self configTableHeaderView];
+                                                   }
+                                               }
+                                               failure:^(NSError *error) {
+                                                   
+                                               }];
 }
 
 - (void)updateSids {
@@ -137,24 +181,11 @@
     [SVProgressHUD show];
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodGET
                                              URLString:_URLStr
-                                            parameters:@{@"expand":@"godPosts"}
+                                            parameters:@{@"expand":@"tags"}
                                                success:^(NSURLSessionDataTask *task, id responseObject) {
                                                    [SVProgressHUD dismiss];
                                                    
-                                                   if (!_isReadHistory) {
-                                                       QSYKFavoriteResourceList *models = [[QSYKFavoriteResourceList alloc] initWithArray:responseObject];
-                                                       if (models.list.count) {
-                                                           self.noDataIndicatorLabel.hidden = YES;
-//                                                           self.models = [NSMutableArray arrayWithArray:models.list];
-                                                           self.models = [NSMutableArray new];
-                                                           for (QSYKFavoriteModel *model in models.list) {
-                                                               [self.models addObject:model.resource];
-                                                           }
-                                                           [self.tableView reloadData];
-                                                       } else {
-                                                           self.noDataIndicatorLabel.hidden = NO;
-                                                       }
-                                                   } else {
+                                                   if (_isReadHistory || _tag) {
                                                        [self.tableView.mj_footer endRefreshing];
                                                        
                                                        QSYKResourceList *models = [[QSYKResourceList alloc] initWithArray:responseObject];
@@ -167,6 +198,19 @@
                                                            self.noDataIndicatorLabel.hidden = NO;
                                                        }
                                                        
+                                                   } else {
+                                                       QSYKFavoriteResourceList *models = [[QSYKFavoriteResourceList alloc] initWithArray:responseObject];
+                                                       if (models.list.count) {
+                                                           self.noDataIndicatorLabel.hidden = YES;
+                                                           //                                                           self.models = [NSMutableArray arrayWithArray:models.list];
+                                                           self.models = [NSMutableArray new];
+                                                           for (QSYKFavoriteModel *model in models.list) {
+                                                               [self.models addObject:model.resource];
+                                                           }
+                                                           [self.tableView reloadData];
+                                                       } else {
+                                                           self.noDataIndicatorLabel.hidden = NO;
+                                                       }
                                                    }
                                                    
                                                } failure:^(NSError *error) {
@@ -190,8 +234,8 @@
     
     // width = content标签左右边距离屏幕左右边的距离的和
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
-                                                          font:16.f
-                                                         width:SCREEN_WIDTH - 8 * 4];
+                                                          font:TEXT_FONT
+                                                         width:SCREEN_WIDTH - TWO_SIDE_SPACES];
     
     if (cellType == 1) {
         return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
@@ -199,18 +243,18 @@
     } else if (cellType == 2) {
         // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
         if (resource.relImage.height > 2 * resource.relImage.width && !resource.relImage.dynamic) {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * 1.5;
+            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * 1.5;
         } else {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.relImage.height / resource.relImage.width;
+            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relImage.height / resource.relImage.width;
         }
         
         return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
     } else {
         // video类型同图片
         if (resource.relVideo.height > resource.relVideo.width) {
-            extraHeight += (SCREEN_WIDTH - 8 * 4);
+            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES);
         } else {
-            extraHeight += (SCREEN_WIDTH - 8 * 4) * resource.relVideo.height / resource.relVideo.width;
+            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relVideo.height / resource.relVideo.width;
         }
         
         return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
@@ -327,33 +371,69 @@
     QSYKResourceModel *resource = _models[indexPath.row];
     if (type == 1) {
         resource.dig++;
+        resource.hasDigged = YES;
     } else {
         resource.bury++;
+        resource.hasBuried = YES;
     }
     [self.models replaceObjectAtIndex:indexPath.row withObject:resource];
-    
-    /*
-     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-     URLString:@"resource/rate"
-     parameters:@{
-     @"type" : @(type),
-     @"sid" : sid,
-     }
-     success:^(NSURLSessionDataTask *task, id responseObject) {
-     QSYKResultModel *result = [[QSYKResultModel alloc] initWithDictionary:responseObject error:nil];
-     if (result && result.success) {
-     [SVProgressHUD showSuccessWithStatus:@"评价成功"];
-     
-     } else {
-     [SVProgressHUD showErrorWithStatus:@"评价失败"];
-     }
-     
-     } failure:^(NSError *error) {
-     [SVProgressHUD showErrorWithStatus:@"评价失败"];
-     NSLog(@"error = %@", error);
-     }];
-     */
 }
+
+
+// 删除某个资源
+- (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _models[indexPath.row];
+    self.deletingResourceSid = resource.sid;
+    self.deletingResourceIndexPath = indexPath;
+    [QSYKUtility showDeleteResourceReasonsWithSid:resource.sid delegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAndReloadAtIndexPath) name:@"deleteComplete" object:nil];
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // 1看不懂, 2不喜欢, 3太污了, 4重口味, 0其他
+    
+    NSInteger index = buttonIndex != 4 ? buttonIndex + 1 : 0;
+    [[QSYKDataManager sharedManager] deleteResourceWithSid:self.deletingResourceSid type:index];
+    
+}
+
+- (void) deleteAndReloadAtIndexPath {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleteComplete" object:nil];
+    
+    [_models removeObjectAtIndex:self.deletingResourceIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[self.deletingResourceIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView reloadData];
+}
+
+// 查看某个标签类型资源
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag {
+    QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+    myFavoritesVC.URLStr = [NSString stringWithFormat:@"resource-tags?tag=%@", tag.sid];
+    myFavoritesVC.isReadHistory = YES;
+    myFavoritesVC.tag = tag;
+    myFavoritesVC.title = tag.name;
+    myFavoritesVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myFavoritesVC animated:YES];
+}
+
+// 通过点击评论图标进入资源内页，定位到评论位置
+- (void)locatePostAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _models[indexPath.row];
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = resource.sid;
+    resourceDetailVC.needScrollToPost = YES;
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+    
+    if (resource.type == 3) {
+        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [curCell reset];
+    }
+}
+
 
 /*
 // Override to support rearranging the table view.

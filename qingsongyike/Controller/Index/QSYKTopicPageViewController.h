@@ -8,6 +8,6 @@
 
 #import "QSYKBaseViewController.h"
 
-@interface QSYKTopicPageViewController : QSYKBaseViewController  <UITableViewDataSource, UITableViewDelegate>
+@interface QSYKTopicPageViewController : QSYKBaseViewController
 
 @end

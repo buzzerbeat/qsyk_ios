@@ -10,6 +10,8 @@
 #import "QSYKVideoTableViewCell.h"
 #import "QSYKResourceDetailViewController.h"
 #import "QSYKGodPostView.h"
+#import "QSYKRecommendPageViewController.h"
+#import "QSYKMyFavoriteTableViewController.h"
 @import MediaPlayer;
 
 static int RESOURCE_TYPE = 3;
@@ -182,10 +184,11 @@ static int RESOURCE_TYPE = 3;
     QSYKResourceModel *resource = _resourceList[indexPath.row];
 
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
-    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
     
+    // 1.文本高度
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
-                                                          font:16.f
+                                                          font:TEXT_FONT
                                                          width:width];
     
     // 神评论
@@ -194,11 +197,14 @@ static int RESOURCE_TYPE = 3;
         CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
         for (int i = 0; i < postCount; i++) {
             QSYKPostModel *post = resource.godPosts[i];
-            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:15 width:[QSYKGodPostView contentWidth]];
+            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
         }
+        
+        // 2.神评论高度
         extraHeight += postHeight;
     }
     
+    // 3.视频缩略图高度
     if (resource.relVideo.height > resource.relVideo.width) {
         extraHeight += width;
     } else {
@@ -285,10 +291,58 @@ static int RESOURCE_TYPE = 3;
     
 }
 
-- (void)commentResourceWithSid:(NSString *)sid {
+// 查看某个标签类型资源
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag {
+    QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+    myFavoritesVC.URLStr = [NSString stringWithFormat:@"resource-tag?tag=%@", tag.sid];
+    myFavoritesVC.tag = tag;
+    myFavoritesVC.title = tag.name;
+    myFavoritesVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myFavoritesVC animated:YES];
+}
+
+// 删除某个资源
+- (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    self.deletingResourceSid = resource.sid;
+    self.deletingResourceIndexPath = indexPath;
+    [QSYKUtility showDeleteResourceReasonsWithSid:resource.sid delegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAndReloadAtIndexPath) name:@"deleteComplete" object:nil];
     
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // 1看不懂, 2不喜欢, 3太污了, 4重口味, 0其他
+    
+    NSInteger index = buttonIndex != 4 ? buttonIndex + 1 : 0;
+    [[QSYKDataManager sharedManager] deleteResourceWithSid:self.deletingResourceSid type:index];
+    
+}
+
+- (void) deleteAndReloadAtIndexPath {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleteComplete" object:nil];
+    
+    [_resourceList removeObjectAtIndex:self.deletingResourceIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[self.deletingResourceIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView reloadData];
+}
+
+// 通过点击评论图标进入资源内页，定位到评论位置
+- (void)locatePostAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = resource.sid;
+    resourceDetailVC.needScrollToPost = YES;
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
+    
+    if (resource.type == 3) {
+        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [curCell reset];
+    }
+}
 
 /*
 #pragma mark - Navigation

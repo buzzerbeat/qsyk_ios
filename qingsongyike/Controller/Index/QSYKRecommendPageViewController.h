@@ -8,7 +8,7 @@
 
 #import "QSYKBaseViewController.h"
 
-@interface QSYKRecommendPageViewController : QSYKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface QSYKRecommendPageViewController : QSYKBaseViewController
 @property (nonatomic) BOOL isBeautyTag;
 
 @end

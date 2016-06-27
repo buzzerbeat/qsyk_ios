@@ -34,7 +34,7 @@
 //        self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
 //    }
     self.tabBarItemTitles = @[@"首页", @"我的"];
-    self.tabBarItemImages = @[@"ic_home", @"ic_profile"];
+    self.tabBarItemImages = @[@"bar_ico_home", @"bar_ico_user"];
     
     self.selectedItemIndex = 0;
     [self setupViewControllers];
@@ -80,8 +80,8 @@
 }
 
 - (UITabBarItem *)configureItemAtIndex:(NSInteger)index {
-    UIImage *unselectedImage = [self formatImageWithName:[NSString stringWithFormat:@"%@", [_tabBarItemImages objectAtIndex:index]]];
-    UIImage *selectedImage   = [self formatImageWithName:[NSString stringWithFormat:@"%@_pressed", [_tabBarItemImages objectAtIndex:index]]];
+    UIImage *unselectedImage = [self formatImageWithName:[NSString stringWithFormat:@"%@_gray", [_tabBarItemImages objectAtIndex:index]]];
+    UIImage *selectedImage   = [self formatImageWithName:[NSString stringWithFormat:@"%@_red", [_tabBarItemImages objectAtIndex:index]]];
     
     UITabBarItem *item = [[UITabBarItem alloc] initWithTitle:_tabBarItemTitles[index] image:unselectedImage selectedImage:selectedImage];
     item.tag = index;

@@ -10,10 +10,14 @@
 #import "QSYKResourceModel.h"
 #import "QSYKDetailPicutreViewController.h"
 #import <DALabeledCircularProgressView.h>
+#import <FLAnimatedImage.h>
 #import "QSYKGodPostView.h"
+
+static CGFloat IMAGE_BOTTOM_BASE_SPACE = 0;
 
 @interface QSYKPictureTableViewCell()
 @property (nonatomic, strong) NSURL *URL;
+@property (nonatomic, strong) UIImage *image;
 
 @end
 
@@ -22,20 +26,33 @@
 - (void)awakeFromNib {
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.postCountLabel.textColor = kTextGrayColor;
+    self.usernameLabel.textColor = kUsernameColor;
     
-    self.separatorHeightCon.constant = 1.0 / [[UIScreen mainScreen] scale];
+    for (NSLayoutConstraint *con in self.separatorHeightCons) {
+        con.constant = ONE_PIX;
+    }
     
+    // 底部四个操作功能相关
+    [self.digView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(digViewTapped)]];
+    [self.buryView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(buryViewTapped)]];
+    [self.deleteView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(deleteViewTapped)]];
+    [self.shareView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shareViewTapped)]];
+    
+    // 图片显示、全屏及非wifi点击加载功能相关
     self.myImageView.backgroundColor = [UIColor lightGrayColor];
     self.myImageView.userInteractionEnabled = YES;
     [self.myImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPicture)]];
     
-    [self.digBtn setImage:[UIImage imageNamed:@"icon_like"] forState:UIControlStateNormal];
-    [self.digBtn setImage:[UIImage imageNamed:@"icon_like_pressed"] forState:UIControlStateSelected];
-    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike"] forState:UIControlStateNormal];
-    [self.buryBtn setImage:[UIImage imageNamed:@"icon_dislike_pressed"] forState:UIControlStateSelected];
-    
     self.tapToDownloadIndicatorLabel.userInteractionEnabled = YES;
     [self.tapToDownloadIndicatorLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTODownload)]];
+    
+    
+    // 标签功能相关
+    [self.tagContainerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagViewTapped:)]];
+    
+    // 点击神评论进入详情页时定位到评论位置
+    [self.containerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(godPostViewTapped:)]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -46,13 +63,17 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    self.myImageView.image = nil;
-    self.avatarImageView.image = nil;
+    
+    self.digImageView.image = [UIImage imageNamed:@"resource_ico_dig_gray"];
+    self.buryImageView.image = [UIImage imageNamed:@"resource_ico_bury_gray"];
+    self.digCountLabel.textColor = [UIColor lightGrayColor];
+    self.buryCountLabel.textColor = [UIColor lightGrayColor];
+    self.digView.userInteractionEnabled = YES;
+    self.buryView.userInteractionEnabled = YES;
+    
     self.progressView.hidden = YES;
-    self.showBigPicBtn.hidden = YES;
-    self.buryBtn.userInteractionEnabled = YES;
-    self.digBtn.userInteractionEnabled = YES;
 }
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -68,20 +89,11 @@
     self.isTopic = (_resource.type == 1);
     
     if (_resource.hasDigged) {
-        self.digBtn.selected = YES;
-        self.digCountLabel.textColor = kCoreColor;
-        [self disableRateBtn];
-    } else {
-        self.digBtn.selected = NO;
-        self.digCountLabel.textColor = [UIColor lightGrayColor];
+        [self disableDigAction];
     }
+    
     if (_resource.hasBuried) {
-        self.buryBtn.selected = YES;
-        self.buryCountLabel.textColor = kCoreColor;
-        [self disableRateBtn];
-    } else {
-        self.buryBtn.selected = NO;
-        self.buryCountLabel.textColor = [UIColor lightGrayColor];
+        [self disableBuryAction];
     }
     
     if (_flag) {
@@ -89,11 +101,11 @@
         self.readTimeLabel.text = [QSYKUtility formateTimeInterval:_readTime];
     }
     
-    self.progressView.hidden = YES;
+    
     [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
     self.usernameLabel.text = _resource.userName;
-    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.dig];
-    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)_resource.bury];
+    self.digCountLabel.text = [NSString stringWithFormat:@"%d", _resource.dig];
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%d", _resource.bury];
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:self.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -103,12 +115,57 @@
                        range:NSMakeRange(0, attrString.length)];
     self.contentLabel.attributedText = attrString;
     
+    self.postCountLabel.text = [NSString stringWithFormat:@"%d", _resource.post];
+    
+    if (self.isInnerPage) {
+        self.postImageView.hidden = YES;
+        self.postCountLabel.hidden = YES;
+        self.deleteImageView.hidden = YES;
+        self.commentImageView.hidden = NO;
+        self.commentCountLabel.hidden = NO;
+        self.commentCountLabel.text = [NSString stringWithFormat:@"%d", _resource.post];
+    } else {
+        self.postImageView.hidden = NO;
+        self.postCountLabel.hidden = NO;
+        self.deleteImageView.hidden = NO;
+        self.commentImageView.hidden = YES;
+        self.commentCountLabel.hidden = YES;
+    }
+    
+    // 标签相关
+    self.firstTagLabel.text = nil;
+    self.secondTagLabel.text = nil;
+    self.thirdTagLabel.text = nil;
+    
+    NSArray *tags = _resource.tags;
+    if (tags && tags.count) {
+        self.tagImageView.hidden = NO;
+        
+        for (int i = 0; i < tags.count; i++) {
+            QSYKTagModel *tag = _resource.tags[i];
+            NSString *tagName = tag.name;
+            
+            if (i == 0) {
+                self.firstTagLabel.text = tagName;
+            } else if (i == 1) {
+                self.secondTagLabel.text = tagName;
+            } else if (i == 2) {
+                self.thirdTagLabel.text = tagName;
+            }
+        }
+        
+    } else {
+        self.tagImageView.hidden = YES;
+    }
+    
+    
     // 神评论相关
     for (UIView *view in self.containerView.subviews) {
         [view removeFromSuperview];
         self.firstGodPostHeight = self.secondGodPostHeight = self.thirdGodPostHeight = 0;
     }
     
+    self.tagContainerViewBottomCon.constant = 0;
     if (_resource.godPosts.count && !self.isInnerPage) {
         for (int i = 0; i < _resource.godPosts.count; i++) {
             QSYKGodPostView *postView = [[NSBundle mainBundle] loadNibNamed:@"QSYKGodPostView" owner:nil options:nil][0];
@@ -120,13 +177,13 @@
             
             CGFloat height = 0;
             if (i == 0) {
-                self.firstGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                self.firstGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
             } else if (i == 1) {
-                self.secondGodPostHeight = [QSYKGodPostView baseHeight] +  [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                self.secondGodPostHeight = [QSYKGodPostView baseHeight] +  [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
                 height = self.firstGodPostHeight;
                 
             } else if (i == 2) {
-                self.thirdGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
+                self.thirdGodPostHeight = [QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
                 
                 height = self.firstGodPostHeight + self.secondGodPostHeight;
             }
@@ -136,19 +193,17 @@
                 make.left.equalTo(self.containerView.mas_left);
                 make.right.equalTo(self.containerView.mas_right);
                 make.top.equalTo(self.containerView).offset(height);
-                make.height.offset([QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]]);
+                make.height.offset([QSYKGodPostView baseHeight] + [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]]);
             }];
         }
         
         self.containerView.hidden = NO;
-        self.imageViewBottomCon.constant = 63 + self.firstGodPostHeight + self.secondGodPostHeight + self.thirdGodPostHeight;
+        self.tagContainerViewBottomCon.constant = self.firstGodPostHeight + self.secondGodPostHeight + self.thirdGodPostHeight;
         
     } else {
         self.containerView.hidden = YES;
-        self.imageViewBottomCon.constant = 63;
     }
     
-//    [self layoutIfNeeded];
     
     self.URL = [NSURL URLWithString:[QSYKUtility imgUrl:self.img.sid
                                                   width:self.img.width
@@ -170,9 +225,12 @@
 }
 
 - (void)downloadWithURL:(NSURL *)URL {
+    @weakify(self);
     [self.myImageView sd_setImageWithURL:URL placeholderImage:nil options:0
                                 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                    @strongify(self);
                                     self.showBigPicBtn.hidden = YES;
+                                    
                                     CGFloat progress = 1.0 * receivedSize / expectedSize;
                                     self.progressView.hidden = NO;
                                     self.progressView.progressLabel.textColor = [UIColor whiteColor];
@@ -180,7 +238,10 @@
                                     self.progressView.progressLabel.text =
                                     [NSString stringWithFormat:@"%.1f%%",  (progress > 0 ? progress : -1 * progress)*100];
                                     [self.progressView setProgress:progress animated:YES];
+                                
                                 } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                    @strongify(self);
+                                    
                                     self.progressView.hidden = YES;
                                     if (!error) {
                                         //判断是不是大图（暂时定为高 > 宽 * 2 时为大图）
@@ -198,10 +259,18 @@
                                             // 结束图形上下文
                                             UIGraphicsEndImageContext();
                                             self.showBigPicBtn.hidden = NO;
-                                        } else {
+                                        } else {//if (self.img.dynamic) {
                                             self.myImageView.contentMode = UIViewContentModeScaleToFill;
+                                            self.myImageView.image = image;
                                             self.showBigPicBtn.hidden = YES;
+                                            
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                self.progressView.hidden = YES;
+                                                self.showBigPicBtn.hidden = YES;
+                                            });
                                         }
+                                        
+                                        
                                     } else {
                                         NSLog(@"error = %@", error);
                                     }
@@ -221,45 +290,91 @@
     
 }
 
-- (IBAction)digBtnClicked:(id)sender {
+- (void)digViewTapped {
+    if (_resource.hasBuried || _resource.hasDigged) {
+        return;
+    }
+    
+    self.digImageView.image = [UIImage imageNamed:@"resource_ico_ding_red"];
+    self.digCountLabel.textColor = kCoreColor;
+    self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.dig];
+    
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:self.sid type:1 indexPath:_indexPath];
-        [self.digBtn setSelected:YES];
-        self.digCountLabel.textColor = kCoreColor;
-        self.digCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.dig];
-        [self disableRateBtn];
     }
 }
 
-- (IBAction)buryBtnClicked:(id)sender {
+- (void)buryViewTapped {
+    if (_resource.hasBuried || _resource.hasDigged) {
+        return;
+    }
+    
+    self.buryImageView.image = [UIImage imageNamed:@"resource_ico_bury_red"];
+    self.buryCountLabel.textColor = kCoreColor;
+    self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.bury];
+    
     if (_delegate && [_delegate respondsToSelector:@selector(rateResourceWithSid:type:indexPath:)]) {
         [_delegate rateResourceWithSid:self.sid type:2 indexPath:_indexPath];
-        [self.buryBtn setSelected:YES];
-        self.buryCountLabel.textColor = kCoreColor;
-        self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)++self.bury];
-        [self disableRateBtn];
     }
 }
 
-- (IBAction)commentBtnClicked:(id)sender {
-    if (_delegate && [_delegate respondsToSelector:@selector(commentResourceWithSid:)]) {
-        [_delegate commentResourceWithSid:self.sid];
-    }
-}
-
-- (IBAction)shareBtnClicked:(id)sender {
+- (void)shareViewTapped {
     if (_delegate && [_delegate respondsToSelector:@selector(shareResoureWithSid:imgSid:content:isTopic:)]) {
-        [_delegate shareResoureWithSid:self.sid imgSid:self.img.sid content:self.content isTopic:self.isTopic];
+        [_delegate shareResoureWithSid:self.sid imgSid:nil content:self.content isTopic:self.isTopic];
     }
 }
 
-- (void)disableRateBtn {
-    self.buryBtn.userInteractionEnabled = NO;
-    self.digBtn.userInteractionEnabled = NO;
+- (void)deleteViewTapped {
+    if (_delegate && [_delegate respondsToSelector:@selector(deleteResourceAtIndexPath:)]) {
+        [_delegate deleteResourceAtIndexPath:_indexPath];
+    }
+}
+
+- (void)disableDigAction {
+    self.digCountLabel.textColor = kCoreColor;
+    self.digImageView.image = [UIImage imageNamed:@"resource_ico_ding_red"];
+}
+
+- (void)disableBuryAction {
+    self.buryCountLabel.textColor = kCoreColor;
+    self.buryImageView.image = [UIImage imageNamed:@"resource_ico_bury_red"];
+}
+
+- (void)tagViewTapped:(UITapGestureRecognizer *)gest {
+    if (_delegate) {
+        CGPoint p = [gest locationInView:self.tagContainerView];
+        
+        if ([_delegate respondsToSelector:@selector(tagTappedWithInfo:)]) {
+            if (CGRectContainsPoint(self.firstTagLabel.frame, p)) {
+                [_delegate tagTappedWithInfo:_resource.tags[0]];
+                return;
+            } else if (CGRectContainsPoint(self.secondTagLabel.frame, p)) {
+                [_delegate tagTappedWithInfo:_resource.tags[1]];
+                return;
+            } else if (CGRectContainsPoint(self.thirdTagLabel.frame, p)) {
+                [_delegate tagTappedWithInfo:_resource.tags[2]];
+                return;
+            }
+        }
+        
+        if ([_delegate respondsToSelector:@selector(locatePostAtIndexPath:)]) {
+            if (CGRectContainsPoint(self.postCoverView.frame, p)) {
+                [_delegate locatePostAtIndexPath:_indexPath];
+            } else if (CGRectContainsPoint(self.containerView.frame, p)) {
+                [_delegate locatePostAtIndexPath:_indexPath];
+            }
+        }
+    }
+}
+
+- (void)godPostViewTapped:(UITapGestureRecognizer *)gest {
+    if (_delegate && [_delegate respondsToSelector:@selector(locatePostAtIndexPath:)]) {
+        [_delegate locatePostAtIndexPath:_indexPath];
+    }
 }
 
 + (CGFloat)cellBaseHeight {
-    return 157.f;
+    return 160.f;
 }
 
 @end

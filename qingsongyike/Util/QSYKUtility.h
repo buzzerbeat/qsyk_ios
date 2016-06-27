@@ -85,4 +85,6 @@
  */
 + (NSString * _Nonnull)formateBirthdayWithTimeInterval:(NSString * _Nonnull)timeInterval;
 
++ (void)showDeleteResourceReasonsWithSid:(NSString *)sid delegate:(id)delegate;
+
 @end

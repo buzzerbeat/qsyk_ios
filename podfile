@@ -20,4 +20,6 @@ pod 'FMDB', '~> 2.6.2'
 pod 'NJKWebViewProgress', '~> 0.2.3'
 pod 'Colours', '~> 5.13.0'
 pod 'RSKImageCropper', '~> 1.5.1'
+pod 'FLAnimatedImage', '~> 1.0.12'
+
 end

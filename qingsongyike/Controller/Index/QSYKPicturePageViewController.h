@@ -8,7 +8,7 @@
 
 #import "QSYKBaseViewController.h"
 
-@interface QSYKPicturePageViewController : QSYKBaseViewController <UITableViewDataSource, UITableViewDelegate>
+@interface QSYKPicturePageViewController : QSYKBaseViewController
 @property (nonatomic) BOOL isDynamic;
 
 @end

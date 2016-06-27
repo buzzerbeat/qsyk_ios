@@ -12,7 +12,9 @@
 
 @interface QZBindThirdCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *thirdTypeNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *bindStateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *thirdTypeImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightCon;
+@property (weak, nonatomic) IBOutlet UIImageView *arrowImageView;
+@property (weak, nonatomic) IBOutlet UISwitch *nightSwitch;
 
 @end

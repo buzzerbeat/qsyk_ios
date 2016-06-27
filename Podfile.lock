@@ -32,6 +32,7 @@ PODS:
     - DKNightVersion/Core
   - DKNightVersion/UIKit (2.3.0):
     - DKNightVersion/Core
+  - FLAnimatedImage (1.0.12)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -93,6 +94,7 @@ DEPENDENCIES:
   - Colours (~> 5.13.0)
   - DACircularProgress (~> 2.3.1)
   - DKNightVersion (~> 2.3.0)
+  - FLAnimatedImage (~> 1.0.12)
   - FMDB (~> 2.6.2)
   - JPush (~> 2.1.6)
   - JSONModel (~> 1.2.0)
@@ -112,6 +114,7 @@ SPEC CHECKSUMS:
   Colours: f24220c38f13deac88612667e9b4a7fb96b871d4
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   DKNightVersion: 459438cbfd14edb9e41a777ff14b18e5661b9269
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   JPush: d37320eba856bf91f2c73989df4abf1e8846db2c
   JSONModel: 12523685c4b623553ccf844bbbf7007624317b2c

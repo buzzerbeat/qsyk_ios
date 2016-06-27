@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -16,36 +17,56 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_weixin_login_normal" translatesAutoresizingMaskIntoConstraints="NO" id="soB-yT-qit">
-                        <rect key="frame" x="15" y="7" width="30" height="30"/>
+                        <rect key="frame" x="20" y="12" width="20" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="30" id="IVP-VY-tKn"/>
-                            <constraint firstAttribute="height" constant="30" id="fVv-H3-oCT"/>
+                            <constraint firstAttribute="width" constant="20" id="IVP-VY-tKn"/>
+                            <constraint firstAttribute="height" constant="20" id="fVv-H3-oCT"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="微信账户" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdG-9K-uVJ">
-                        <rect key="frame" x="53" y="13" width="60" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <rect key="frame" x="52" y="12" width="64" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未绑定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yeh-JB-5cY">
-                        <rect key="frame" x="281" y="14" width="39" height="16"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DGo-KU-emL">
+                        <rect key="frame" x="0.0" y="42" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.90980392156862744" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="jpL-pM-giQ"/>
+                        </constraints>
+                    </view>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ico_my_arrow_right" translatesAutoresizingMaskIntoConstraints="NO" id="ABu-bA-JC2">
+                        <rect key="frame" x="297" y="15" width="8" height="13"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="8" id="3IQ-om-E8X"/>
+                            <constraint firstAttribute="width" secondItem="ABu-bA-JC2" secondAttribute="height" multiplier="7:12" id="bs5-eA-hbv"/>
+                        </constraints>
+                    </imageView>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ycM-z3-7oQ">
+                        <rect key="frame" x="256" y="6.5" width="51" height="31"/>
+                        <connections>
+                            <action selector="nightSwitchTapped:" destination="KGk-i7-Jjw" eventType="valueChanged" id="EU2-Yf-NEe"/>
+                        </connections>
+                    </switch>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="DGo-KU-emL" secondAttribute="trailing" id="7K9-po-RAS"/>
                     <constraint firstItem="MdG-9K-uVJ" firstAttribute="centerY" secondItem="soB-yT-qit" secondAttribute="centerY" id="7yX-5O-EpG"/>
-                    <constraint firstItem="soB-yT-qit" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="7" id="Tui-ux-NNU"/>
-                    <constraint firstItem="Yeh-JB-5cY" firstAttribute="centerY" secondItem="soB-yT-qit" secondAttribute="centerY" id="Vyc-9Q-PJV"/>
-                    <constraint firstItem="soB-yT-qit" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-1" id="glS-gk-DFv"/>
-                    <constraint firstItem="MdG-9K-uVJ" firstAttribute="leading" secondItem="soB-yT-qit" secondAttribute="trailing" constant="8" id="o7g-I9-sRe"/>
-                    <constraint firstAttribute="trailing" secondItem="Yeh-JB-5cY" secondAttribute="trailing" id="ojx-ka-ym7"/>
+                    <constraint firstAttribute="bottom" secondItem="DGo-KU-emL" secondAttribute="bottom" id="DIT-3p-2jo"/>
+                    <constraint firstItem="DGo-KU-emL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="HUl-Vv-qsw"/>
+                    <constraint firstItem="soB-yT-qit" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="TmI-RR-5aF"/>
+                    <constraint firstItem="soB-yT-qit" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="Tui-ux-NNU"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ABu-bA-JC2" secondAttribute="trailing" constant="7" id="aNY-qj-piV"/>
+                    <constraint firstItem="ABu-bA-JC2" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="hjC-ty-ajd"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="ycM-z3-7oQ" secondAttribute="trailing" constant="7" id="nrt-Mg-dUG"/>
+                    <constraint firstItem="MdG-9K-uVJ" firstAttribute="leading" secondItem="soB-yT-qit" secondAttribute="trailing" constant="12" id="o7g-I9-sRe"/>
+                    <constraint firstItem="ycM-z3-7oQ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ySF-HU-TUn"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="bindStateLabel" destination="Yeh-JB-5cY" id="S4Y-Tx-5BO"/>
+                <outlet property="arrowImageView" destination="ABu-bA-JC2" id="0dM-2Z-pr1"/>
+                <outlet property="nightSwitch" destination="ycM-z3-7oQ" id="MLv-2n-Fth"/>
+                <outlet property="separatorHeightCon" destination="jpL-pM-giQ" id="0dk-cn-trI"/>
                 <outlet property="thirdTypeImageView" destination="soB-yT-qit" id="uHz-si-D9G"/>
                 <outlet property="thirdTypeNameLabel" destination="MdG-9K-uVJ" id="g0O-gU-1dZ"/>
             </connections>
@@ -54,5 +75,6 @@
     </objects>
     <resources>
         <image name="ic_weixin_login_normal" width="80" height="80"/>
+        <image name="ico_my_arrow_right" width="7" height="12"/>
     </resources>
 </document>

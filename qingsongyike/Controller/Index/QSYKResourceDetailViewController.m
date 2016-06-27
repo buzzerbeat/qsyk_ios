@@ -15,10 +15,12 @@
 #import "QSYKGodPostView.h"
 #import "QZRegisterViewController.h"
 #import "QSYKBaseNavigationController.h"
+#import "QSYKTableSectionView.h"
+#import "QSYKMyFavoriteTableViewController.h"
 //#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 @import MediaPlayer;
 
-static int POST_CONTENT_SIDE_WIDTH = 100;
+static int POST_CONTENT_SIDE_WIDTH = 56;
 
 @interface QSYKResourceDetailViewController () <QSYKCellDelegate>
 //@property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -27,6 +29,7 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tableViewWidthCon;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightCon;
 @property (nonatomic, strong) QSYKResourceModel *resource;
 @property (nonatomic, assign) NSInteger type;
 @property (nonatomic, strong) QSYKPostModel *post;
@@ -41,9 +44,9 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     // Do any additional setup after loading the view.
     self.user = [QSYKUserManager sharedManager].user;
     
-//    [self.navigationController.interactivePopGestureRecognizer setValue:@(20) forKeyPath:@"_recognizer._settings._edgeSettings._edgeRegionSize"];
-    
-    
+    self.separatorHeightCon.constant = ONE_PIX;
+    self.sendCommentBtn.layer.cornerRadius = 3.f;
+    self.sendCommentBtn.backgroundColor = kCoreColor;
     [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
     self.view.backgroundColor = self.tableView.backgroundColor;
     
@@ -60,8 +63,6 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     } else {
         self.tableViewWidthCon.constant = SCREEN_WIDTH * 2/3;
     }
-    
-    self.sendCommentBtn.layer.cornerRadius = 3.f;
     
     [self loadResourceData];
     
@@ -156,6 +157,9 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
                                                                      self.resource = resource;
                                                                      self.type = self.resource.type;
                                                                      [self.tableView reloadData];
+                                                                     if (_needScrollToPost) {
+                                                                         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                                                                     }
                                                                      
                                                                  } failure:^(NSError *error) {
                                                                      [SVProgressHUD dismiss];
@@ -200,40 +204,53 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     return 0;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return 0.1;
+    } else {
+        return [QSYKTableSectionView viewHeight];
+    }
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    if (section != [tableView numberOfSections] - 1) {
+//        return 10;
+//    } else {
+//        return 0;
+//    }
+//}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    QSYKTableSectionView *view = [[NSBundle mainBundle] loadNibNamed:@"QSYKTableSectionView" owner:nil options:nil][0];
+    
     if (section == 1) {
         if (_resource.hotPosts.count) {
-            return @"最热评论";
+            view.titleLabel.text = @"最热评论";
+            view.imageView.image = [UIImage imageNamed:@"comment_hot_red"];
         } else {
-            return @"最近评论";
+            view.titleLabel.text = @"最近评论";
+            view.imageView.image = [UIImage imageNamed:@"comment_recently_red"];
         }
     } else if (section == 2) {
-        return @"最近评论";
+        view.titleLabel.text = @"最近评论";
+        view.topSeparatorView.hidden = NO;
+        view.imageView.image = [UIImage imageNamed:@"comment_recently_red"];
     } else {
-        return nil;
+        view = nil;
     }
+    
+    return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
 
         // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
-        CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+        CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
         
         CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_resource.desc
-                                                              font:16.f
+                                                              font:TEXT_FONT
                                                              width:width];
-        
-        // 神评论
-//        NSUInteger postCount = _resource.godPosts.count;
-//        CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
-//        if (postCount) {
-//            for (int i = 0; i < postCount; i++) {
-//                QSYKPostModel *post = _resource.godPosts[i];
-//                postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:14 width:[QSYKGodPostView contentWidth]];
-//            }
-//        }
-//        extraHeight += postHeight;
         
         switch (_type) {
             case 1: {
@@ -276,7 +293,7 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
         }
         
         CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:post.content
-                                                              font:16.f
+                                                              font:TEXT_FONT
                                                              width:SCREEN_WIDTH - POST_CONTENT_SIDE_WIDTH];
         return [QSYKCommentTableViewCell cellBaseHeight] + extraHeight;
     }
@@ -478,7 +495,7 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
                                                }];
     
     QSYKPostModel *post = nil;
-    if (indexPath.section == 1) {
+    if (indexPath.section == 1 && _resource.hotPosts.count) {
         post = (QSYKPostModel *)_resource.hotPosts[indexPath.row];
         post.dig++;
         post.hasDigged = YES;
@@ -493,8 +510,14 @@ static int POST_CONTENT_SIDE_WIDTH = 100;
     
 }
 
-- (void)commentResourceWithSid:(NSString *)sid {
-    
+// 查看某个标签类型资源
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag {
+    QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+    myFavoritesVC.URLStr = [NSString stringWithFormat:@"resource-tags?tag=%@", tag.sid];
+    myFavoritesVC.tag = tag;
+    myFavoritesVC.title = tag.name;
+    myFavoritesVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myFavoritesVC animated:YES];
 }
 
 /*

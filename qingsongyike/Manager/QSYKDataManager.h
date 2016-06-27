@@ -51,7 +51,7 @@ typedef NS_ENUM(NSInteger, QSYKHTTPMethod) {
 - (void)startApp;
 - (void)ratePostWithSid:(NSString *)sid;
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type;
-
+- (void)deleteResourceWithSid:(NSString *)sid type:(NSInteger)type;
 
 
 @end
