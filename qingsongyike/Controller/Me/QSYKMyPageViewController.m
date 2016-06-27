@@ -17,9 +17,8 @@
 #import "QZRegisterViewController.h"
 #import "QZProfileViewController.h"
 #import "QSYKUserBriefInfoCell.h"
-
-static CGFloat POINTS_LABEL_FONT = 14;
-static CGFloat CELL_TEXTLABEL_FONT = 16;
+#import "QZBindThirdCell.h"
+#import "QSYKTableSectionView.h"
 
 @interface QSYKMyPageViewController ()
 @property (nonatomic, strong) NSArray *cellTitles;
@@ -30,23 +29,20 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
 
 @implementation QSYKMyPageViewController
 
-- (instancetype)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    
-    return self;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"我的";
     
     self.user = [QSYKUserManager sharedManager].user;
+    [self updateCellTitlesAndImages];
     [self loadUserInfo];
     
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableFooterView = [UIView new];
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.tableView.backgroundColor = kBackgroundColor;
     [self.tableView registerNib:[UINib nibWithNibName:@"QSYKUserBriefInfoCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_userBrief];
+    [self.tableView registerNib:[UINib nibWithNibName:@"QZBindThirdCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_BindThird];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh:) name:kUserInfoChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadLotteryPage) name:@"test" object:nil];
@@ -71,28 +67,32 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
     if (_user && _user.isLogin) {
         self.cellTitles = @[
                             @[@"me"],
-                            @[@"我的收藏", @"我赞过的",],// @"我最近浏览的"],
+                            @[@"我的收藏", @"我赞过的", @"我最近浏览的"],
                             @[@"我的积分", @"我的任务"],
-                            @[@"设置"]//@[@"夜间模式", @"设置", @"意见反馈"],
+//                            @[@"夜间模式", @"设置"],
+                            @[@"设置"],
                             ];
         
         self.cellImageViews = @[
                                 @[@"ic_fav"],
-                                @[@"ic_fav", @"ic_like",],// @"ic_like"],
-                                @[@"ic_points", @"ic_task"],
-                                @[@"ic_settings"]//@[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                @[@"my_ico_favrite", @"my_ico_like", @"my_ico_read"],
+                                @[@"my_ico_points", @"my_ico_task"],
+//                                @[@"my_ico_moon", @"my_ico_setting"],
+                                @[@"my_ico_setting"],
                                 ];
     } else {
         self.cellTitles = @[
                             @[@"me"],
-                            @[@"我的收藏", @"我赞过的",],// @"我最近浏览的"],
-                            @[@"设置"]//@[@"夜间模式", @"设置", @"意见反馈"],
+                            @[@"我的收藏", @"我赞过的", @"我最近浏览的"],
+//                            @[@"夜间模式", @"设置"],
+                            @[@"设置"],
                             ];
         
         self.cellImageViews = @[
                                 @[@"ic_fav"],
-                                @[@"ic_fav", @"ic_like",],// @"ic_like"],
-                                @[@"ic_settings"]//@[@"ic_fav", @"ic_settings", @"ic_settings"],
+                                @[@"my_ico_favrite", @"my_ico_like", @"my_ico_read"],
+//                                @[@"my_ico_moon", @"my_ico_setting"],
+                                @[@"my_ico_setting"],
                                 ];
     }
 }
@@ -158,19 +158,40 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
     return [_cellTitles[section] count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 0;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 5;
+    if (section == 0) {
+        if (_user) {
+            return 15;
+        } else {
+            return 0;
+        }
+    } else {
+        return 20;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return 80;
+        if (_user) {
+            return 93;
+        } else {
+            return 64;
+        }
     }
-    return 50;
+    return 44;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section != 0 ) {
+        QSYKTableSectionView *sectionView = [[NSBundle mainBundle] loadNibNamed:@"QSYKTableSectionView" owner:nil options:nil][0];
+        sectionView.topSeparatorView.hidden = YES;
+        sectionView.bottomSeparotorView.hidden = NO;
+        sectionView.backgroundColor = [UIColor clearColor];
+        
+        return sectionView;
+    } else {
+        return [[UIView alloc] init];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -184,64 +205,27 @@ static CGFloat CELL_TEXTLABEL_FONT = 16;
         return cell;
         
     } else {
-        static NSString *cellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
         
-        cell.textLabel.text = _cellTitles[indexPath.section][indexPath.row];
-        cell.imageView.image = [UIImage imageNamed:_cellImageViews[indexPath.section][indexPath.row]];
-        cell.textLabel.font = [UIFont systemFontOfSize:CELL_TEXTLABEL_FONT];
-        for (UIView *view in cell.contentView.subviews) {
-            [view removeFromSuperview];
-        }
+        QZBindThirdCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_BindThird forIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryNone;
         
+        cell.thirdTypeNameLabel.text = _cellTitles[indexPath.section][indexPath.row];
+        cell.thirdTypeImageView.image = [UIImage imageNamed:_cellImageViews[indexPath.section][indexPath.row]];
+        
+        /*
         if (_user.isLogin) {
-            if (indexPath.section == 2) {
-                if (indexPath.row == 0) {
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    
-                    UILabel *pointsLabel = [[UILabel alloc] init];
-                    pointsLabel.text = _user ? [NSString stringWithFormat:@"%d积分", _user.points] : @"";
-                    pointsLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-                    pointsLabel.textColor = [UIColor lightGrayColor];
-                    pointsLabel.textAlignment = NSTextAlignmentRight;
-                    [cell.contentView addSubview:pointsLabel];
-                    [pointsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.centerY.equalTo(cell.contentView.mas_centerY);
-                        make.right.equalTo(cell.contentView.mas_right);
-                    }];
-                } else if (indexPath.row == 1) {
-                    UILabel *taskLabel = [[UILabel alloc] init];
-                    taskLabel.font = [UIFont systemFontOfSize:POINTS_LABEL_FONT];
-                    taskLabel.textColor = [UIColor lightGrayColor];
-                    taskLabel.textAlignment = NSTextAlignmentRight;
-                    [cell.contentView addSubview:taskLabel];
-                    
-                    // 显示当前任务情况
-                    if (_user.taskList) {
-                        int finishedTasks = 0, totalTasks = 0;
-                        for (QSYKTaskModel *aTask in _user.taskList) {
-                            finishedTasks += aTask.current;
-                            totalTasks    += aTask.total;
-                        }
-                        
-                        taskLabel.text = [NSString stringWithFormat:@"%d/%d", finishedTasks, totalTasks];
-                    } else {
-                        taskLabel.text = @"";
-                    }
-                    
-                    [taskLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.centerY.equalTo(cell.contentView.mas_centerY);
-                        make.right.equalTo(cell.contentView.mas_right);
-                    }];
-                }
+            if (indexPath.section == 3 && indexPath.row == 0) {
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.nightSwitch.hidden = NO;
+                cell.arrowImageView.hidden = YES;
             }
         } else {
-            
-        }
+            if (indexPath.section == 2 && indexPath.row == 0) {
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.nightSwitch.hidden = NO;
+                cell.arrowImageView.hidden = YES;
+            }
+        }*/
         
         return cell;
     }

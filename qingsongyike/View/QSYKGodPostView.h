@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *digBtn;
 @property (weak, nonatomic) IBOutlet UILabel *digCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorHeightCon;
 
 @property (nonatomic, weak) id<QSYKCellDelegate> delegate;
 @property (nonatomic, strong) QSYKPostModel *post;

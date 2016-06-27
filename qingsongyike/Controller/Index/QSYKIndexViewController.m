@@ -71,17 +71,19 @@
 }
 
 - (void)configCarbonTabNav {
-    [_carbonTabSwipeNavigation setIndicatorColor:[UIColor clearColor]];
-    [_carbonTabSwipeNavigation setTabExtraWidth:30];
-    _carbonTabSwipeNavigation.carbonTabSwipeScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [_carbonTabSwipeNavigation setTabBarHeight:40];
+    [_carbonTabSwipeNavigation setIndicatorColor:kCoreColor];
+    [_carbonTabSwipeNavigation setIndicatorHeight:2];
+
+//    [_carbonTabSwipeNavigation setTabExtraWidth:10];
     
     for (int i = 0; i < _itemTitles.count; i++) {
         [_carbonTabSwipeNavigation.carbonSegmentedControl setWidth:SCREEN_WIDTH / _itemTitles.count forSegmentAtIndex:i];
     }
     
     // Custimize segmented control
-    [_carbonTabSwipeNavigation setNormalColor:[UIColor lightGrayColor]
-                                         font:[UIFont boldSystemFontOfSize:14]];
+    [_carbonTabSwipeNavigation setNormalColor:kTextGrayColor
+                                         font:[UIFont systemFontOfSize:16]];
     [_carbonTabSwipeNavigation setSelectedColor:kCoreColor
                                            font:[UIFont boldSystemFontOfSize:16]];
 }

@@ -86,6 +86,8 @@
     // 安装并启动app时先设置配置信息的默认值
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isReStart"]) {
         [QSYKUtility setDefaultConfig];
+        // 设置默认文本字体大小
+        [[NSUserDefaults standardUserDefaults] setFloat:18 forKey:@"text_font"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isReStart"];
     }
     [QSYKUtility loadSplash];

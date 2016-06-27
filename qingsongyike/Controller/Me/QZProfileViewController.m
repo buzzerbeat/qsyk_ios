@@ -13,7 +13,6 @@
 #import "MyHeadImageViewController.h"
 #import "QSYKUserModel.h"
 #import "QZEditProfileViewController.h"
-#import "QZBindThirdViewController.h"
 #import "QZBindMobileViewController.h"
 #import "QZLoginViewController.h"
 #import <UMSocial.h>

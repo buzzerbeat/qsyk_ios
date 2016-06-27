@@ -8,6 +8,6 @@
 
 #import "QSYKBaseViewController.h"
 
-@interface QSYKVideoPageViewController : QSYKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface QSYKVideoPageViewController : QSYKBaseViewController
 
 @end

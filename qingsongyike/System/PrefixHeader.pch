@@ -56,10 +56,18 @@
 #define kUserReadHistory ([[NSUserDefaults standardUserDefaults] objectForKey:kReadHistoryDicKey] ?: [NSDictionary new])
 
 
-#define TEXT_LING_SPACING 10.f
+#define TEXT_LING_SPACING 9.f
+#define ONE_PIX (1.0 / [UIScreen mainScreen].scale)
+#define TEXT_FONT [[NSUserDefaults standardUserDefaults] floatForKey:@"text_font"]
+static CGFloat TWO_SIDE_SPACES = 10.f * 2;
 
-#define kCoreColor [UIColor colorWithRed:220.f / 255 green:83.f / 255 blue:74.f / 255 alpha:1.0f]
-#define kSeparatorLightGrayColor [UIColor colorFromHexString:@"#e4e0e1"]
+#define kCoreColor [UIColor colorFromHexString:@"#df3031"]
+#define kTextGrayColor [UIColor colorFromHexString:@"#adacac"]
+#define kUsernameColor [UIColor colorFromHexString:@"#716e6e"]
+#define kBlackColor = [UIColor blackColor]
+#define kSeparatorLightGrayColor [UIColor colorFromHexString:@"#e8e6e6"]
+#define kBackgroundColor [UIColor colorFromHexString:@"#f8f6f6"]
+
 
 static NSString * const CLIENT_ID = @"test_android_client";
 static NSString * const CLIENT_SECRET = @"JtdtMvlqAlc6";

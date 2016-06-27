@@ -16,8 +16,9 @@
 @implementation QSYKGodPostView
 
 - (void)awakeFromNib {
-    [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButton"] forState:UIControlStateNormal];
-    [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButtonClick"] forState:UIControlStateSelected];
+    [self.digBtn setImage:[UIImage imageNamed:@"comment_dig_gray"] forState:UIControlStateNormal];
+    [self.digBtn setImage:[UIImage imageNamed:@"comment_dig_red"] forState:UIControlStateSelected];
+    self.separatorHeightCon.constant = 1.0 / [UIScreen mainScreen].scale;
 }
 
 - (void)layoutSubviews {
@@ -39,7 +40,7 @@
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_post.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:TEXT_LING_SPACING];
+    [style setLineHeightMultiple:1.5];
     [attrString addAttribute:NSParagraphStyleAttributeName
                        value:style
                        range:NSMakeRange(0, attrString.length)];
@@ -64,12 +65,12 @@
 }
 
 + (CGFloat)baseHeight {
-    return 58;
+    return 46;
 }
 
 + (CGFloat)contentWidth {
-    // contentLabel leadingCon=43,traingCon=40,superView leading(8+8) + traing(8+8) 
-    return SCREEN_WIDTH - (43 + 40 + 8 * 4);
+    // contentLabel leadingCon=45,traingCon=15,superView leading(10) + traing(10)
+    return kIsIphone ? SCREEN_WIDTH - (45 + 15 + TWO_SIDE_SPACES) : SCREEN_WIDTH * 2 / 3 - (45 + 15 + TWO_SIDE_SPACES) ;
 }
 
 @end

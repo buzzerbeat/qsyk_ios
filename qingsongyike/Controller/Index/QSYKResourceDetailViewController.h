@@ -8,7 +8,8 @@
 
 #import "QSYKBaseViewController.h"
 
-@interface QSYKResourceDetailViewController : QSYKBaseViewController <UITableViewDelegate, UITableViewDataSource>
+@interface QSYKResourceDetailViewController : QSYKBaseViewController
 @property (nonatomic, copy) NSString *sid;  // 资源sid
+@property (nonatomic) BOOL needScrollToPost;   // 需要在页面显示时定位到评论的位置
 
 @end

@@ -10,6 +10,7 @@
 #import "QSYKPictureTableViewCell.h"
 #import "QSYKResourceDetailViewController.h"
 #import "QSYKGodPostView.h"
+#import "QSYKMyFavoriteTableViewController.h"
 
 @interface QSYKPicturePageViewController () <QSYKCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -155,7 +156,7 @@
     NSArray *finalResources = [QSYKUtility removeRedundantData:resources];
     
     // 发送去重日志
-    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/listCombine/t/%d/p/%d/a/%u", kLogBaseURL, _type, _currentPage, resources.count - finalResources.count];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/listCombine/t/%d/p/%d/a/%lu", kLogBaseURL, _type, _currentPage, resources.count - finalResources.count];
     NSLog(@"log URL = %@", urlStr);
     [[QSYKDataManager sharedManager] sendLogWithURLString:urlStr];
     
@@ -182,10 +183,10 @@
     QSYKResourceModel *resource = _resourceList[indexPath.row];
     
     // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
-    CGFloat width = kIsIphone ? SCREEN_WIDTH - 8 * 4 : SCREEN_WIDTH * 2 / 3 - 8 * 4;
+    CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
     
     CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
-                                                          font:16.f
+                                                          font:TEXT_FONT
                                                          width:width];
     
     if (resource.relImage.height > resource.relImage.width * 2 && !resource.relImage.dynamic) {
@@ -200,7 +201,7 @@
         CGFloat postHeight = [QSYKGodPostView baseHeight] * postCount;
         for (int i = 0; i < postCount; i++) {
             QSYKPostModel *post = resource.godPosts[i];
-            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:15 width:[QSYKGodPostView contentWidth]];
+            postHeight += [QSYKUtility heightForMutilLineLabel:post.content font:TEXT_FONT width:[QSYKGodPostView contentWidth]];
         }
         extraHeight += postHeight;
     }
@@ -273,11 +274,54 @@
     post.dig++;
     post.hasDigged = YES;
     [resource.hotPosts replaceObjectAtIndex:indexPath.row withObject:post];
+}
+
+// 查看某个标签类型资源
+- (void)tagTappedWithInfo:(QSYKTagModel *)tag {
+    QSYKMyFavoriteTableViewController *myFavoritesVC = [[QSYKMyFavoriteTableViewController alloc] init];
+    myFavoritesVC.URLStr = [NSString stringWithFormat:@"resource-tags?tag=%@", tag.sid];
+    myFavoritesVC.tag = tag;
+    myFavoritesVC.title = tag.name;
+    myFavoritesVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:myFavoritesVC animated:YES];
+}
+
+// 删除某个资源
+- (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    self.deletingResourceSid = resource.sid;
+    self.deletingResourceIndexPath = indexPath;
+    [QSYKUtility showDeleteResourceReasonsWithSid:resource.sid delegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAndReloadAtIndexPath) name:@"deleteComplete" object:nil];
     
 }
 
-- (void)commentResourceWithSid:(NSString *)sid {
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // 1看不懂, 2不喜欢, 3太污了, 4重口味, 0其他
     
+    NSInteger index = buttonIndex != 4 ? buttonIndex + 1 : 0;
+    [[QSYKDataManager sharedManager] deleteResourceWithSid:self.deletingResourceSid type:index];
+    
+}
+
+- (void) deleteAndReloadAtIndexPath {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleteComplete" object:nil];
+    
+    [_resourceList removeObjectAtIndex:self.deletingResourceIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[self.deletingResourceIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView reloadData];
+}
+
+// 通过点击评论图标进入资源内页，定位到评论位置
+- (void)locatePostAtIndexPath:(NSIndexPath *)indexPath {
+    QSYKResourceModel *resource = _resourceList[indexPath.row];
+    
+    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
+    resourceDetailVC.sid = resource.sid;
+    resourceDetailVC.needScrollToPost = YES;
+    resourceDetailVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:resourceDetailVC animated:YES];
 }
 
 /*

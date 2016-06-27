@@ -20,9 +20,10 @@
 - (void)awakeFromNib {
     // Initialization code
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.bottomSeparaotrHeiCon.constant = 1.0 / [UIScreen mainScreen].scale;
-    [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButton"] forState:UIControlStateNormal];
-    [self.digBtn setImage:[UIImage imageNamed:@"commentLikeButtonClick"] forState:UIControlStateSelected];
+    self.bottomSeparaotrHeiCon.constant = ONE_PIX;
+    self.usernameLabel.textColor =kUsernameColor;
+    [self.digBtn setImage:[UIImage imageNamed:@"comment_dig_gray"] forState:UIControlStateNormal];
+    [self.digBtn setImage:[UIImage imageNamed:@"comment_dig_red"] forState:UIControlStateSelected];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -62,7 +63,7 @@
     
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:_post.content];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:TEXT_LING_SPACING];
+    [style setLineHeightMultiple:1.5];
     [attrString addAttribute:NSParagraphStyleAttributeName
                        value:style
                        range:NSMakeRange(0, attrString.length)];
@@ -87,7 +88,7 @@
 }
 
 + (CGFloat)cellBaseHeight {
-    return 57.f;
+    return 55.f;
 }
 
 @end

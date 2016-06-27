@@ -28,14 +28,14 @@ static int MAX_READHISTORY_COUNT = 1000;
 
 + (CGFloat)heightForMutilLineLabel:(NSString *)string font:(CGFloat)fontSize width:(CGFloat)width {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:TEXT_LING_SPACING];
+    [paragraphStyle setLineHeightMultiple:1.5];
     
-    string = [string stringByAppendingString:@"占"];
     CGSize titleSize = [string boundingRectWithSize:CGSizeMake(width, MAXFLOAT)
-                                            options: NSStringDrawingUsesLineFragmentOrigin
+                                            options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                          attributes:@{
                                                       NSFontAttributeName : [UIFont systemFontOfSize:fontSize],
-                                                      NSParagraphStyleAttributeName : paragraphStyle}
+                                                      NSParagraphStyleAttributeName : paragraphStyle,
+                                                      }
                                             context:nil].size;
     
     return ceil(titleSize.height);
@@ -413,6 +413,58 @@ static int MAX_READHISTORY_COUNT = 1000;
     NSTimeZone *timeZone = [[NSTimeZone alloc] initWithName:@"Asia/Shanghai"];
     [dateFormatter setTimeZone:timeZone];
     return  [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:[timeInterval doubleValue]]];
+}
+
++ (void)showDeleteResourceReasonsWithSid:(NSString *)sid delegate:(id)delegate {
+    // 一下文字对应的编号为 1，5，2，3，4，0
+    NSArray *types = @[@"看不懂", @"没意思", @"不喜欢", @"太污了", @"重口味", @"其他"];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    
+    if (SYSTEM_VERSION >= 8.0) {
+        
+        void (^ Handler) (int type) = ^(int type) {
+            [[QSYKDataManager sharedManager] deleteResourceWithSid:sid type:type];
+            
+        };
+        
+        UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:@"删除的原因" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        for (int i = 0; i < types.count; i++) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:types[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                int type = 0;
+                if (i == 0) {
+                    type = 1;
+                } else if (i == 1) {
+                    type = 5;
+                } else if (type == types.count - 1) {
+                    type = 0;
+                } else {
+                    type = i;
+                }
+                Handler(type);
+            }];
+            [actionSheet addAction:action];
+        }
+        
+        UIAlertAction *cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [actionSheet addAction:cancleAction];
+        
+        if (!(kIsIphone)) {
+            actionSheet.popoverPresentationController.sourceView = window;
+            actionSheet.popoverPresentationController.sourceRect = window.bounds;
+            actionSheet.popoverPresentationController.permittedArrowDirections = NO;
+        }
+        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:actionSheet animated:YES completion:nil];
+        
+    } else {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"删除的原因" delegate:delegate cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:types[0], types[1], types[2], types[3], types[4], nil];
+        
+        
+        if (kIsIphone) {
+            [actionSheet showInView:window];
+        } else {
+            [actionSheet showFromRect:window.frame inView:window animated:YES];
+        }
+    }
 }
 
 @end
