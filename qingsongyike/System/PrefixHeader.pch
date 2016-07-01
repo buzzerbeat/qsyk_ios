@@ -52,6 +52,12 @@
 #define kLotteryEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"lotteryEnable"]
 #define kBeautyEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"beautyEnable"]
 #define kThirdLoginEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"thirdLoginEnable"]
+#define kAdEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"adEnable"]
+#define kAdInterval [[NSUserDefaults standardUserDefaults] integerForKey:@"adInterval"]
+#define kQQAppId [[NSUserDefaults standardUserDefaults] objectForKey:@"qqAppId"]
+#define kQQPosId [[NSUserDefaults standardUserDefaults] objectForKey:@"qqPosId"]
+#define kQQAdNum [[NSUserDefaults standardUserDefaults] integerForKey:@"qqAdNum"]
+
 #define kDBPath [QSYKUtility dbPath]
 #define kUserReadHistory ([[NSUserDefaults standardUserDefaults] objectForKey:kReadHistoryDicKey] ?: [NSDictionary new])
 
@@ -60,6 +66,9 @@
 #define ONE_PIX (1.0 / [UIScreen mainScreen].scale)
 #define TEXT_FONT [[NSUserDefaults standardUserDefaults] floatForKey:@"text_font"]
 static CGFloat TWO_SIDE_SPACES = 10.f * 2;
+static CGFloat AD_TWO_SIDE_SPACES = 15 * 2;
+static const CGFloat MENU_WIDTH = 170.f;
+#define MENU_HEIGHT SCREEN_HEIGHT / 2 - 30
 
 #define kCoreColor [UIColor colorFromHexString:@"#df3031"]
 #define kTextGrayColor [UIColor colorFromHexString:@"#adacac"]
@@ -90,5 +99,6 @@ static NSString * const kLoginSuccessNotification       = @"LoginSuccessNotifica
 static NSString * const kLogoutNotification             = @"LogoutNotification";
 static NSString * const kAvatarDidChangedNotification   = @"AvatarDidChangedNotification";
 static NSString * const kEditProfileNotification        = @"EditProfileNotification";
+static NSString * const kFocusedTagsChangedNotification = @"FocusedTagsChangedNotification";
 
 #endif /* PrefixHeader_pch */

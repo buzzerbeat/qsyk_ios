@@ -70,15 +70,13 @@ static NSString *const kUserIsLogin = @"userIsLogin";
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"refreshToken"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserIsLogin];
         
-        // 登出后重新请求临时用的token
-//        [[QSYKDataManager sharedManager] registerAction];
         
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
 
-#pragma mark Public Request Methods - Login & Profile
+#pragma mark Public Request Methods - LoginO & Profile
 
 - (NSURLSessionDataTask *) loginWithMobileNum:(NSString *)mobileNum
                                      password:(NSString *)password

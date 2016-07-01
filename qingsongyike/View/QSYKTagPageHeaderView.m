@@ -30,8 +30,9 @@
     self.imageView.layer.masksToBounds = YES;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
+- (void)setup {
+//- (void)layoutSubviews {
+//    [super layoutSubviews];
     if (!_tagModel) {
         return;
     }
@@ -88,7 +89,7 @@
                                                    if (result && !result.status) {
                                                        [SVProgressHUD showSuccessWithStatus:successMsg];
                                                        
-                                                       [[NSNotificationCenter defaultCenter] postNotificationName:@"focusDone" object:nil];
+                                                       [[NSNotificationCenter defaultCenter] postNotificationName:kFocusedTagsChangedNotification object:nil];
                                                    } else {
                                                        [SVProgressHUD showErrorWithStatus:failedMsg];
                                                    }
