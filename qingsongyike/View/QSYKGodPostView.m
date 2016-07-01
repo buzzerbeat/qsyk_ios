@@ -62,6 +62,7 @@
     }
     
     self.digCountLabel.text = [NSString stringWithFormat:@"%d", self.dig];
+    self.digCountLabel.textColor = kCoreColor;
 }
 
 + (CGFloat)baseHeight {

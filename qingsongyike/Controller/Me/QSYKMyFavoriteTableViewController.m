@@ -16,7 +16,7 @@
 #import "QSYKTagModel.h"
 @import MediaPlayer;
 
-@interface QSYKMyFavoriteTableViewController () <UITableViewDelegate, UITableViewDataSource, QSYKCellDelegate>
+@interface QSYKMyFavoriteTableViewController () <QSYKInnerPageDelegate, QSYKCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *models;
 @property (nonatomic, strong) UILabel *noDataIndicatorLabel;
@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSString *sids;     // 当前显示的资源sid串
 @property (nonatomic, assign) NSInteger remainingSidCount;
 @property (nonatomic, strong) QSYKTagPageHeaderView *headerView;
+@property (nonatomic, assign) BOOL adEnable;
 
 @end
 
@@ -43,11 +44,16 @@
         [tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
         [tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
+        [tableView registerNib:[UINib nibWithNibName:@"QSYKAdTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_adCell];
         
         if (_tag) {
             [self getTagInfo];
+            if (kAdEnable) {
+                self.adEnable = YES;
+                [self configNativeAd];
+            }
             
-            [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(getTagInfo) name:@"focusDone" object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver: self selector:@selector(getTagInfo) name:kFocusedTagsChangedNotification object:nil];
         }
         
         [self.view addSubview:tableView];
@@ -131,7 +137,7 @@
 
 - (void)configTableHeaderView {
     self.headerView.tagModel = _tag;
-    [_headerView layoutSubviews];
+    [_headerView setup];
     
     UIView *view = [[UIView alloc] init];
     view.height = _headerView.height;
@@ -143,6 +149,38 @@
     
     self.tableView.tableHeaderView = view;
     [self.tableView reloadData];
+}
+
+// GDT AD 相关
+- (void)configNativeAd {
+    self.gdtNativeAd        = [[GDTNativeAd alloc] initWithAppkey:kQQAppId placementId:kQQPosId];
+    self.gdtNativeAd.controller = self;
+    self.gdtNativeAd.delegate   = self;
+    
+    /*
+     * 拉取广告,传入参数为拉取个数。
+     * 发起拉取广告请求,在获得广告数据后回调delegate
+     */
+    [self.gdtNativeAd loadAd:(int)kQQAdNum]; //一次拉取n条原生广告
+}
+
+#pragma mark GDTNativeAdDelegate
+
+-(void)nativeAdSuccessToLoad:(NSArray *)nativeAdDataArray
+{
+    NSLog(@"%s",__FUNCTION__);
+    /*广告数据拉取成功，存储并展示*/
+    
+    // 每次刷新广告数据
+    self.adData = [NSMutableArray arrayWithArray:nativeAdDataArray];
+    
+    NSLog(@"%lu",(unsigned long)nativeAdDataArray.count);
+}
+
+-(void)nativeAdFailToLoad:(NSError *)error
+{
+    NSLog(@"%s",__FUNCTION__);
+    /*广告数据拉取失败*/
 }
 
 - (void)getTagInfo {
@@ -224,126 +262,188 @@
 #pragma mark tableView delegate & dataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _models.count ?: 0;
+    NSUInteger resourceCount = _models.count;
+    if (resourceCount) {
+        // 把广告cell（如果显示）考虑在内
+        NSInteger numberOfRows = resourceCount + (_adEnable ? resourceCount / kAdInterval : 0);
+        
+        self.cellTypeArray = [NSMutableArray arrayWithCapacity:numberOfRows];
+        for (int i = 0; i < numberOfRows; i++) {
+            self.cellTypeArray[i] = @"Resource";
+        }
+        
+        if (_adEnable) {
+            for (int j = 1; j <= resourceCount / kAdInterval; j++) {
+                self.cellTypeArray[j * (kAdInterval + 1) - 1] = @"AD";
+            }
+        }
+        
+        return numberOfRows;
+    }
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = _models[indexPath.row];
-    NSInteger cellType = resource.type;
-    
-    // width = content标签左右边距离屏幕左右边的距离的和
-    CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
-                                                          font:TEXT_FONT
-                                                         width:SCREEN_WIDTH - TWO_SIDE_SPACES];
-    
-    if (cellType == 1) {
-        return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
+        NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+        QSYKResourceModel *resource = _models[curResourceIndex];
+        NSInteger cellType = resource.type;
         
-    } else if (cellType == 2) {
-        // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-        if (resource.relImage.height > 2 * resource.relImage.width && !resource.relImage.dynamic) {
-            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * 1.5;
+        // width = content标签左右边距离屏幕左右边的距离的和
+        CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:resource.desc
+                                                              font:TEXT_FONT
+                                                             width:SCREEN_WIDTH - TWO_SIDE_SPACES];
+        
+        if (cellType == 1) {
+            return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
+            
+        } else if (cellType == 2) {
+            // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
+            if (resource.relImage.height > 2 * resource.relImage.width && !resource.relImage.dynamic) {
+                extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * 1.5;
+            } else {
+                extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relImage.height / resource.relImage.width;
+            }
+            
+            return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
         } else {
-            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relImage.height / resource.relImage.width;
+            // video类型同图片
+            if (resource.relVideo.height > resource.relVideo.width) {
+                extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES);
+            } else {
+                extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relVideo.height / resource.relVideo.width;
+            }
+            
+            return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
         }
-        
-        return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
     } else {
-        // video类型同图片
-        if (resource.relVideo.height > resource.relVideo.width) {
-            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES);
+        if (!_adEnable) {
+            return 0;
+            
         } else {
-            extraHeight += (SCREEN_WIDTH - TWO_SIDE_SPACES) * resource.relVideo.height / resource.relVideo.width;
+            // width = content标签左右边距离屏幕左右边的距离(广告左右距离是15)的和
+            //（如果是iPad，需要再减去两边的空白区域的宽度）
+            CGFloat width = kIsIphone ? SCREEN_WIDTH - AD_TWO_SIDE_SPACES
+            : SCREEN_WIDTH * 2 / 3 - AD_TWO_SIDE_SPACES;
+            
+            //            NSLog(@"%ld", kAdInterval);
+            GDTNativeAdData *anAD = self.adData[indexPath.row / (kAdInterval + 1) % kQQAdNum];
+            
+            CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:anAD.properties[@"desc"]
+                                                                  font:TEXT_FONT
+                                                                 width:width];
+            
+            return [QSYKAdTableViewCell cellBaseHeight] + extraHeight;
         }
-        
-        return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = _models[indexPath.row];
-    NSInteger cellType = resource.type;
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
+        NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+        QSYKResourceModel *resource = _models[curResourceIndex];
+        NSInteger cellType = resource.type;
     
-    switch (cellType) {
-        case 1: {
-            QSYKTopicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_topicCell forIndexPath:indexPath];
-            cell.resource = resource;
-            cell.indexPath = indexPath;
-            cell.delegate = self;
-            
-            if (_isReadHistory) {
-                cell.flag = YES;
-                cell.readTime = [self getReadTimeBySid:resource.sid];
+        switch (cellType) {
+            case 1: {
+                QSYKTopicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_topicCell forIndexPath:indexPath];
+                cell.resource = resource;
+                cell.indexPath = indexPath;
+                cell.delegate = self;
+                
+                if (_isReadHistory) {
+                    cell.flag = YES;
+                    cell.readTime = [self getReadTimeBySid:resource.sid];
+                }
+                
+                return cell;
             }
-            
-            return cell;
-        }
-            break;
-        case 2: {
-            QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
-            cell.resource = resource;
-            cell.indexPath = indexPath;
-            cell.delegate = self;
-            
-            if (_isReadHistory) {
-                cell.flag = YES;
-                cell.readTime = [self getReadTimeBySid:resource.sid];
+                break;
+            case 2: {
+                QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
+                cell.resource = resource;
+                cell.indexPath = indexPath;
+                cell.delegate = self;
+                
+                if (_isReadHistory) {
+                    cell.flag = YES;
+                    cell.readTime = [self getReadTimeBySid:resource.sid];
+                }
+                
+                return cell;
             }
-            
-            return cell;
-        }
-            break;
-        case 3: {
-            QSYKVideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_videoCell forIndexPath:indexPath];
-            cell.resource = resource;
-            cell.indexPath = indexPath;
-            cell.delegate = self;
-            
-            if (_isReadHistory) {
-                cell.flag = YES;
-                cell.readTime = [self getReadTimeBySid:resource.sid];
+                break;
+            case 3: {
+                QSYKVideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_videoCell forIndexPath:indexPath];
+                cell.resource = resource;
+                cell.indexPath = indexPath;
+                cell.delegate = self;
+                
+                if (_isReadHistory) {
+                    cell.flag = YES;
+                    cell.readTime = [self getReadTimeBySid:resource.sid];
+                }
+                
+                return cell;
             }
-            
-            return cell;
+                break;
+                
+            default:
+                return nil;
+                break;
         }
-            break;
-            
-        default:
-            return nil;
-            break;
+    } else {
+        QSYKAdTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_adCell forIndexPath:indexPath];
+        
+        GDTNativeAdData *anAD = self.adData[indexPath.row / (kAdInterval + 1) % kQQAdNum];
+        [cell setupWithGDTAd:anAD];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        return cell;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = _models[indexPath.row];
-    
-    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
-    resourceDetailVC.sid = resource.sid;
-    resourceDetailVC.hidesBottomBarWhenPushed = YES;
-    
-    [self.navigationController pushViewController:resourceDetailVC animated:YES];
-    
-    if (resource.type == 3) {
-        QSYKVideoTableViewCell *curCell = [tableView cellForRowAtIndexPath:indexPath];
-        [curCell reset];
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
+        NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+        QSYKResourceModel *resource = _models[curResourceIndex];
+        
+        [self pushToInnerPageWithIndexPath:indexPath needScroll:NO];
+        
+        if (resource.type == 3) {
+            QSYKVideoTableViewCell *curCell = [tableView cellForRowAtIndexPath:indexPath];
+            [curCell reset];
+        }
+        
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    } else {
+        // 点击广告
+        NSInteger adDataIndex = (indexPath.row / (kAdInterval + 1)) % kQQAdNum;
+        
+        [self.gdtNativeAd clickAd:self.adData[adDataIndex]];
     }
-    
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"AD"]) {
+        /*
+         * 广告数据渲染完毕，即将展示时需调用AttachAd方法。(用于统计)
+         */
+        NSInteger adIndex = (indexPath.row / (kAdInterval + 1)) % kQQAdNum;
+        [self.gdtNativeAd attachAd:self.adData[adIndex] toView:cell];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([tableView.indexPathsForVisibleRows indexOfObject:indexPath] == NSNotFound)
-    {
-        // This indeed is an indexPath no longer visible
-        // Do something to this non-visible cell...
-//        QSYKFavoriteModel *aModel = _models[indexPath.row];
-        QSYKResourceModel *resource = _models[indexPath.row];
-        if (resource.type == 3) {
-            QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
-            [curCell reset];
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
+        if ([tableView.indexPathsForVisibleRows indexOfObject:indexPath] == NSNotFound)
+        {
+            NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+            QSYKResourceModel *resource = _models[curResourceIndex];
+            if (resource.type == 3) {
+                QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
+                [curCell reset];
+            }
         }
     }
 }
@@ -367,8 +467,8 @@
 - (void)rateResourceWithSid:(NSString *)sid type:(NSInteger)type indexPath:(NSIndexPath *)indexPath {
     [[QSYKDataManager sharedManager] rateResourceWithSid:sid type:type];
     
-//    QSYKFavoriteModel *aModel = _models[indexPath.row];
-    QSYKResourceModel *resource = _models[indexPath.row];
+    NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+    QSYKResourceModel *resource = _models[curResourceIndex];
     if (type == 1) {
         resource.dig++;
         resource.hasDigged = YES;
@@ -382,7 +482,8 @@
 
 // 删除某个资源
 - (void)deleteResourceAtIndexPath:(NSIndexPath *)indexPath {
-    QSYKResourceModel *resource = _models[indexPath.row];
+    NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+    QSYKResourceModel *resource = _models[curResourceIndex];
     self.deletingResourceSid = resource.sid;
     self.deletingResourceIndexPath = indexPath;
     [QSYKUtility showDeleteResourceReasonsWithSid:resource.sid delegate:self];
@@ -419,19 +520,31 @@
 
 // 通过点击评论图标进入资源内页，定位到评论位置
 - (void)locatePostAtIndexPath:(NSIndexPath *)indexPath {
-    QSYKResourceModel *resource = _models[indexPath.row];
+    NSInteger curResourceIndex = indexPath.row - (_adEnable ? indexPath.row / (kAdInterval + 1) : 0);
+    QSYKResourceModel *resource = _models[curResourceIndex];
     
-    QSYKResourceDetailViewController *resourceDetailVC = [[QSYKResourceDetailViewController alloc] init];
-    resourceDetailVC.sid = resource.sid;
-    resourceDetailVC.needScrollToPost = YES;
-    resourceDetailVC.hidesBottomBarWhenPushed = YES;
-    
-    [self.navigationController pushViewController:resourceDetailVC animated:YES];
-    
-    if (resource.type == 3) {
+    [self pushToInnerPageWithIndexPath:indexPath needScroll:YES];
+        
+    if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"] && resource.type == 3) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
         [curCell reset];
     }
+}
+
+- (void)pushToInnerPageWithIndexPath:(NSIndexPath *)indexPath needScroll:(BOOL)needScroll {
+    QSYKResourceInnerPageViewController *innerPage = [[QSYKResourceInnerPageViewController alloc] init];
+    innerPage.delegate = self;
+    innerPage.resources = _models;
+    innerPage.ads = self.adData;
+    innerPage.curIndex = indexPath.row;
+    innerPage.needScrollToPost = needScroll;
+    innerPage.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:innerPage animated:YES];
+}
+
+// 从详情页返回主页时将内页最后浏览的资源滑动到屏幕中间
+- (void)tableViewScrollToIndex:(NSInteger)index {
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 
 

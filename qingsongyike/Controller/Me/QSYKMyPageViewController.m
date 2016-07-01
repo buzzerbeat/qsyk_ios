@@ -112,7 +112,7 @@
 
 - (void)logout:(NSNotification *)noti {
     _user = nil;
-    [QSYKUserManager sharedManager].user = nil;
+//    [QSYKUserManager sharedManager].user = nil;
     
     [self updateCellTitlesAndImages];
     [self.tableView reloadData];

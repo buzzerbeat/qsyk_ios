@@ -364,6 +364,7 @@
         
         UIAlertAction *quitAction = [UIAlertAction actionWithTitle:@"退出" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             
+            [QSYKUserManager sharedManager].user = nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:kLogoutNotification object:nil];
             [self.navigationController popViewControllerAnimated:NO];
         }];

@@ -43,6 +43,9 @@
         
     }];
     
+    // 设置 HUD 显示时间为 2s
+    [SVProgressHUD setMinimumDismissTimeInterval:2.0];
+    
     // 实现点击状态栏让keyWindow上的ScrollView滚动到顶部
     if (SYSTEM_VERSION >= 8.0) {
         [[LYTopWindow sharedTopWindow] setClickStatusBarBlock:^{
@@ -86,11 +89,13 @@
     // 安装并启动app时先设置配置信息的默认值
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"isReStart"]) {
         [QSYKUtility setDefaultConfig];
-        // 设置默认文本字体大小
-        [[NSUserDefaults standardUserDefaults] setFloat:18 forKey:@"text_font"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isReStart"];
     }
     [QSYKUtility loadSplash];
+    
+    // 设置默认文本字体大小
+    [[NSUserDefaults standardUserDefaults] setFloat:18 forKey:@"text_font"];
+    
     
     // 展示SplashView
     UIImage *launchImg = nil;
