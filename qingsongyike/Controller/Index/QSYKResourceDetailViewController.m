@@ -17,6 +17,8 @@
 #import "QSYKBaseNavigationController.h"
 #import "QSYKTableSectionView.h"
 #import "QSYKMyFavoriteTableViewController.h"
+#import "QSYKAdTableViewCell.h"
+#import <GDTNativeAd.h>
 //#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 @import MediaPlayer;
 
@@ -25,6 +27,7 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
 @interface QSYKResourceDetailViewController () <QSYKCellDelegate>
 //@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentBtn;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
@@ -48,23 +51,36 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
     self.sendCommentBtn.layer.cornerRadius = 3.f;
     self.sendCommentBtn.backgroundColor = kCoreColor;
     [self.view addGestureRecognizer:self.tableView.panGestureRecognizer];
-    self.view.backgroundColor = self.tableView.backgroundColor;
+    self.view.backgroundColor = kBackgroundColor;
     
     
     self.tableView.separatorStyle  = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.tableView.backgroundColor = kBackgroundColor;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView registerNib:[UINib nibWithNibName:@"QSYKPictureTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_pictureCell];
     [self.tableView registerNib:[UINib nibWithNibName:@"QSYKTopicTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_topicCell];
     [self.tableView registerNib:[UINib nibWithNibName:@"QSYKVideoTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_videoCell];
     [self.tableView registerNib:[UINib nibWithNibName:@"QSYKCommentTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_commentCell];
+    [self.tableView registerNib:[UINib nibWithNibName:@"QSYKAdTableViewCell" bundle:nil] forCellReuseIdentifier:kCellIdentifier_adCell];
+    
     if (kIsIphone) {
         self.tableViewWidthCon.constant = SCREEN_WIDTH;
     } else {
         self.tableViewWidthCon.constant = SCREEN_WIDTH * 2/3;
     }
     
-    [self loadResourceData];
+    if (!_ad) {
+        [self loadResourceData];
+    } else {
+        
+        self.gdtNativeAd  = [[GDTNativeAd alloc] initWithAppkey:kQQAppId placementId:kQQPosId];
+        self.gdtNativeAd.controller = self;
+        self.gdtNativeAd.delegate   = self;
+        
+        self.bottomView.hidden = YES;
+        self.tableView.scrollEnabled = NO;
+        [self.tableView reloadData];
+    }
     
     // 监听用户点击推送消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotiResource:) name:kLoadFromRemotePushNotification object:nil];
@@ -100,6 +116,15 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
+
+//- (void)setSid:(NSString *)sid {
+//    _sid = sid;
+//}
+//
+//- (void)setAd:(GDTNativeAdData *)ad {
+//    _ad = ad;
+//}
+
 
 - (void)showRemoteNotiResource:(NSNotification *)noti {
     NSLog(@"noti = %@", noti.userInfo);
@@ -172,9 +197,8 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
 #pragma mark tableView delegate & dataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    int numberOfSections = 0;
+    int numberOfSections = 1;
     if (_resource) {
-        numberOfSections++;
         if (_resource.hotPosts.count) {
             numberOfSections++;
         }
@@ -200,6 +224,8 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
         } else {
             return 0;
         }
+    } else if (_ad) {
+        return 1;
     }
     return 0;
 }
@@ -244,41 +270,51 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-
-        // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
-        CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
-        
-        CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_resource.desc
-                                                              font:TEXT_FONT
-                                                             width:width];
-        
-        switch (_type) {
-            case 1: {
-                
-                return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
-            }
-                break;
-            case 2: {
-                // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
-                extraHeight += width * _resource.relImage.height / _resource.relImage.width;
-                return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
-            }
-                break;
-            case 3: {
-                // video类型cell
-                if (_resource.relVideo.height > _resource.relVideo.width) {
-                    extraHeight += width;
-                } else {
-                    extraHeight += width * _resource.relVideo.height / _resource.relVideo.width;
+        if (!_ad) {
+            // width = content标签左右边距离屏幕左右边的距离的和（如果是iPad，需要再减去两边的空白区域的宽度）
+            CGFloat width = kIsIphone ? SCREEN_WIDTH - TWO_SIDE_SPACES : SCREEN_WIDTH * 2 / 3 - TWO_SIDE_SPACES;
+            
+            CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_resource.desc
+                                                                  font:TEXT_FONT
+                                                                 width:width];
+            
+            switch (_type) {
+                case 1: {
+                    return [QSYKTopicTableViewCell cellBaseHeight] + extraHeight;
                 }
-                
-                return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
+                    break;
+                case 2: {
+                    // 图片类型的cell的高度根据图片本事的宽高比来计算在不同屏幕宽度下的高度
+                    extraHeight += width * _resource.relImage.height / _resource.relImage.width;
+                    return [QSYKPictureTableViewCell cellBaseHeight] + extraHeight;
+                }
+                    break;
+                case 3: {
+                    // video类型cell
+                    if (_resource.relVideo.height > _resource.relVideo.width) {
+                        extraHeight += width;
+                    } else {
+                        extraHeight += width * _resource.relVideo.height / _resource.relVideo.width;
+                    }
+                    
+                    return [QSYKVideoTableViewCell cellBaseHeight] + extraHeight;
+                }
+                    break;
+                    
+                default:
+                    return 0;
+                    break;
             }
-                break;
-                
-            default:
-                return 0;
-                break;
+        } else {
+            // width = content标签左右边距离屏幕左右边的距离(广告左右距离是15)的和
+            //（如果是iPad，需要再减去两边的空白区域的宽度）
+            CGFloat width = SCREEN_WIDTH - AD_TWO_SIDE_SPACES;
+            
+            CGFloat extraHeight = [QSYKUtility heightForMutilLineLabel:_ad.properties[@"desc"]
+                                                                  font:TEXT_FONT
+                                                                 width:width];
+            
+            return [QSYKAdTableViewCell cellBaseHeight] + extraHeight;
         }
     } else {
         QSYKPostModel *post = nil;
@@ -302,41 +338,48 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        switch (_type) {
-            case 1: {
-                QSYKTopicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_topicCell forIndexPath:indexPath];
-                cell.resource = _resource;
-                cell.indexPath = indexPath;
-                cell.delegate = self;
-                cell.isInnerPage = YES;
-                
-                return cell;
+        if (!_ad) {
+            switch (_type) {
+                case 1: {
+                    QSYKTopicTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_topicCell forIndexPath:indexPath];
+                    cell.resource = _resource;
+                    cell.indexPath = indexPath;
+                    cell.delegate = self;
+                    cell.isInnerPage = YES;
+                    
+                    return cell;
+                }
+                    break;
+                case 2: {
+                    QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
+                    cell.resource = _resource;
+                    cell.indexPath = indexPath;
+                    cell.isInnerPage = YES;
+                    cell.delegate = self;
+                    
+                    return cell;
+                }
+                    break;
+                case 3: {
+                    QSYKVideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_videoCell forIndexPath:indexPath];
+                    cell.resource = _resource;
+                    cell.indexPath = indexPath;
+                    cell.delegate = self;
+                    cell.isInnerPage = YES;
+                    
+                    return cell;
+                }
+                    break;
+                    
+                default:
+                    return nil;
+                    break;
             }
-                break;
-            case 2: {
-                QSYKPictureTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_pictureCell forIndexPath:indexPath];
-                cell.resource = _resource;
-                cell.indexPath = indexPath;
-                cell.isInnerPage = YES;
-                cell.delegate = self;
-                
-                return cell;
-            }
-                break;
-            case 3: {
-                QSYKVideoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_videoCell forIndexPath:indexPath];
-                cell.resource = _resource;
-                cell.indexPath = indexPath;
-                cell.delegate = self;
-                cell.isInnerPage = YES;
-                
-                return cell;
-            }
-                break;
-                
-            default:
-                return nil;
-                break;
+        } else {
+            QSYKAdTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_adCell forIndexPath:indexPath];
+            [cell setupWithGDTAd:_ad];
+            
+            return cell;
         }
     } else if(indexPath.section == 1) {
         QSYKCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_commentCell forIndexPath:indexPath];
@@ -357,6 +400,18 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
         cell.indexPath = indexPath;
         
         return cell;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_ad) {
+        [self.gdtNativeAd clickAd:_ad];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_ad) {
+        [self.gdtNativeAd attachAd:_ad toView:self.view];
     }
 }
 

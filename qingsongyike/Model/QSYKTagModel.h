@@ -33,3 +33,16 @@
 @property (nonatomic, copy) NSString *focusCount;
 
 @end
+
+@interface QSYKTagList : NSObject
+@property (nonatomic, strong) NSArray *list;
+
+- (instancetype)initWithArray:(NSArray *)array;
+
+@end
+
+@interface QSYKTagGroupModel : JSONModel
+@property (nonatomic, strong) NSArray<QSYKTagModel> *top;
+@property (nonatomic, strong) NSArray<QSYKTagModel, Optional> *focus;
+
+@end

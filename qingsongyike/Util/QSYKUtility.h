@@ -85,6 +85,11 @@
  */
 + (NSString * _Nonnull)formateBirthdayWithTimeInterval:(NSString * _Nonnull)timeInterval;
 
-+ (void)showDeleteResourceReasonsWithSid:(NSString *)sid delegate:(id)delegate;
++ (void)showDeleteResourceReasonsWithSid:(NSString * _Nonnull)sid delegate:(id _Nonnull)delegate;
+
+/**
+ * 设置多行 label 的文字的行间距
+ */
++ (NSMutableAttributedString * _Nonnull)attrStringWithString:(NSString * _Nonnull)string;
 
 @end

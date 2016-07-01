@@ -75,6 +75,7 @@ PODS:
   - libextobjc/UmbrellaHeader (0.4.1)
   - Masonry (1.0.1)
   - MJRefresh (3.1.6)
+  - MTGDTMob (4.4.1)
   - NJKWebViewProgress (0.2.3):
     - NJKWebViewProgress/Core (= 0.2.3)
     - NJKWebViewProgress/ProgressView (= 0.2.3)
@@ -101,6 +102,7 @@ DEPENDENCIES:
   - libextobjc (~> 0.4.1)
   - Masonry (~> 1.0.0)
   - MJRefresh (~> 3.1.0)
+  - MTGDTMob (~> 4.4.1)
   - NJKWebViewProgress (~> 0.2.3)
   - RSKImageCropper (~> 1.5.1)
   - SDWebImage (~> 3.7.5)
@@ -121,6 +123,7 @@ SPEC CHECKSUMS:
   libextobjc: a650fc1bf489a3d3a9bc2e621efa3e1006fc5471
   Masonry: a1a931a0d08870ed8ae415a2ea5ea68ebcac77df
   MJRefresh: 5c69f11e8bde0664e15326d2e61f61e103c6545f
+  MTGDTMob: 744078263334271acdf8eb8af16ec0f11bb45f12
   NJKWebViewProgress: f481fd424cb5ecc27eacae11b5397db92fba9a4d
   RSKImageCropper: edd65fedb3734332818deb139906d6b7f54b8a44
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9

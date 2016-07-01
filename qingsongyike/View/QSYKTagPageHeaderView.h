@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) QSYKTagModel *tagModel;
 
+- (void)setup;
 + (CGFloat)viewBaseHeight;
 
 @end
