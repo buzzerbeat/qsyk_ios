@@ -86,7 +86,7 @@ static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
         self.readTimeLabel.text = [QSYKUtility formateTimeInterval:_readTime];
     }
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:200 height:200 extension:@"png"]];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_resource.userAvatar width:120 height:120 extension:@"png"]];
     self.usernameLabel.text  = _resource.userName;
     self.digCountLabel.text  = [NSString stringWithFormat:@"%ld", (long)self.dig];
     self.buryCountLabel.text = [NSString stringWithFormat:@"%ld", (long)self.bury];

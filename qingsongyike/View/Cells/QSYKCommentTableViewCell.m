@@ -50,7 +50,7 @@
     self.dig = _post.dig;
     self.sid = _post.sid;
     
-    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_post.userAvatar width:200 height:200 extension:@"png"]];
+    [self.avatarImageView setAvatar:[QSYKUtility imgUrl:_post.userAvatar width:120 height:120 extension:@"png"]];
     self.usernameLabel.text = _post.userName;
     self.digCountLabel.text = [NSString stringWithFormat:@"%d", _post.dig];
     self.pubTimeLabel.text = [QSYKUtility formateTimeInterval:_post.createTime];
