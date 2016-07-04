@@ -17,6 +17,7 @@
 #import "QSYKRootTabBarController.h"
 #import "QSYKTopWindow.h"
 #import "QSYKResourceDetailViewController.h"
+#import <AdSupport/AdSupport.h>
 
 @interface AppDelegate ()
 
@@ -43,8 +44,7 @@
         
     }];
     
-    // 设置 HUD 显示时间为 2s
-    [SVProgressHUD setMinimumDismissTimeInterval:2.0];
+//    NSString *adId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
     
     // 实现点击状态栏让keyWindow上的ScrollView滚动到顶部
     if (SYSTEM_VERSION >= 8.0) {
@@ -95,6 +95,9 @@
     
     // 设置默认文本字体大小
     [[NSUserDefaults standardUserDefaults] setFloat:18 forKey:@"text_font"];
+    
+    // 设置 HUD 显示时间为 2s
+    [SVProgressHUD setMinimumDismissTimeInterval:2.0];
     
     
     // 展示SplashView
