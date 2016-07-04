@@ -57,6 +57,8 @@
 #define kQQAppId [[NSUserDefaults standardUserDefaults] objectForKey:@"qqAppId"]
 #define kQQPosId [[NSUserDefaults standardUserDefaults] objectForKey:@"qqPosId"]
 #define kQQAdNum [[NSUserDefaults standardUserDefaults] integerForKey:@"qqAdNum"]
+#define kGoogleAdEnable [[NSUserDefaults standardUserDefaults] boolForKey:@"indexBannerEnable"]
+#define kGoogleAdId [[NSUserDefaults standardUserDefaults] objectForKey:@"indexBannerId"]
 
 #define kDBPath [QSYKUtility dbPath]
 #define kUserReadHistory ([[NSUserDefaults standardUserDefaults] objectForKey:kReadHistoryDicKey] ?: [NSDictionary new])

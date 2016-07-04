@@ -238,6 +238,12 @@ static int MAX_READHISTORY_COUNT = 1000;
         [userDefaults setObject:plaminfo[@"qq"][@"posid"] forKey:@"qqPosId"];
         [userDefaults setInteger:[plaminfo[@"qq"][@"adnum"] integerValue] forKey:@"qqAdNum"];
         
+        // google
+        NSDictionary *google = ad[@"google"];
+        
+        [userDefaults setBool:[google[@"indexBannerEnable"] boolValue] forKey:@"indexBannerEnable"];
+        [userDefaults setObject:google[@"indexBannerId"] forKey:@"indexBannerId"];
+        
         BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"设置配置成功 = %d", saveSuccess);
     });
@@ -249,6 +255,9 @@ static int MAX_READHISTORY_COUNT = 1000;
     [userDefaults setBool:NO forKey:@"lotteryEnable"];
     [userDefaults setBool:NO forKey:@"beautyEnable"];
     [userDefaults setBool:YES forKey:@"thirdLoginEnable"];
+    
+    [userDefaults setBool:YES forKey:@""];
+    [userDefaults setObject:@"" forKey:@""];
     
     [userDefaults setBool:NO forKey:@"adEnable"];
     /*
