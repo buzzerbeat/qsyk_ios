@@ -98,7 +98,7 @@ static int RESOURCE_TYPE = 3;
     for (NSIndexPath *indexPath in visibleRows) {
         if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
             QSYKVideoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            [cell reset];
+            [cell resetWithAcitonType:@"o"];
         }
     }
     
@@ -335,7 +335,7 @@ static int RESOURCE_TYPE = 3;
         QSYKResourceModel *resource = _resourceList[curResourceIndex];
         if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"] && resource.type == 3) {
             QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
-            [curCell reset];
+            [curCell resetWithAcitonType:@"d"];
         }
         
         [QSYKUtility saveResourceSidIntoDBWithSid:resource.sid];
@@ -348,7 +348,7 @@ static int RESOURCE_TYPE = 3;
         [self pushToInnerPageWithIndexPath:indexPath needScroll:NO];
         
         QSYKVideoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [cell reset];
+        [cell resetWithAcitonType:@"o"];
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     } else {
@@ -458,10 +458,10 @@ static int RESOURCE_TYPE = 3;
 - (void) deleteAndReload {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleteComplete" object:nil];
     
-//    if ([self.cellTypeArray[self.deletingResourceIndexPath.row] isEqualToString:@"Resource"]) {
-//        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:self.deletingResourceIndexPath];
-//        [curCell reset];
-//    }
+    if ([self.cellTypeArray[self.deletingResourceIndexPath.row] isEqualToString:@"Resource"]) {
+        QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:self.deletingResourceIndexPath];
+        [curCell resetWithAcitonType:@"o"];
+    }
     
     [_resourceList removeObjectAtIndex:self.deletingResourceIndexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[self.deletingResourceIndexPath] withRowAnimation:UITableViewRowAnimationRight];
@@ -476,7 +476,7 @@ static int RESOURCE_TYPE = 3;
     
     if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"]) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [curCell reset];
+        [curCell resetWithAcitonType:@"o"];
     }
 }
 

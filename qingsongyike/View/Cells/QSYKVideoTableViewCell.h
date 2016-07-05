@@ -49,7 +49,7 @@
 @property (nonatomic, assign) BOOL flag;    // 标识是否显示在最近浏览页面
 @property (nonatomic, copy) NSString *readTime;
 
-- (void)reset;
+- (void)resetWithAcitonType:(NSString *)actionType;
 + (CGFloat)cellBaseHeight;
 
 @end

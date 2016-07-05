@@ -140,7 +140,7 @@
             QSYKResourceModel *resource = _resourceList[curResourceIndex];
             if (resource.type == 3) {
                 QSYKVideoTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                [cell reset];
+                [cell resetWithAcitonType:@"o"];
             }
         }
     }
@@ -439,7 +439,7 @@
         
         if (resource.type == 3) {
             QSYKVideoTableViewCell *curCell = [tableView cellForRowAtIndexPath:indexPath];
-            [curCell reset];
+            [curCell resetWithAcitonType:@"o"];
         }
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -473,7 +473,7 @@
             QSYKResourceModel *resource = _resourceList[curResourceIndex];
             if (resource.type == 3) {
                 QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
-                [curCell reset];
+                [curCell resetWithAcitonType:@"d"];
             }
             
             [QSYKUtility saveResourceSidIntoDBWithSid:resource.sid];
@@ -584,7 +584,7 @@
     QSYKResourceModel *resource = _resourceList[curResourceIndex];
     if ([self.cellTypeArray[self.deletingResourceIndexPath.row] isEqualToString:@"Resource"] && resource.type == 3) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:self.deletingResourceIndexPath];
-        [curCell reset];
+        [curCell resetWithAcitonType:@"o"];
     }
     
     [_resourceList removeObjectAtIndex:self.deletingResourceIndexPath.row];
@@ -600,7 +600,7 @@
     
     if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"] && resource.type == 3) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [curCell reset];
+        [curCell resetWithAcitonType:@"o"];
     }
 }
 

@@ -15,6 +15,9 @@
 @property (nonatomic, assign) CGRect frame;
 //@property (nonatomic, strong) KRVideoPlayerControlView *videoControl;
 
+@property (copy) void (^pauseBlock) (void);
+@property (copy) void (^finishBlock) (void);
+
 - (instancetype)initWithFrame:(CGRect)frame;
 - (void)showInWindow;
 - (void)dismiss;

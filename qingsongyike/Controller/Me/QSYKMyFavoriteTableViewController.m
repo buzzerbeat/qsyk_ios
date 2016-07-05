@@ -412,7 +412,7 @@
         
         if (resource.type == 3) {
             QSYKVideoTableViewCell *curCell = [tableView cellForRowAtIndexPath:indexPath];
-            [curCell reset];
+            [curCell resetWithAcitonType:@"o"];
         }
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -442,7 +442,7 @@
             QSYKResourceModel *resource = _models[curResourceIndex];
             if (resource.type == 3) {
                 QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
-                [curCell reset];
+                [curCell resetWithAcitonType:@"d"];
             }
         }
     }
@@ -527,7 +527,7 @@
         
     if ([self.cellTypeArray[indexPath.row] isEqualToString:@"Resource"] && resource.type == 3) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [curCell reset];
+        [curCell resetWithAcitonType:@"o"];
     }
 }
 

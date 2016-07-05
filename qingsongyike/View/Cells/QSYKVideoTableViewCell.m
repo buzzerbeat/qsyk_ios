@@ -8,8 +8,8 @@
 
 #import "QSYKVideoTableViewCell.h"
 #import <AVFoundation/AVFoundation.h>
-#import "KRVideoPlayerController.h"
 #import "QSYKGodPostView.h"
+#import "KRVideoPlayerController.h"
 
 static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
 
@@ -48,7 +48,7 @@ static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    [self reset];
+//    [self reset];
     
     self.digImageView.image = [UIImage imageNamed:@"resource_ico_dig_gray"];
     self.buryImageView.image = [UIImage imageNamed:@"resource_ico_bury_gray"];
@@ -58,6 +58,7 @@ static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
     self.buryView.userInteractionEnabled = YES;
     
     self.videoThumbImageView.image = nil;
+    self.videoController = nil;
 }
 
 - (void)layoutSubviews {
@@ -252,14 +253,38 @@ static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
             @strongify(self);
             self.videoController = nil;
         }];
+        
+        [self.videoController setPauseBlock:^{
+            @strongify(self);
+            [self sendVideoLogWithActionType:@"p"];
+        }];
+        
+        [self.videoController setFinishBlock:^{
+            @strongify(self);
+            [self sendVideoLogWithActionType:@"a"];
+            
+            [self.videoController dismiss];
+            self.videoController = nil;
+        }];
     }
     self.videoController.contentURL = url;
 }
 
 //停止视频的播放
-- (void)reset {
+- (void)resetWithAcitonType:(NSString *)actionType {
+    if (self.videoController != nil) {
+        [self sendVideoLogWithActionType:actionType];
+    }
+    
     [self.videoController dismiss];
     self.videoController = nil;
+}
+
+- (void)sendVideoLogWithActionType:(NSString *)actionType {
+    // send log
+    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/r/%@/d/%d/p/%d/a/%@", kLogBaseURL, self.resource.sid, (int)self.videoController.duration, (int)self.videoController.currentPlaybackTime, actionType];
+    NSLog(@"log URL = %@", urlStr);
+    [[QSYKDataManager sharedManager] sendLogWithURLString:urlStr];
 }
 
 - (void)updateVideoViewFrame:(NSNotification *)noti {

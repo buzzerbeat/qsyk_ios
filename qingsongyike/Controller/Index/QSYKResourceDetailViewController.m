@@ -106,7 +106,7 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
     [super viewDidDisappear:animated];
     if (_resource.type == 3) {
         QSYKVideoTableViewCell *curCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        [curCell reset];
+        [curCell resetWithAcitonType:@"o"];
     }
     
     // 当页面消失时注销对消息的监听
@@ -422,7 +422,7 @@ static int POST_CONTENT_SIDE_WIDTH = 56;
         // Do something to this non-visible cell...
         if (_resource.type == 3 && indexPath.section == 0) {
             QSYKVideoTableViewCell *curCell = (QSYKVideoTableViewCell *)cell;
-            [curCell reset];
+            [curCell resetWithAcitonType:@"d"];
         }
     }
 }
