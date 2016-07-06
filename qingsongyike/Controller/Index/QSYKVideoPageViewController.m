@@ -198,7 +198,7 @@ static int RESOURCE_TYPE = 3;
     NSArray *finalResources = [QSYKUtility removeRedundantData:resources];
     
     // 发送去重日志
-    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/listCombine/t/%d/p/%d/a/%lu", kLogBaseURL, RESOURCE_TYPE, _currentPage, resources.count - finalResources.count];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/listCombine/t/%d/p/%d/a/%lu", kLogBaseURL, RESOURCE_TYPE, _currentPage, resources.count - finalResources.count];
     NSLog(@"log URL = %@", urlStr);
     [[QSYKDataManager sharedManager] sendLogWithURLString:urlStr];
     

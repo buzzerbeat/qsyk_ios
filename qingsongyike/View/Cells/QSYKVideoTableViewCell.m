@@ -282,7 +282,7 @@ static CGFloat TAG_VIEW_BOTTOM_BASE_SPACE = 0;
 
 - (void)sendVideoLogWithActionType:(NSString *)actionType {
     // send log
-    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/r/%@/d/%d/p/%d/a/%@", kLogBaseURL, self.resource.sid, (int)self.videoController.duration, (int)self.videoController.currentPlaybackTime, actionType];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/r/%@/d/%d/p/%d/a/%@", kLogBaseURL, self.resource.sid, (int)self.videoController.duration, (int)self.videoController.currentPlaybackTime, actionType];
     NSLog(@"log URL = %@", urlStr);
     [[QSYKDataManager sharedManager] sendLogWithURLString:urlStr];
 }

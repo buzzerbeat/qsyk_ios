@@ -166,7 +166,7 @@ typedef NS_ENUM(NSInteger, QZShareToPlatformType) {
                                               }];
     
     // 发送分享日志
-    [[QSYKDataManager sharedManager] sendLogWithURLString:[NSString stringWithFormat:@"%@/logdomain/share/r/%@/p/%@", kLogBaseURL, _resourceSid, _platformBrief]];
+    [[QSYKDataManager sharedManager] sendLogWithURLString:[NSString stringWithFormat:@"%@/share/r/%@/p/%@", kLogBaseURL, _resourceSid, _platformBrief]];
 }
 
 - (IBAction)copyResourceAction:(id)sender {
