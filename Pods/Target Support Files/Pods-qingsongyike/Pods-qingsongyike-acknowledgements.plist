@@ -222,6 +222,14 @@ THE SOFTWARE.</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>Copyright 2011 Google Inc. All Rights Reserved.</string>
+			<key>Title</key>
+			<string>Google-Mobile-Ads-SDK</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>Copyright jpush.cn</string>
 			<key>Title</key>
 			<string>JPush</string>
@@ -283,6 +291,14 @@ THE SOFTWARE.
 </string>
 			<key>Title</key>
 			<string>MJRefresh</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
+			<string>LICENSE  &#169;2016 Domob, Inc. All rights reserved</string>
+			<key>Title</key>
+			<string>MTGDTMob</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

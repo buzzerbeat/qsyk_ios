@@ -278,21 +278,9 @@
 }
 
 - (void)deleteResourceWithSid:(NSString *)sid type:(NSInteger)type {
-    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/videoPlay/r/%@/t/%d", kLogBaseURL, sid, type];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/del/r/%@/t/%d", kLogBaseURL, sid, type];
     NSLog(@"delete resource log's url = %@", urlStr);
-    
-    [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
-                                             URLString:urlStr
-                                            parameters:nil
-                                               success:^(NSURLSessionDataTask *task, id responseObject) {
-                                                   
-                                                   NSLog(@"反馈成功");
-                                                   
-                                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteComplete" object:nil];
-                                                   
-                                               } failure:^(NSError *error) {
-                                                   NSLog(@"反馈失败  %@", error);
-                                               }];
+    [self sendLogWithURLString:urlStr];
 }
 
 - (void)startApp {

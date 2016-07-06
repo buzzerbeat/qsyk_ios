@@ -17,9 +17,11 @@ pod 'UMengSocial', '~> 5.0'
 pod 'JPush', '~> 2.1.6'
 pod 'DKNightVersion', '~> 2.3.0'
 pod 'FMDB', '~> 2.6.2'
-pod 'NJKWebViewProgress', '~> 0.2.3'
+pod 'NJKWebView Progress', '~> 0.2.3'
 pod 'Colours', '~> 5.13.0'
 pod 'RSKImageCropper', '~> 1.5.1'
 pod 'FLAnimatedImage', '~> 1.0.12'
+pod 'MTGDTMob', '~> 4.4.1'
+pod 'Google-Mobile-Ads-SDK', '~> 7.7.1'
 
 end

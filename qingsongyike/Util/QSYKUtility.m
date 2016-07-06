@@ -222,18 +222,49 @@ static int MAX_READHISTORY_COUNT = 1000;
         BOOL thirdLoginEnable  = [dic[@"config"][@"thirdLoginEnable"] boolValue];
         
         // 存到本地
-        [[NSUserDefaults standardUserDefaults] setBool:lotteryEnable forKey:@"lotteryEnable"];
-        [[NSUserDefaults standardUserDefaults] setBool:beautyEnable forKey:@"beautyEnable"];
-        [[NSUserDefaults standardUserDefaults] setBool:thirdLoginEnable forKey:@"thirdLoginEnable"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setBool:lotteryEnable forKey:@"lotteryEnable"];
+        [userDefaults setBool:beautyEnable forKey:@"beautyEnable"];
+        [userDefaults setBool:thirdLoginEnable forKey:@"thirdLoginEnable"];
+        
+        // ad
+        NSDictionary *ad = dic[@"ad"];
+        NSDictionary *informationFlow = ad[@"informationFlow"];
+        NSDictionary *plaminfo = informationFlow[@"plaminfo"];
+        
+        [userDefaults setBool:[informationFlow[@"enable"] boolValue] forKey:@"adEnable"];
+        [userDefaults setInteger:[informationFlow[@"interval"] integerValue] forKey:@"adInterval"];
+        [userDefaults setObject:plaminfo[@"qq"][@"appid"] forKey:@"qqAppId"];
+        [userDefaults setObject:plaminfo[@"qq"][@"posid"] forKey:@"qqPosId"];
+        [userDefaults setInteger:[plaminfo[@"qq"][@"adnum"] integerValue] forKey:@"qqAdNum"];
+        
+        // google
+        NSDictionary *google = ad[@"google"];
+        
+        [userDefaults setBool:[google[@"indexBannerEnable"] boolValue] forKey:@"indexBannerEnable"];
+        [userDefaults setObject:google[@"indexBannerId"] forKey:@"indexBannerId"];
+        
         BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"设置配置成功 = %d", saveSuccess);
     });
 }
 
 + (void)setDefaultConfig {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"lotteryEnable"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"beautyEnable"];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"thirdLoginEnable"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    [userDefaults setBool:NO forKey:@"lotteryEnable"];
+    [userDefaults setBool:NO forKey:@"beautyEnable"];
+    [userDefaults setBool:YES forKey:@"thirdLoginEnable"];
+    
+    [userDefaults setBool:YES forKey:@""];
+    [userDefaults setObject:@"" forKey:@""];
+    
+    [userDefaults setBool:NO forKey:@"adEnable"];
+    /*
+    [userDefaults setInteger:15 forKey:@"adInterval"];
+    [userDefaults setObject:@"1105333924" forKey:@"qqAppId"];
+    [userDefaults setObject:@"5030015066168155" forKey:@"qqPosId"];
+    [userDefaults setInteger:10 forKey:@"qqAdNum"];*/
     
     BOOL saveSuccess = [[NSUserDefaults standardUserDefaults] synchronize];
     NSLog(@"设置默认配置成功 = %d", saveSuccess);
@@ -465,6 +496,17 @@ static int MAX_READHISTORY_COUNT = 1000;
             [actionSheet showFromRect:window.frame inView:window animated:YES];
         }
     }
+}
+
++ (NSMutableAttributedString *)attrStringWithString:(NSString *)string {
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:string];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:TEXT_LING_SPACING];
+    [attrString addAttribute:NSParagraphStyleAttributeName
+                       value:style
+                       range:NSMakeRange(0, attrString.length)];
+    
+    return attrString;
 }
 
 @end

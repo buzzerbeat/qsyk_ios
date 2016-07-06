@@ -172,7 +172,13 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 }
 
 - (void)onMPMoviePlayerPlaybackDidFinishNotification {
-    [self pauseButtonClick];
+    [self pause];
+    self.videoControl.playButton.hidden = NO;
+    self.videoControl.pauseButton.hidden = YES;
+    
+    if (self.duration == self.currentPlaybackTime && self.finishBlock) {
+        self.finishBlock();
+    }
     
     // 播放结束后退出全屏
     [self shrinkScreenButtonClick];
@@ -189,7 +195,11 @@ static const CGFloat kVideoPlayerControllerAnimationTimeinterval = 0.3f;
 {
     [self pause];
     self.videoControl.playButton.hidden = NO;
-    self.videoControl.pauseButton.hidden = YES; 
+    self.videoControl.pauseButton.hidden = YES;
+    
+    if (self.pauseBlock) {
+        self.pauseBlock();
+    }
 }
 
 - (void)backButtonClick

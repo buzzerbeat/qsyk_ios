@@ -28,13 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *qqBtn;
 @property (weak, nonatomic) IBOutlet UIButton *weiboBtn;
 @property (weak, nonatomic) IBOutlet UIView *turnToRegisterPageView;
-@property (weak, nonatomic) IBOutlet UIButton *dismissBtn;
-
-@property (weak, nonatomic) IBOutlet UIImageView *userNameIV;
-@property (weak, nonatomic) IBOutlet UIButton *clearBtn;
-@property (weak, nonatomic) IBOutlet UIImageView *passwordIV;
-@property (weak, nonatomic) IBOutlet UIButton *pwdVisibilityBtn;
-@property (weak, nonatomic) IBOutlet UIButton *forgetPwdBtn;
 @property (strong, nonatomic) IBOutletCollection(id) NSArray *thirdTypeViews;
 
 @property (copy, nonatomic) NSString *thirdTypeUserName;
@@ -133,20 +126,6 @@
         } completion:nil];
     }
     _flag = NO;
-}
-
-// 设置密码是否可见及右侧图片样式
-- (IBAction)pwdVisibilityBtnClicked:(id)sender
-{
-    _isSecureTextEntry = !self.passwordTextField.secureTextEntry;
-    [self.passwordTextField setSecureTextEntry:_isSecureTextEntry];
-//    [self.passwordTextField becomeFirstResponder];
-    
-    if (_isSecureTextEntry) {
-        [self.pwdVisibilityBtn setImage:[UIImage imageNamed:@"login_visibility_on"] forState:UIControlStateNormal];
-    } else {
-        [self.pwdVisibilityBtn setImage:[UIImage imageNamed:@"login_visibility_off"] forState:UIControlStateNormal];
-    }
 }
 
 - (void)limitMobileNumLength:(NSNotification *)noti {
