@@ -278,7 +278,7 @@
 }
 
 - (void)deleteResourceWithSid:(NSString *)sid type:(NSInteger)type {
-    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/videoPlay/r/%@/t/%d", kLogBaseURL, sid, type];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/logdomain/del/r/%@/t/%d", kLogBaseURL, sid, type];
     NSLog(@"delete resource log's url = %@", urlStr);
     
     [[QSYKDataManager sharedManager] requestWithMethod:QSYKHTTPMethodPOST
